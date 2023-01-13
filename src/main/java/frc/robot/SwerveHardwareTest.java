@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
   //  so dont use this command as a 
   //  reference/learning tool cause its bad 
 
+
+  // MAKE SURE THE ROBOTS WHEELS ARENT TOUCHING THE
+//   GROUND WHEN YOU RUN THIS COMMAND
   //TODO: add documentation
 public class SwerveHardwareTest extends CommandBase {
   /** Creates a new SwerveHardwareTest. */
