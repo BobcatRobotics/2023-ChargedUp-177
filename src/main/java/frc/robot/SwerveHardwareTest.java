@@ -17,39 +17,42 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
   //  reference/learning tool cause its bad 
 
 
-  // MAKE SURE THE ROBOTS WHEELS ARENT TOUCHING THE
-//   GROUND WHEN YOU RUN THIS COMMAND
+  // MAKE SURE THE ROBOTS WHEELS ARE NOT TOUCHING THE
+  // GROUND WHEN YOU RUN THIS COMMAND
+  
   //TODO: add documentation
 public class SwerveHardwareTest extends CommandBase {
   /** Creates a new SwerveHardwareTest. */
 
-  int lbaID = 6;
-  int lbdID = 5;
-  int rbaID = 8;
+  int lbaID = 6; //TODO: can IDs?
+  int lbdID = 5; //I took these IDs from the swerve testing branch
+  int rbaID = 8; //idk if they're right tho
   int rbdID = 7;
   int lfaID = 2;
   int lfdID = 1;
   int rfaID = 4;
   int rfdID = 3;
-
   int lbCAN = 3;
   int rbCAN = 4;
   int rfCAN = 2;
   int lfCAN = 1;
 
-
-  TalonFX lbAngleMotor = new TalonFX(lbaID); //TODO: find CAN IDs
+  // back left module
+  TalonFX lbAngleMotor = new TalonFX(lbaID);
   TalonFX lbDriveMotor = new TalonFX(lbdID);
   CANCoder lbEncoder = new CANCoder(lbCAN);
 
+  // back right module
   TalonFX rbAngleMotor = new TalonFX(rbaID);
   TalonFX rbDriveMotor = new TalonFX(rbdID);
   CANCoder rbEncoder = new CANCoder(rbCAN);
 
+  // front left module
   TalonFX lfAngleMotor = new TalonFX(lfaID);
   TalonFX lfDriveMotor = new TalonFX(lfdID);
   CANCoder lfEncoder = new CANCoder(lfCAN);
 
+  // front right module
   TalonFX rfAngleMotor = new TalonFX(rfaID);
   TalonFX rfDriveMotor = new TalonFX(rfdID);
   CANCoder rfEncoder = new CANCoder(rfCAN);
@@ -57,9 +60,11 @@ public class SwerveHardwareTest extends CommandBase {
   //encoder counts per rotation
   int falconCpr = 2048;
   int canCoderCPR = 4069;
+
+  //gear ratio for the drive motors
   double gearRatio = 6.12;
 
-  //the cpr of one full rotation using the gear ratio
+  //the cpr of one full rotation of the drive motors
   double cPerRotation = falconCpr * gearRatio;
 
   //is the command finished
@@ -95,15 +100,15 @@ public class SwerveHardwareTest extends CommandBase {
     //start rotating the left back angle motor
     lbAngleMotor.set(ControlMode.PercentOutput, 0.5);
 
-    //once it makes a full rotation, start rotating the drive motor
+    //once it makes a full rotation, start rotating the lb drive motor
     if (lbEncoder.getPosition() > canCoderCPR) {
       lbDriveMotor.set(ControlMode.PercentOutput, 0.5);  
     }
-    //once it makes a full rotation, start rotating the right back angle motor
+    //once the lb drive motor makes a full rotation, start rotating the right back angle motor
     if (lbDriveMotor.getSelectedSensorPosition() > cPerRotation) {
       rbAngleMotor.set(ControlMode.PercentOutput, 0.5);
     }
-
+    //repeat for all motors
     if (rbEncoder.getPosition() > canCoderCPR) {
       rbDriveMotor.set(ControlMode.PercentOutput, 0.5);
     }if(rbDriveMotor.getSelectedSensorPosition() > cPerRotation) {
@@ -145,7 +150,7 @@ public class SwerveHardwareTest extends CommandBase {
     rfAngleMotor.set(ControlMode.PercentOutput, 0);
     rfAngleMotor.set(ControlMode.PercentOutput, 0);
     
-    //this makes it so that isFinished() returns true, and ends the command
+    //this makes it so that isFinished() returns true, which ends the command
     fin = true;
   }
   else{
