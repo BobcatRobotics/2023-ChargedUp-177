@@ -20,22 +20,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
   // MAKE SURE THE ROBOTS WHEELS ARE NOT TOUCHING THE
   // GROUND WHEN YOU RUN THIS COMMAND
   
-  //TODO: add documentation
 public class SwerveHardwareTest extends CommandBase {
   /** Creates a new SwerveHardwareTest. */
 
-  int lbaID = 6; //TODO: can IDs?
-  int lbdID = 5; //I took these IDs from the swerve testing branch
-  int rbaID = 8; //idk if they're right tho
-  int rbdID = 7;
-  int lfaID = 2;
-  int lfdID = 1;
-  int rfaID = 4;
-  int rfdID = 3;
-  int lbCAN = 3;
-  int rbCAN = 4;
-  int rfCAN = 2;
-  int lfCAN = 1;
+  int lbaID = 0; //TODO: can IDs?
+  int lbdID = 0; 
+  int rbaID = 0; 
+  int rbdID = 0;
+  int lfaID = 0;
+  int lfdID = 0;
+  int rfaID = 0;
+  int rfdID = 0;
+  int lbCAN = 0;
+  int rbCAN = 0;
+  int rfCAN = 0;
+  int lfCAN = 0;
 
   // back left module
   TalonFX lbAngleMotor = new TalonFX(lbaID);
