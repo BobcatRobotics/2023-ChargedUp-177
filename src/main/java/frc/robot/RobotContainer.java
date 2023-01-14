@@ -19,12 +19,14 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
+    private final Joystick driver = new Joystick(2);
+    private final Joystick rotate = new Joystick(0);
+    private final Joystick strafe = new Joystick(1);
 
-    /* Drive Controls */
-    private final int translationAxis = XboxController.Axis.kLeftY.value;
-    private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    private final int rotationAxis = XboxController.Axis.kRightX.value;
+    // /* Drive Controls */
+    // private final int translationAxis = XboxController.Axis.kLeftY.value;
+    // private final int strafeAxis = XboxController.Axis.kLeftX.value;
+    // private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
@@ -39,9 +41,9 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
+                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value), 
+                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value), 
+                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
                 () -> robotCentric.getAsBoolean()
             )
         );
