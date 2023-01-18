@@ -100,7 +100,7 @@ public class SwerveModule {
     }
 
     private void resetToAbsolute(){
-        waitForCanCoder();
+        //waitForCanCoder();
 
         double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(), Constants.Swerve.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
@@ -116,6 +116,7 @@ public class SwerveModule {
         mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
+        //Timer.delay(1000); // 1000 ms = 1 sec
         resetToAbsolute();
     }
 
