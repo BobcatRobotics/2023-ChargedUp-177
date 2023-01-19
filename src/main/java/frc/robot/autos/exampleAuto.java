@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 public class exampleAuto extends SequentialCommandGroup {
-    String trajectoryJSON = "paths/YourPath.wpilib.json";
+    String trajectoryJSON = "paths/test11823.wpilib.json";//"src/main/deploy/output/test11823.wpilib.json"; //"./src/main/deploy/output/test11823.wpilib.json";
     Trajectory exampleTrajectory = new Trajectory();
 
     public exampleAuto(Swerve s_Swerve){
