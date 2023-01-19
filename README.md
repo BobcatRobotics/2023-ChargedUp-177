@@ -1,5 +1,12 @@
-# WARNING: As of 1/8/23 This code is untested after being converted from 22 to 23 WPILib.
-**Once ths code is tested on an actual robot sometime in the next week or so, this warning shall be removed.**
+Tested & working for teleop & pathweaver autos
+
+**our changes**
+-tuned pid constants
+-added angle offsets
+-added ruffy joysticks
+-removed controller deadband
+
+
 
 # BaseFalconSwerve </br>
 
