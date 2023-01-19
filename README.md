@@ -6,6 +6,8 @@ Tested & working for teleop & pathweaver autos
 -added ruffy joysticks
 -removed controller deadband
 
+Original 364 Base Code: https://github.com/Team364/BaseFalconSwerve
+
 
 
 # BaseFalconSwerve </br>
