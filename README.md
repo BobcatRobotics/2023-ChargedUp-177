@@ -8,7 +8,9 @@ Tested & working for teleop & pathweaver autos
 
 Original 364 Base Code: https://github.com/Team364/BaseFalconSwerve
 
-
+**Pathweaver**
+---
+If you want to change the directory that paths are stored in on deploy, you have to change the ```  "outputDir":``` attribute of the ```pathweaver.json``` file
 
 # BaseFalconSwerve </br>
 
