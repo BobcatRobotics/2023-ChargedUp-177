@@ -21,6 +21,7 @@ public class BalanceChargeStation extends CommandBase {
   private PIDController pid; // see Ramsete.java for info on PIDControllers
   private Swerve dt;
   double calc;
+  double stationOffset = 0;
 
   
   
@@ -33,14 +34,20 @@ public class BalanceChargeStation extends CommandBase {
     pid.setSetpoint(BalancingConstants.kSetpoint);
   }
 
+  /**@param stationOffset the heading that we need to be at to be parallel with the drivetrain */
+  public BalanceChargeStation(Swerve dt, double stationOffset) {
+    pid = new PIDController(BalancingConstants.kP, BalancingConstants.kI, BalancingConstants.kD);
+    pid.setTolerance(BalancingConstants.kToleranceDegrees);
+    this.dt = dt;
+    this.stationOffset = stationOffset%360;
+    pid.setSetpoint(BalancingConstants.kSetpoint);
+  }
 
   
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  dt.drive(new Translation2d(0, 0), 0, true, false);
-  dt.resetModulesToAbsolute();
-  
+  dt.drive(new Translation2d(0, 0), stationOffset, true, false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,13 +63,13 @@ public class BalanceChargeStation extends CommandBase {
     dt.driveTank(calc/6);
 
     SmartDashboard.putNumber("error", calc);
-
+    SmartDashboard.putBoolean("isAtSetpoint", pid.atSetpoint());
   }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     dt.setBrakeMode(true);
-    dt.drive(new Translation2d(0, 0), 0, true, false);
+    dt.drive(new Translation2d(0, 0), stationOffset, true, false);
   }
 
   // Returns true when the command should end.
