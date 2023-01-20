@@ -70,6 +70,13 @@ public class Swerve extends SubsystemBase {
         }
     }    
 
+    public void driveTank(double speed){
+    //set the drive motors to the given speed
+        for(SwerveModule mod : mSwerveMods){
+            mod.driveSimple(speed);
+        }
+    }
+
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);

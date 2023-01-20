@@ -38,29 +38,29 @@ public class BalanceChargeStation extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+  dt.drive(new Translation2d(0, 0), 0, true, false);
+  dt.resetModulesToAbsolute();
+  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putString("docking debugging", "started balancing");
-    SmartDashboard.putBoolean("BalanceChargeStation", false);
-
     //start pid loop
     //devide to reduce the sensitivity
     //if pitch within 5(?) degrees of 0, stop pid loop
     calc = -pid.calculate(dt.getPitch());
     //for every degree of pitch, drive forward 1/15 of a meter
-    dt.drive(new Translation2d(calc/BalancingConstants.sensitivity, 0), 0, true, false);
-    SmartDashboard.putString("docking debugging", "balancing");
+    //dt.drive(new Translation2d(calc/BalancingConstants.sensitivity, 0), 0, true, false);
+    
+    dt.driveTank(calc/6);
+
     SmartDashboard.putNumber("error", calc);
 
   }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putString("docking debugging", "balanced");
-    SmartDashboard.putBoolean("BalanceChargeStation", true);
     dt.setBrakeMode(true);
     dt.drive(new Translation2d(0, 0), 0, true, false);
   }
