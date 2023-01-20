@@ -45,6 +45,10 @@ public class Swerve extends SubsystemBase {
         // }
     }
 
+    public double getPitch(){
+        return gyro.getPitch();
+    }
+
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
@@ -111,6 +115,13 @@ public class Swerve extends SubsystemBase {
 
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
+    }
+
+    /** @param break true for break, false for coast */
+    public void setBrakeMode(boolean brake){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setBrakeMode(brake);
+        }
     }
 
     @Override
