@@ -1,6 +1,3 @@
-# WARNING: As of 1/8/23 This code is untested after being converted from 22 to 23 WPILib.
-**Once ths code is tested on an actual robot sometime in the next week or so, this warning shall be removed.**
-
 # BaseFalconSwerve </br>
 
 **Basic Swerve Code for a Swerve Module using Falcon Motors, a CTRE CANCoder, and a CTRE Pigeon Gyro** </br>
