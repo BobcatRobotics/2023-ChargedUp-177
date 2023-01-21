@@ -11,12 +11,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.BalancingConstants;
 import frc.robot.subsystems.Swerve;
-
+import frc.robot.subsystems.LEDLightControl;
 
 
 public class BalanceChargeStation extends CommandBase {
   private boolean isContinuous = true; //if false, the command will end after the robot is balanced
   
+  private LEDLightControl led = new LEDLightControl();
+  private SetColor colors = new SetColor(led);
 
   private PIDController pid; // see Ramsete.java for info on PIDControllers
   private Swerve dt;
@@ -64,6 +66,14 @@ public class BalanceChargeStation extends CommandBase {
 
     SmartDashboard.putNumber("error", calc);
     SmartDashboard.putBoolean("isAtSetpoint", pid.atSetpoint());
+
+    if (!pid.atSetpoint()) {
+      //0.61 is red
+      colors.setColor(0.61);
+    } else {
+      //0.73 is lime (green)
+      colors.setColor(0.73);
+    }
   }
   // Called once the command ends or is interrupted.
   @Override
