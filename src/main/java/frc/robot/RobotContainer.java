@@ -38,6 +38,9 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
 
+    /* Commands */
+    private final Command align = new AlignToAprilTag();
+    private final Command follow = new FollowAprilTag();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -64,6 +67,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driver.povLeft().whileTrue(align);
+        driver.povRight().onTrue(follow);
     }
 
     /**
