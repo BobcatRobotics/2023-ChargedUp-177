@@ -4,6 +4,6 @@
   "maxVelocity": 4.5,
   "maxAcceleration": 3.0,
   "trackWidth": 0.476,
-  "gameName": "Slalom Path",
+  "gameName": "Rapid React",
   "outputDir": "../src/main/deploy"
 }

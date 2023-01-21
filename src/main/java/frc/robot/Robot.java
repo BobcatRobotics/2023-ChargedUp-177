@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -21,6 +23,12 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private boolean firstExecute = true;
+
+  private Timer timer;
+
+  private int i = 0;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -31,6 +39,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    timer = new Timer();
   }
 
   /**
@@ -60,7 +69,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -69,7 +78,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    if(firstExecute){
+      firstExecute =false;
+      timer.start();
+    }
+    if (m_autonomousCommand.isFinished() && i==0) {
+      timer.stop();
+      i++;
+    }
+    SmartDashboard.putNumber("Time Path Ran For", timer.get());
+  }
 
   @Override
   public void teleopInit() {
