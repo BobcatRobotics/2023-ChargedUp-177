@@ -1,3 +1,17 @@
+Tested & working for teleop & pathweaver autos
+
+**our changes**
+-tuned pid constants
+-added angle offsets
+-added ruffy joysticks
+-removed controller deadband
+
+Original 364 Base Code: https://github.com/Team364/BaseFalconSwerve
+
+**Pathweaver**
+---
+If you want to change the directory that paths are stored in on deploy, you have to change the ```  "outputDir":``` attribute of the ```pathweaver.json``` file
+
 # BaseFalconSwerve </br>
 
 **Basic Swerve Code for a Swerve Module using Falcon Motors, a CTRE CANCoder, and a CTRE Pigeon Gyro** </br>
