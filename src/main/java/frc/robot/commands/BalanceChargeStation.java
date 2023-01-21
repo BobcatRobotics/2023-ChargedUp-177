@@ -34,7 +34,7 @@ public class BalanceChargeStation extends CommandBase {
     pid.setSetpoint(BalancingConstants.kSetpoint);
   }
 
-  /**@param stationOffset the heading that we need to be at to be parallel with the drivetrain */
+  /**@param stationOffset the heading that we need to be at to be aligned with the charge station */
   public BalanceChargeStation(Swerve dt, double stationOffset) {
     pid = new PIDController(BalancingConstants.kP, BalancingConstants.kI, BalancingConstants.kD);
     pid.setTolerance(BalancingConstants.kToleranceDegrees);
