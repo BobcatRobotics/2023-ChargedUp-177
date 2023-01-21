@@ -44,8 +44,8 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value), 
-                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value), 
+                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
+                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
                 () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
                 () -> robotCentric.getAsBoolean()
             )
