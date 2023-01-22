@@ -72,7 +72,7 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driver.povLeft().whileTrue(align);
-        driver.povRight().onTrue(follow);
+        driver.povRight().whileTrue(follow);
     }
 
     /**

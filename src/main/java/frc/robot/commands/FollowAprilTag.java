@@ -16,6 +16,11 @@ public class FollowAprilTag extends CommandBase {
   private Swerve drivetrain;
   private PhotonVision camera;
 
+  // TODO: Tune!
+  private final double P_GAIN = 0.1;
+  private final double D_GAIN = 0.0;
+  private PIDController controller = new PIDController(P_GAIN, 0, D_GAIN);
+
   /** Creates a new FollowAprilTag. */
   public FollowAprilTag(Swerve dt, PhotonVision cam) {
     drivetrain = dt;
@@ -32,17 +37,22 @@ public class FollowAprilTag extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double forwardSpeed = 0;
     camera.getNewResults();
 
     if (!camera.hasTarget()) {
       end(false);
     } else {
-      double tx = camera.getTarget().getYaw();
-      // The camera.getDistance() method returns the distance from the camera straight to the target
-      // The math is to change it to the distance from the robot to the target on the floor
-      double dist = Math.cos(Units.degreesToRadians(25))*camera.getDistance();
-      Rotation2d rotation = new Rotation2d(tx);
-      Translation2d translation = new Translation2d(dist-1, tx);
+      double yaw = camera.getTarget().getYaw();
+      double range = camera.getDistance();
+
+      double rangeX = range * Math.cos(Units.degreesToRadians(yaw));
+      double rangeY = range * Math.sin(Units.degreesToRadians(yaw));
+
+      forwardSpeedX = -controller.calculate(rangeX, 0.7);
+      forwardSpeedY = -controller.calculate(rangeY, 0.7);
+      Translation2d translation = new Translation2d(forwardSpeedX, forwardSpeedY);
+
       drivetrain.drive(translation, 0, false, false);
     }
   }

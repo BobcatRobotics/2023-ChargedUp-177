@@ -20,6 +20,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class AlignToAprilTag extends CommandBase {
   private Swerve drivetrain;
   private PhotonVision camera;
+  
+  // TODO: Tune!
+  private final double ANGULAR_P = 0.1;
+  private final double ANGULAR_D = 0.0;
+  private PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
   /** Creates a new AlignToAprilTag. */
   public AlignToAprilTag(Swerve dt, PhotonVision cam) {
@@ -37,18 +42,15 @@ public class AlignToAprilTag extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double rotationSpeed = 0;
     camera.getNewResults();
 
     if (!camera.hasTarget()) {
       end(false);
     } else {
-      double tx = camera.getTarget().getYaw();
-      tx /= 27.0;
-
-      if (tx > 0.5) tx = 0.5;
-      else if (tx < -0.5) tx = -0.5;
-      
-      drivetrain.drive(new Translation2d(0, 0), tx * Constants.Swerve.maxAngularVelocity, false, false);
+      double yaw = camera.getTarget().getYaw();
+      rotationSpeed = -turnController.calculate(yaw, 0);
+      drivetrain.drive(new Translation2d(0, 0), rotationSpeed, false, false);
     }
   }
 
