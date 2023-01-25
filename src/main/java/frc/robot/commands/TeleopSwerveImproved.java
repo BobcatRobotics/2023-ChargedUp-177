@@ -12,7 +12,9 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
 
-public class TeleopSwerveImproved extends CommandBase {    
+public class TeleopSwerveImproved extends CommandBase {  
+    
+
     private Swerve s_Swerve;    
     private DoubleSupplier translationSup;
     private DoubleSupplier strafeSup;
