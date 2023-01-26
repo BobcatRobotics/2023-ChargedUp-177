@@ -45,7 +45,7 @@ public class TeleopSwerveImproved extends CommandBase {
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), 0.0); //TODO: add support for rotational axis
-        smartdashboard.putNumber("rotationVal", rotationVal);
+        SmartDashboard.putNumber("rotationVal", rotationVal);
         double angleXVal = MathUtil.applyDeadband(angleXSup.getAsDouble(), 0.3);
         double angleYVal = MathUtil.applyDeadband(angleYSup.getAsDouble(), 0.3);
         double currentHeading = s_Swerve.getYaw().getDegrees()%360;
@@ -55,7 +55,7 @@ public class TeleopSwerveImproved extends CommandBase {
         
         if (Math.abs(desiredHeading - currentHeading) < 0.25) {
             desiredHeading = currentHeading;
-            smartDashboard.putBoolean("is in range", true);
+            SmartDashboard.putBoolean("is in range", true);
         }
         
         
