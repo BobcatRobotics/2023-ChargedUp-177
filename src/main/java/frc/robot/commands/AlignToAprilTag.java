@@ -22,7 +22,7 @@ public class AlignToAprilTag extends CommandBase {
   private PhotonVision camera;
   
   // TODO: Tune!
-  private final double ANGULAR_P = 0.1;
+  private final double ANGULAR_P = -0.05;
   private final double ANGULAR_D = 0.0;
   private PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
@@ -57,7 +57,7 @@ public class AlignToAprilTag extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    drivetrain.drive(new Translation2d(), 0, true, true);
   }
 
   // Returns true when the command should end.

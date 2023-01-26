@@ -16,9 +16,9 @@ public class PhotonVision extends SubsystemBase {
   private PhotonCamera camera;
   private PhotonPipelineResult result;
 
-  private final double CAMERA_HEIGHT = Units.inchesToMeters(5.25);
-  private final double TARGET_HEIGHT = Units.inchesToMeters(42);
-  private final double CAMERA_PITCH = Units.degreesToRadians(25);
+  private final double CAMERA_HEIGHT = Units.inchesToMeters(6);
+  private final double TARGET_HEIGHT = Units.inchesToMeters(11);
+  private final double CAMERA_PITCH = Units.degreesToRadians(0);
 
   /** Creates a new PhotonVision. */
   public PhotonVision() {

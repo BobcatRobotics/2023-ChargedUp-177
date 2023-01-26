@@ -17,7 +17,7 @@ public class FollowAprilTag extends CommandBase {
   private PhotonVision camera;
 
   // TODO: Tune!
-  private final double P_GAIN = 0.1;
+  private final double P_GAIN = 0.7;
   private final double D_GAIN = 0.0;
   private PIDController controller = new PIDController(P_GAIN, 0, D_GAIN);
 
@@ -49,9 +49,9 @@ public class FollowAprilTag extends CommandBase {
       double rangeX = range * Math.cos(Units.degreesToRadians(yaw));
       double rangeY = range * Math.sin(Units.degreesToRadians(yaw));
 
-      forwardSpeedX = -controller.calculate(rangeX, 0.7);
-      forwardSpeedY = -controller.calculate(rangeY, 0.7);
-      Translation2d translation = new Translation2d(forwardSpeedX, forwardSpeedY);
+      double forwardSpeedX = -controller.calculate(rangeX, 1);
+      //double forwardSpeedY = -controller.calculate(rangeY, 0.5);
+      Translation2d translation = new Translation2d(forwardSpeedX, 0);
 
       drivetrain.drive(translation, 0, false, false);
     }
@@ -60,7 +60,7 @@ public class FollowAprilTag extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    drivetrain.drive(new Translation2d(), 0, false, true);
   }
 
   // Returns true when the command should end.
