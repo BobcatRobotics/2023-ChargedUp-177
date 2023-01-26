@@ -6,6 +6,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.robot.Constants;
@@ -22,7 +23,6 @@ public class TeleopSwerveImproved extends CommandBase {
     private DoubleSupplier angleXSup; //rotation joystick x
     private DoubleSupplier angleYSup; //rotation joystick y
     private BooleanSupplier robotCentricSup;
-    double deadband = 0.1;
     PIDController pid = new PIDController(0.302, 0, 0); //TODO: Tune
 
 
@@ -44,9 +44,9 @@ public class TeleopSwerveImproved extends CommandBase {
         /* Get Values, Deadband*/
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
-        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), deadband); //TODO: add support for rotational axis
-        double angleXVal = MathUtil.applyDeadband(angleXSup.getAsDouble(), deadband);
-        double angleYVal = MathUtil.applyDeadband(angleYSup.getAsDouble(), Constants.stickDeadband);
+        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(),Constants.stickDeadband ); //TODO: add support for rotational axis
+        double angleXVal = MathUtil.applyDeadband(angleXSup.getAsDouble(), 0.3);
+        double angleYVal = MathUtil.applyDeadband(angleYSup.getAsDouble(), 0.3);
         double currentHeading = s_Swerve.getYaw().getDegrees()%360;
         
         double desiredHeading = ((Math.atan2(angleYVal, angleXVal) * 180 / Math.PI)+360)%360;
@@ -68,6 +68,10 @@ public class TeleopSwerveImproved extends CommandBase {
             !robotCentricSup.getAsBoolean(), 
             true
         );
-        SmartDashboard.putNumber("error", pid.getError());
+        SmartDashboard.putNumber("error", pid.getPositionError());
+        SmartDashboard.putNumber("desiredHeading", desiredHeading);
+        SmartDashboard.putNumber("currentHeading", currentHeading);
+        SmartDashboard.putBoolean("is at setpoint", pid.atSetpoint());
+        SmartDashboard.putNumber("Rot", rot);
     }
 }
