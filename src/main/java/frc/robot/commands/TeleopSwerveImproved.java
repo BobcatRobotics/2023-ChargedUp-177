@@ -49,19 +49,14 @@ public class TeleopSwerveImproved extends CommandBase {
         double angleYVal = MathUtil.applyDeadband(angleYSup.getAsDouble(), Constants.stickDeadband);
         double currentHeading = s_Swerve.getYaw().getDegrees()%360;
         
-        double desiredHeading = Math.atan2(angleYVal, angleXVal) * 180 / Math.PI;
-        if(angleXSup.getAsDouble()<0){
-            desiredHeading += 360;
-        }
-        // test - desiredHeading = (desiredHeading + 360)%360 for all headings
+        double desiredHeading = ((Math.atan2(angleYVal, angleXVal) * 180 / Math.PI)+360)%360;
+        
         
         if (Math.abs(desiredHeading - currentHeading) < 0.25) {
             desiredHeading = currentHeading;
         }
         
-        // if (angleXVal == 0 && angleYVal == 0) {
-        //     desiredHeading = currentHeading;
-        // }
+        
         double rot = (angleXVal == 0 && angleYVal == 0) ? 
             desiredHeading = currentHeading : pid.calculate(currentHeading, desiredHeading)/360;
 
@@ -73,5 +68,6 @@ public class TeleopSwerveImproved extends CommandBase {
             !robotCentricSup.getAsBoolean(), 
             true
         );
+        SmartDashboard.putNumber("error", pid.getError());
     }
 }
