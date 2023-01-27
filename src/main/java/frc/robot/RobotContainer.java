@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -22,22 +24,22 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(2);
+    private final CommandXboxController driver = new CommandXboxController(2);
     private final Joystick rotate = new Joystick(0);
     private final Joystick strafe = new Joystick(1);
 
     // /* Drive Controls */
     // private final int translationAxis = XboxController.Axis.kLeftY.value;
-    // private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    // private final int rotationAxis = XboxController.Axis.kRightX.value;
+    private final int strafeAxis = XboxController.Axis.kLeftX.value;
+    private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final Trigger zeroGyro = driver.y();
+    private final Trigger robotCentric = driver.leftBumper();
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-
+    private final Intake m_Intake = new Intake();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -64,6 +66,10 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driver.rightTrigger().whileTrue(new RunCommand(m_Intake::runIntakeIn));
+        driver.rightBumper().whileTrue(new RunCommand(m_Intake::runIntakeOut));
+        driver.a().onTrue(new InstantCommand(m_Intake::openGrabber));
+        driver.b().onTrue(new InstantCommand(m_Intake::closeGrabber));
     }
 
     /**

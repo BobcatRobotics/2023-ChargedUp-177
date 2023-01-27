@@ -12,6 +12,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final int intakeMotorID = 0;
+    public static final int intakeSolenoidID = 0;
     public static final double stickDeadband = 0;
     public static final int jake = 194; //Jake M is 194 cm tall
     public static final class Swerve {
