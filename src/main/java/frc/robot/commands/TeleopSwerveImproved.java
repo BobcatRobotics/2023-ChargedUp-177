@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.lib.util.COTSFalconSwerveConstants;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
@@ -52,6 +51,7 @@ public class TeleopSwerveImproved extends CommandBase {
         
         double desiredHeading = ((Math.atan2(angleYVal, angleXVal) * 180 / Math.PI)+360)%360;
         
+        double distance = (Math.max(currentHeading, desiredHeading)-Math.min(currentHeading, desiredHeading));
         
         if (Math.abs(desiredHeading - currentHeading) < 0.25) {
             desiredHeading = currentHeading;
@@ -59,7 +59,7 @@ public class TeleopSwerveImproved extends CommandBase {
         }
         
         
-        double rot = pid.calculate(currentHeading, desiredHeading)/360;
+        double rot = pid.calculate(currentHeading, distance)/79;
 
 
         /* Drive */
@@ -74,5 +74,6 @@ public class TeleopSwerveImproved extends CommandBase {
         SmartDashboard.putNumber("currentHeading", currentHeading);
         SmartDashboard.putBoolean("is at setpoint", pid.atSetpoint());
         SmartDashboard.putNumber("Rot", rot);
+        
     }
 }
