@@ -7,8 +7,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
+import java.util.Hashtable;
 
 public final class Constants {
     public static final double stickDeadband = 0;
@@ -153,4 +155,68 @@ public final class Constants {
         public static final double kSetpoint = 0.0; // we want a pitch of 0 degrees
         public static final double sensitivity = 40; // 1/sensitivity = meters driven per degree of pitch 
     }
+    public static class ButtonHashtable {
+        //hashtable used here to make use of key - value pairs
+        //access through table.get(key);
+        //add or change through table.put(key, value);
+        //remove through table.remove(key);
+
+        //If the types specified in the <>'s of the "New Hashtable<>" are the same as the first, you don't have to include them
+        //Be sure to use WRAPPER CLASSES for primitive types
+        public Hashtable<String, Integer> buttons = new Hashtable<>();
+        public ButtonHashtable () {
+            buttons.put("X_Button", 1);
+            buttons.put("A_Button", 2);
+            buttons.put("B_Button", 3);
+            buttons.put("Y_Button", 4);
+            
+            buttons.put("Left_Bumper_Button", 5);
+            buttons.put("Right_Bumper_Button", 6);
+            buttons.put("Left_Trigger_Button", 7);
+            buttons.put("Right_Trigger_Button", 8);
+
+            //for some reason there are some variables in 2022 rapid react also
+            //with 1 and 0
+
+            buttons.put("D_Pad_Up", 0);
+            buttons.put("D_Pad_Right", 90);
+            buttons.put("D_Pad_Down", 180);
+            buttons.put("D_Pad_Left", 2700);
+        }
+        
+    }
+    public static class ColorHashtable {
+        //guide to hashtables in ButtonHashtable
+        public Hashtable<String, Double> colors = new Hashtable<>();
+        public ColorHashtable () {
+            //TODO: add patterns and not just solid colors
+            //possibly make a var and add .02 to it
+            //in every argument so it is higher
+            //for the next time it is called
+            colors.put("Hot Pink", 0.57);
+            colors.put("Dark Red", 0.59);
+            colors.put("Red", 0.61);
+            colors.put("Red Orange", 0.63);
+            colors.put("Orange", 0.65);
+            colors.put("Gold", 0.67);
+            colors.put("Yellow", 0.69);
+            colors.put("Lawn Green", 0.71);
+            colors.put("Lime", 0.73);
+            colors.put("Dark Green", 0.75);
+            colors.put("Green", 0.77);
+            colors.put("Blue Green", 0.79);
+            colors.put("Aqua", 0.81);
+            colors.put("Sky Blue", 0.83);
+            colors.put("Dark Blue", 0.85);
+            colors.put("Blue", 0.87);
+            colors.put("Blue Violet", 0.89);
+            colors.put("Violet", 0.91);
+            colors.put("White", 0.93);
+            colors.put("Gray", 0.95);
+            colors.put("Dark Gray", 0.97);
+            colors.put("Black", 0.99);
+            
+        }
+    }
+    
 }

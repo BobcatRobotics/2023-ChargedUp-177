@@ -6,16 +6,19 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.LEDLightControl;
 
 public class SetColor extends CommandBase {
   private LEDLightControl leds;
   private Joystick gamepad;
 
-  private double colorDub = 0.57;
+  private Constants.ButtonHashtable bh = new Constants.ButtonHashtable();
+  private Constants.ColorHashtable ch = new Constants.ColorHashtable();  
 
-  
+  private String lastPressedButton;
   /** Creates a new SetBlue. */
   public SetColor(LEDLightControl l, Joystick g) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -32,17 +35,34 @@ public class SetColor extends CommandBase {
   public void setColor (double val) {
     leds.colorSet(val);
   }
-
+  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
-  @Override
+  @Override//D - pad: up - yellow, left - purple, down - red, right - green | double press = off
+  
   public void execute() {
-   
+    pressForColor("D_Pad_Up", "Yellow");
+    pressForColor("D_Pad_Left", "Purple");
+    pressForColor("D_Pad_Down", "Red");
+    pressForColor("D_Pad_Right", "Green");
   }
-
+  //press button --> leds go brrrrr
+  private void pressForColor(String b, String c) {
+    //If a button is pressed twice it turns it off
+    if (lastPressedButton == b) {
+      leds.colorSet(ch.colors.get("Black"));
+      lastPressedButton = "";
+    } else {
+      lastPressedButton = b;
+    }
+    //If button b is pressed, set color to c
+    if (gamepad.getRawButton(bh.buttons.get(b))) {
+      leds.colorSet(ch.colors.get(c));
+    }
+  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
