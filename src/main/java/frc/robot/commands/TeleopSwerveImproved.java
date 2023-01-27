@@ -22,7 +22,7 @@ public class TeleopSwerveImproved extends CommandBase {
     private DoubleSupplier angleXSup; //rotation joystick x
     private DoubleSupplier angleYSup; //rotation joystick y
     private BooleanSupplier robotCentricSup;
-    PIDController pid = new PIDController(0.6, 0, 0); //TODO: Tune
+    PIDController pid = new PIDController(0.6, 0.1, 0); //TODO: Tune
 
 
     public TeleopSwerveImproved(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, DoubleSupplier angleXSup, DoubleSupplier angleYSup, BooleanSupplier robotCentricSup) {
