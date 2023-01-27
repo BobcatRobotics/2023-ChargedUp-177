@@ -22,7 +22,7 @@ public class TeleopSwerveImproved extends CommandBase {
     private DoubleSupplier angleXSup; //rotation joystick x
     private DoubleSupplier angleYSup; //rotation joystick y
     private BooleanSupplier robotCentricSup;
-    PIDController pid = new PIDController(0.302, 0, 0); //TODO: Tune
+    PIDController pid = new PIDController(0.6, 0, 0); //TODO: Tune
 
 
     public TeleopSwerveImproved(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, DoubleSupplier angleXSup, DoubleSupplier angleYSup, BooleanSupplier robotCentricSup) {
@@ -57,9 +57,12 @@ public class TeleopSwerveImproved extends CommandBase {
             desiredHeading = currentHeading;
             SmartDashboard.putBoolean("is in range", true);
         }
+        if (Math.abs(angleXVal) < 0.3 && Math.abs(angleYVal) < 0.3) {
+            desiredHeading = currentHeading;
+        }
         
         
-        double rot = pid.calculate(currentHeading, distance)/79;
+        double rot = pid.calculate(currentHeading, distance)/75;
 
 
         /* Drive */
