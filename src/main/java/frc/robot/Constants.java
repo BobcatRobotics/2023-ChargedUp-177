@@ -145,4 +145,9 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class FieldConstants {
+        public static final double length = 10;
+        public static final double width = 10;
+    }
 }
