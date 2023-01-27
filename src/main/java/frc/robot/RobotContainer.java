@@ -35,15 +35,23 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
 
+    public double getJoystickAngle(){
+        return  ((Math.atan2(rotate.getRawAxis(Joystick.AxisType.kY.value), rotate.getRawAxis(Joystick.AxisType.kX.value)) * 180 / Math.PI)+360)%360;
+    }
+
+    // returns the angle of the joystick in degrees
+   
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
+            new TeleopSwerveImproved(
+                s_Swerve,
                 () -> -strafe.getRawAxis(Joystick.AxisType.kY.value), 
                 () -> -strafe.getRawAxis(Joystick.AxisType.kX.value), 
-                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
+                () -> -rotate.getRawAxis(Joystick.AxisType.kTwist.value),
+                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value),
+                () -> -rotate.getRawAxis(Joystick.AxisType.kY.value),
                 () -> robotCentric.getAsBoolean()
             )
         );
