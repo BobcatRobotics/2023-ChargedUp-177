@@ -34,7 +34,7 @@ public class TeleopSwerveImproved extends CommandBase {
 
     private double deadBand = 0.3;    
 
-    private double kP = 0.6;
+    private double kP = 0.4;
     private double kI = 0.1;
     private double kD = 0;
     PIDController pid = new PIDController(kP, kI, kD); //TODO: Tune
@@ -68,6 +68,8 @@ public class TeleopSwerveImproved extends CommandBase {
         SmartDashboard.putNumber("currentHeading", currentHeading);
         SmartDashboard.putBoolean("is at setpoint", pid.atSetpoint());
         SmartDashboard.putNumber("Rot", rot);
+        SmartDashboard.putNumber("x", angleXVal);
+        SmartDashboard.putNumber("y", angleYVal);
     }
 
     @Override
@@ -90,6 +92,8 @@ public class TeleopSwerveImproved extends CommandBase {
         //TODO: fix angle offset
         desiredHeading = ((Math.atan2(angleYVal, angleXVal) * 180 / Math.PI)+360)%360;
         
+        updateShuffleBoardDebugging();
+
         //find the shortest distance between the current heading and the desired heading
         distance = (Math.max(currentHeading, desiredHeading)-Math.min(currentHeading, desiredHeading));
         //if the current heading is greater than the desired heading, turn counterclockwise
@@ -110,7 +114,7 @@ public class TeleopSwerveImproved extends CommandBase {
         }
         
         
-        rot = (pid.calculate(currentHeading, distance)/75);
+        rot = rotationVal == 0 ? (pid.calculate(currentHeading, distance)/75) : ((pid.calculate(currentHeading, distance)/75)+rotationVal)/2 ;
 
 
         /* Drive */
