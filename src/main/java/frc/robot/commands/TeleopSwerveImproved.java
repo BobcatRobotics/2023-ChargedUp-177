@@ -84,15 +84,8 @@ public class TeleopSwerveImproved extends CommandBase {
          currentHeading = s_Swerve.getYaw().getDegrees()%360;
         
 
-        /* Calculate desired heading based on joystick input,
-         * for example, if the joystick is pointing straight up,
-         * the desired heading is 0 degrees, if it is pointing
-         * to the top right, the desired heading is 45 degrees, etc
-         */
-        //TODO: fix angle offset
-        desiredHeading = ((Math.atan2(angleYVal, angleXVal) * 180 / Math.PI)+270)%360;
         
-        updateShuffleBoardDebugging();
+        
 
         //find the shortest distance between the current heading and the desired heading
         distance = (Math.max(currentHeading, desiredHeading)-Math.min(currentHeading, desiredHeading));
@@ -101,16 +94,21 @@ public class TeleopSwerveImproved extends CommandBase {
 
         //if the desired heading is within 0.25 degrees of the current heading,
         //stay where we are
-        if (Math.abs(desiredHeading - currentHeading) < 0.25) {
-            desiredHeading = currentHeading;
-            SmartDashboard.putBoolean("is in range", true);
-        }
-        else {
-            SmartDashboard.putBoolean("is in range", false);
-        }
         //if the joystick is within the deadband, stay where we are
         if (Math.abs(angleXVal) < deadBand && Math.abs(angleYVal) < deadBand) {
             desiredHeading = currentHeading;
+        }else if (Math.abs(desiredHeading - currentHeading) < 0.25){
+            desiredHeading = currentHeading;
+            SmartDashboard.putBoolean("is in range", true);
+        }else{
+        /* Calculate desired heading based on joystick input,
+         * for example, if the joystick is pointing straight up,
+         * the desired heading is 0 degrees, if it is pointing
+         * to the top right, the desired heading is 45 degrees, etc
+         */
+        //TODO: fix angle offset
+        desiredHeading = ((Math.atan2(angleYVal, angleXVal) * 180 / Math.PI)+270)%360;
+        SmartDashboard.putBoolean("is in range", false);
         }
         
         
@@ -124,5 +122,6 @@ public class TeleopSwerveImproved extends CommandBase {
             !robotCentricSup.getAsBoolean(), 
             true
         );
+        updateShuffleBoardDebugging();
     }
 }
