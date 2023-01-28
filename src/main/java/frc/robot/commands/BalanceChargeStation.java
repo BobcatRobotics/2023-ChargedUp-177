@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.BalancingConstants;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.LEDLightControl;
-
+import frc.robot.Constants.ButtonHashtable;
 
 public class BalanceChargeStation extends CommandBase {
   private boolean isContinuous = true; //if false, the command will end after the robot is balanced
@@ -25,7 +25,7 @@ public class BalanceChargeStation extends CommandBase {
   double calc;
   double stationOffset = 0;
 
-  
+  private ButtonHashtable bh = new ButtonHashtable();
   
 
   /** Creates a new BalanceChargeStation. */
@@ -69,10 +69,10 @@ public class BalanceChargeStation extends CommandBase {
 
     if (!pid.atSetpoint()) {
       //0.61 is red
-      colors.setColor(0.61);
+      colors.setColor(bh.buttons.get("Red"));
     } else {
       //0.73 is lime (green)
-      colors.setColor(0.73);
+      colors.setColor(bh.buttons.get("Red"));
     }
   }
   // Called once the command ends or is interrupted.

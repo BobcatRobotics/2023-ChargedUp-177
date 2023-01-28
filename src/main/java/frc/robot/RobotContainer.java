@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.Constants;
+import frc.robot.Constants.ButtonHashtable;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,6 +20,9 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    //for the xbox controller buttons
+    private Constants.ButtonHashtable bh = new Constants.ButtonHashtable();
+
     /* Controllers */
     private final Joystick driver = new Joystick(2);
     private final Joystick rotate = new Joystick(0);
@@ -29,8 +34,8 @@ public class RobotContainer {
     // private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, bh.buttons.get("Y_Button"));
+    private final JoystickButton robotCentric = new JoystickButton(driver, bh.buttons.get("Left_Bumper_Button"));
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
