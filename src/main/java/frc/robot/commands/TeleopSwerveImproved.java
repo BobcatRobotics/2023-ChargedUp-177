@@ -90,7 +90,7 @@ public class TeleopSwerveImproved extends CommandBase {
          * to the top right, the desired heading is 45 degrees, etc
          */
         //TODO: fix angle offset
-        desiredHeading = ((Math.atan2(angleYVal, angleXVal) * 180 / Math.PI)+360)%360;
+        desiredHeading = ((Math.atan2(angleYVal, angleXVal) * 180 / Math.PI)+270)%360;
         
         updateShuffleBoardDebugging();
 
