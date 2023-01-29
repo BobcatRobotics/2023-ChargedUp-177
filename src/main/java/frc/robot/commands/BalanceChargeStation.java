@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.BalancingConstants;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.LEDLightControl;
+//import frc.robot.subsystems.LEDLightControl;
 import frc.robot.Constants.ButtonHashtable;
 
 public class BalanceChargeStation extends CommandBase {
   private boolean isContinuous = true; //if false, the command will end after the robot is balanced
   
-  private LEDLightControl led = new LEDLightControl();
-  private SetColor colors = new SetColor(led);
+  // private LEDLightControl led = new LEDLightControl();
+  // private SetColor colors = new SetColor(led);
 
   private PIDController pid; 
   // for in depth info on PID controllers, see https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/pidcontroller.html
@@ -84,7 +84,7 @@ public class BalanceChargeStation extends CommandBase {
     //if pitch within 5(?) degrees of 0, stop pid loop
     calc = -pid.calculate(dt.getPitch());
     // if calc = sensitivity, drive at 100% speed, if calc = 0, drive at 0% speed, etc
-    dt.driveTank(calc/sensitivity);
+    dt.driveTank(calc);
 
     SmartDashboard.putNumber("charge error", calc);
     SmartDashboard.putBoolean(" charte @ Setpoint", pid.atSetpoint());    
