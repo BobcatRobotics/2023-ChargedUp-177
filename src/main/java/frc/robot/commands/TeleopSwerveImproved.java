@@ -35,7 +35,7 @@ public class TeleopSwerveImproved extends CommandBase {
     private double deadBand = 0.15;    
 
     private double kP = 0.4;
-    private double kI = 0.1;
+    private double kI = 1;
     private double kD = 0;
     PIDController pid = new PIDController(kP, kI, kD); //TODO: Tune
 
@@ -117,7 +117,7 @@ public class TeleopSwerveImproved extends CommandBase {
 
         
         //if using rotational axis, use that value, otherwise use the pid
-        rot = rotationVal == 0 ? (pid.calculate(currentHeading, distance)/75) : rotationVal;
+        rot = rotationVal == 0 ? pid.calculate(currentHeading, distance)/10 : rotationVal;
 
 
         /* Drive */
