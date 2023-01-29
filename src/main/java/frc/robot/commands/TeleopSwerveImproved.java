@@ -32,7 +32,7 @@ public class TeleopSwerveImproved extends CommandBase {
     private double distance;
     double rot;
 
-    private double deadBand = 0.3;    
+    private double deadBand = 0.15;    
 
     private double kP = 0.4;
     private double kI = 0.1;
@@ -63,13 +63,13 @@ public class TeleopSwerveImproved extends CommandBase {
         this.robotCentricSup = robotCentricSup;
     }
     public void updateShuffleBoardDebugging(){
-        SmartDashboard.putNumber("error", pid.getPositionError());
+        SmartDashboard.putNumber("turn error", pid.getPositionError());
         SmartDashboard.putNumber("desiredHeading", desiredHeading);
         SmartDashboard.putNumber("currentHeading", currentHeading);
-        SmartDashboard.putBoolean("is at setpoint", pid.atSetpoint());
+        SmartDashboard.putBoolean("turn at setpoint", pid.atSetpoint());
         SmartDashboard.putNumber("Rot", rot);
-        SmartDashboard.putNumber("x", angleXVal);
-        SmartDashboard.putNumber("y", angleYVal);
+        SmartDashboard.putNumber("turn x", angleXVal);
+        SmartDashboard.putNumber("turn y", angleYVal);
     }
 
     @Override
@@ -78,28 +78,23 @@ public class TeleopSwerveImproved extends CommandBase {
          translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
          strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
          rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), 0.0); //TODO: add support for rotational axis
-        SmartDashboard.putNumber("rotationVal", rotationVal);
+         SmartDashboard.putNumber("rotationVal", rotationVal);
          angleXVal = MathUtil.applyDeadband(angleXSup.getAsDouble(), deadBand);
-         angleYVal = MathUtil.applyDeadband(angleYSup.getAsDouble(), 0.3);
+         angleYVal = MathUtil.applyDeadband(angleYSup.getAsDouble(), deadBand);
+        
+
          currentHeading = s_Swerve.getYaw().getDegrees()%360;
-        
+         desiredHeading = ((Math.atan2(angleYVal, angleXVal) * 180 / Math.PI)+270)%360;
 
-        
-        
 
-        //find the shortest distance between the current heading and the desired heading
-        distance = (Math.max(currentHeading, desiredHeading)-Math.min(currentHeading, desiredHeading));
-        //if the current heading is greater than the desired heading, turn counterclockwise
-        distance = (currentHeading > desiredHeading) ? -distance : distance;
-
-        //if the desired heading is within 0.25 degrees of the current heading,
+         //if the desired heading is within 0.25 degrees of the current heading,
         //stay where we are
         //if the joystick is within the deadband, stay where we are
-        if (Math.abs(angleXVal) < deadBand && Math.abs(angleYVal) < deadBand) {
+        if (angleXVal == 0 && angleYVal == 0) {
             desiredHeading = currentHeading;
         }else if (Math.abs(desiredHeading - currentHeading) < 0.25){
             desiredHeading = currentHeading;
-            SmartDashboard.putBoolean("is in range", true);
+            SmartDashboard.putBoolean("turn in range", true);
         }else{
         /* Calculate desired heading based on joystick input,
          * for example, if the joystick is pointing straight up,
@@ -108,11 +103,21 @@ public class TeleopSwerveImproved extends CommandBase {
          */
         //TODO: fix angle offset
         desiredHeading = ((Math.atan2(angleYVal, angleXVal) * 180 / Math.PI)+270)%360;
-        SmartDashboard.putBoolean("is in range", false);
+        SmartDashboard.putBoolean("turn in range", false);
         }
         
         
-        rot = rotationVal == 0 ? (pid.calculate(currentHeading, distance)/75) : ((pid.calculate(currentHeading, distance)/75)+rotationVal)/2 ;
+
+        //find the shortest distance between the current heading and the desired heading
+        distance = (Math.max(currentHeading, desiredHeading)-Math.min(currentHeading, desiredHeading));
+        //if the current heading is greater than the desired heading, turn counterclockwise
+        distance = (currentHeading > desiredHeading) ? -distance : distance;
+
+        
+
+        
+        //if using rotational axis, use that value, otherwise use the pid
+        rot = rotationVal == 0 ? (pid.calculate(currentHeading, distance)/75) : rotationVal;
 
 
         /* Drive */
@@ -122,6 +127,7 @@ public class TeleopSwerveImproved extends CommandBase {
             !robotCentricSup.getAsBoolean(), 
             true
         );
+
         updateShuffleBoardDebugging();
     }
 }
