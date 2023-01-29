@@ -46,7 +46,7 @@ public class BalanceChargeStation extends CommandBase {
   double stationOffset = 0;
   double sensitivity = 10;
 
-  private ButtonHashtable bh = new ButtonHashtable();
+  //private ButtonHashtable bh = new ButtonHashtable();
   
 
   /** Creates a new BalanceChargeStation. */
@@ -71,8 +71,10 @@ public class BalanceChargeStation extends CommandBase {
   @Override
   public void initialize() {
   //orient wheels to be parallel with the charge station
-  dt.drive(new Translation2d(0, 0), stationOffset, true, false);
-  }
+  //dt.drive(new Translation2d(0, 0), stationOffset, true, false);
+  
+  dt.resetModulesToAbsolute();
+}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -84,10 +86,11 @@ public class BalanceChargeStation extends CommandBase {
     // if calc = sensitivity, drive at 100% speed, if calc = 0, drive at 0% speed, etc
     dt.driveTank(calc/sensitivity);
 
-    SmartDashboard.putNumber("error", calc);
-    SmartDashboard.putBoolean("isAtSetpoint", pid.atSetpoint());    
-
-
+    SmartDashboard.putNumber("charge error", calc);
+    SmartDashboard.putBoolean(" charte @ Setpoint", pid.atSetpoint());    
+    SmartDashboard.putNumber("charge station offset", stationOffset);
+    
+/* 
     if (!pid.atSetpoint()) {
       //0.61 is red
       colors.setColor(bh.buttons.get("Red"));
@@ -95,7 +98,8 @@ public class BalanceChargeStation extends CommandBase {
       //0.73 is lime (green)
       colors.setColor(bh.buttons.get("Red")); //shouldnt this be lime?
     }
-  }
+  
+  */}
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
