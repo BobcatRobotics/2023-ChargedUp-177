@@ -5,14 +5,16 @@
 package frc.robot.commands;
 
 
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Constants.BalancingConstants;
 import frc.robot.subsystems.Swerve;
 //import frc.robot.subsystems.LEDLightControl;
-import frc.robot.Constants.ButtonHashtable;
+//import frc.robot.Constants.ButtonHashtable;
 
 public class BalanceChargeStation extends CommandBase {
   private boolean isContinuous = true; //if false, the command will end after the robot is balanced
@@ -44,7 +46,8 @@ public class BalanceChargeStation extends CommandBase {
   private Swerve dt;
   double calc;
   double stationOffset = 0;
-  double sensitivity = 10;
+  double sensitivity = BalancingConstants.kSensitivity;
+  boolean isOffset = false;
 
   //private ButtonHashtable bh = new ButtonHashtable();
   
@@ -64,30 +67,53 @@ public class BalanceChargeStation extends CommandBase {
     this.dt = dt;
     this.stationOffset = stationOffset%360;
     pid.setSetpoint(BalancingConstants.kSetpoint);
+    isOffset = true;
   }
 
+  // sigmoid activation function
+  // high values return 1, low values return 0
+  public double sigmoid(double x){
+    return 1/(1+Math.exp(-x));
+  }
   
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  //orient wheels to be parallel with the charge station
-  //dt.drive(new Translation2d(0, 0), stationOffset, true, false);
-  
-  dt.resetModulesToAbsolute();
 }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //start pid loop
-    //devide to reduce the sensitivity
-    //if pitch within 5(?) degrees of 0, stop pid loop
     calc = -pid.calculate(dt.getPitch());
-    // if calc = sensitivity, drive at 100% speed, if calc = 0, drive at 0% speed, etc
-    dt.driveTank(calc);
-
+    if (!isOffset){
+    dt.drive(
+      new Translation2d(
+        sigmoid(calc/sensitivity)*Constants.Swerve.maxSpeed, //x & y may need to be switched
+        0
+      ),
+      0,
+      true,
+      true
+      );
+    }
+    //TODO: figure out driving with an offset driverstation angle
+    //were probably never gonna use this, and I have other stuff to do,
+    //so I'm just gonna leave this here for now
+    /*else{
+      dt.drive(
+        // angle -> slope of line with that angle
+        // slope = tan(angle * pi/180)
+        new Translation2d(
+          
+          
+        ),
+        0,
+        true,
+        true
+      )
+    }  */  
     SmartDashboard.putNumber("charge error", calc);
-    SmartDashboard.putBoolean(" charte @ Setpoint", pid.atSetpoint());    
+    SmartDashboard.putBoolean(" charge Setpoint", pid.atSetpoint());    
     SmartDashboard.putNumber("charge station offset", stationOffset);
     
 /* 
@@ -104,7 +130,7 @@ public class BalanceChargeStation extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     dt.setBrakeMode(true);
-    dt.drive(new Translation2d(0, 0), stationOffset, true, false);
+    dt.drive(new Translation2d(0, 0), 0, true, false);  
   }
 
   // Returns true when the command should end.

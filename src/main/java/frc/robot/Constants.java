@@ -153,7 +153,8 @@ public final class Constants {
         public static final double kD = 0;
         public static final double kToleranceDegrees = 2.5;//acceptable absolute error in degrees
         public static final double kSetpoint = 0.0; // we want a pitch of 0 degrees
-        public static final double sensitivity = 40; // 1/sensitivity = meters driven per degree of pitch 
+        public static final double kSensitivity = 40; // sigmoid(pid/sensitivity)*max speed = meters per second to drive 
+        
     }
     public static class ButtonHashtable {
         //hashtable used here to make use of key - value pairs

@@ -70,9 +70,6 @@ public class SwerveModule {
         }
     }
     
-    public void driveSimple(double speed){
-        mDriveMotor.set(ControlMode.PercentOutput, speed);
-    }
 
     private void setAngle(SwerveModuleState desiredState){
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
