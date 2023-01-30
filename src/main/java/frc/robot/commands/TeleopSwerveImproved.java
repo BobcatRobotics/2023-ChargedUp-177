@@ -34,7 +34,7 @@ public class TeleopSwerveImproved extends CommandBase {
 
     private double deadBand = 0.15;    
 
-    private double kP = 0.4;
+    private double kP = 5;
     private double kI = 1;
     private double kD = 0;
     PIDController pid = new PIDController(kP, kI, kD); //TODO: Tune
@@ -70,6 +70,7 @@ public class TeleopSwerveImproved extends CommandBase {
         SmartDashboard.putNumber("Rot", rot);
         SmartDashboard.putNumber("turn x", angleXVal);
         SmartDashboard.putNumber("turn y", angleYVal);
+        SmartDashboard.putNumber("rotationVal", rotationVal);
     }
 
     @Override
@@ -78,7 +79,6 @@ public class TeleopSwerveImproved extends CommandBase {
          translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
          strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
          rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), 0.0); //TODO: add support for rotational axis
-         SmartDashboard.putNumber("rotationVal", rotationVal);
          angleXVal = MathUtil.applyDeadband(angleXSup.getAsDouble(), deadBand);
          angleYVal = MathUtil.applyDeadband(angleYSup.getAsDouble(), deadBand);
         
@@ -111,13 +111,11 @@ public class TeleopSwerveImproved extends CommandBase {
         //find the shortest distance between the current heading and the desired heading
         distance = (Math.max(currentHeading, desiredHeading)-Math.min(currentHeading, desiredHeading));
         //if the current heading is greater than the desired heading, turn counterclockwise
-        distance = (currentHeading > desiredHeading) ? -distance : distance;
-
-        
+        distance = (currentHeading > desiredHeading) ? -distance : distance;       
 
         
         //if using rotational axis, use that value, otherwise use the pid
-        rot = rotationVal == 0 ? pid.calculate(currentHeading, distance)/10 : rotationVal;
+        rot = rotationVal == 0 ? pid.calculate(currentHeading, distance)/360 : rotationVal;
 
 
         /* Drive */
