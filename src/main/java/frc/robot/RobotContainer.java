@@ -1,18 +1,18 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import frc.robot.autos.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.autos.exampleAuto;
+import frc.robot.commands.AlignToTarget;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Swerve;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,7 +22,7 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(2);
+    private final CommandXboxController driver = new CommandXboxController(2);
     private final Joystick rotate = new Joystick(0);
     private final Joystick strafe = new Joystick(1);
 
@@ -32,12 +32,15 @@ public class RobotContainer {
     // private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final Trigger zeroGyro = driver.y();
+    private final Trigger robotCentric = driver.leftBumper();
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Limelight m_Limelight = new Limelight();
 
+    /* Commands */
+    private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -64,6 +67,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driver.a().whileTrue(align);
     }
 
     /**
