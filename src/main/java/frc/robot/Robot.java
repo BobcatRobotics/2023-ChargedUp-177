@@ -49,6 +49,8 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     timer = new Timer();
+    gamepad = m_robotContainer.m_driverController;
+    elevator =  m_robotContainer.elevator;
   }
 
   /**
