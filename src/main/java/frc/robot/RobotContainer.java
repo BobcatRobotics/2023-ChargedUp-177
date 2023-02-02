@@ -25,6 +25,12 @@ public class RobotContainer {
     private final Joystick driver = new Joystick(2);
     private final Joystick rotate = new Joystick(0);
     private final Joystick strafe = new Joystick(1);
+    
+    public final Elevator elevator = new Elevator();
+ 
+
+    // Replace with CommandPS4Controller or CommandJoystick if needed
+    public final XboxController m_driverController = new XboxController(2);
 
     // /* Drive Controls */
     // private final int translationAxis = XboxController.Axis.kLeftY.value;

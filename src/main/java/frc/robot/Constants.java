@@ -129,7 +129,22 @@ public final class Constants {
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
     }
-
+    public static class elevator {
+        public static final int Elevator_motorCanID = 9;
+        public static final int bottomlimitSwitchcanport = 0;
+        public static final int toplimitSwitchcanport = 1;
+    
+        public static final double top_level = 100;
+        public static final double middle_level = 50;
+        public static final double bottom_level = 0;
+    
+        public static final int D_Pad_Up = 0;
+        public static final int D_Pad_Down = 180;
+        public static final int D_Pad_Left = 270;
+        public static final int D_Pad_Right = 90;
+        public static final int middlelimitSwitchcanport = -1;
+      }
+      
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
         public static final double kMaxSpeedMetersPerSecond = 4.5;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
