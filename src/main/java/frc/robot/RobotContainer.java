@@ -1,12 +1,16 @@
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.exampleAuto;
 import frc.robot.commands.AlignToTarget;
@@ -22,7 +26,7 @@ import frc.robot.subsystems.Swerve;
  */
 public class RobotContainer {
     /* Controllers */
-    private final CommandXboxController driver = new CommandXboxController(2);
+    private final Joystick driver = new Joystick(2);
     private final Joystick rotate = new Joystick(0);
     private final Joystick strafe = new Joystick(1);
 
@@ -32,15 +36,16 @@ public class RobotContainer {
     // private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final Trigger zeroGyro = driver.y();
-    private final Trigger robotCentric = driver.leftBumper();
+    private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
+    private final JoystickButton robotCentric = new JoystickButton(driver, 5);
+    private final JoystickButton alignRobot = new JoystickButton(driver, 2);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Limelight m_Limelight = new Limelight();
 
     /* Commands */
-    private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
+    private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -56,6 +61,7 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+        m_Limelight.initializeLimeLight();
     }
 
     /**
@@ -67,7 +73,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        driver.a().whileTrue(align);
+        alignRobot.whileTrue(align);
     }
 
     /**
