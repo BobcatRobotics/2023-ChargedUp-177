@@ -35,34 +35,33 @@ public class Elevator extends SubsystemBase {
 
 
   public Elevator() { //gear reduction is 15 to 1
+
+    /* Inits the limits (poet frfr) + Also initializes the elevator motor*/
     topLimit = new DigitalInput(Constants.elevator.toplimitSwitchPWMport);
     bottomLimit = new DigitalInput(Constants.elevator.bottomlimitSwitchPWMport);
-    //middleLimit = new DigitalInput(Constants.elevator.middlelimitSwitchcanport);
     elevator_motor = new WPI_TalonFX(Constants.elevator.Elevator_motorCanID);
-    //encoder = new Encoder(topLimit, bottomLimit);
+
+    /*
+    (!!)All encoder stuff is commented out for now(!!)
+
+    encoder = new Encoder(topLimit, bottomLimit);
+    */
+
+    //Creates PID for elevator
     elevatorCONTROLLER = new PIDController(0, 0, 0);
     //encoder.reset();
     elevatorCONTROLLER.reset();
     elevatorCONTROLLER.setTolerance(tolerance);
   }
 
+  /* Returns the value of limits */
   public boolean getTopLimit() {
     return !topLimit.get();
   }
-
   public boolean getBottomLimit() {
-    // if (bottomLimit.get() == true){
-    //   System.out.println("Bot Lim:" + bottomLimit.get());
-    // }
     return !bottomLimit.get();
   }
-  // public boolean getMiddleLimit(){
-  //   if(middleLimit.get() == true){
-  //     state = 0;
-  //     encoder.reset();
-  //   }
-  //   return middleLimit.get();
-  // }
+
   
   public void stop() {
     elevator_motor.stopMotor();
@@ -88,19 +87,26 @@ public class Elevator extends SubsystemBase {
   public void setInvertedfalse(){
     elevator_motor.setInverted(false);
   }
+
+  /* Returns the position of the elevator (whether it's at the top limit (1), bottom limit (0), or in the middle (-1)) */
   public int get_state(){
     return(state);
   }
+
+
+  /* Encoder and PID calculations */
   public double get_encoder_distance(){
     return(elevator_motor.getSelectedSensorPosition());
   }
+  public void reset_encoder(){
+    encoder.reset();
+  }
+  
   public void setpidpoint(double Setpoint){
     elevatorCONTROLLER.setSetpoint(Setpoint);
   }
   public double calculate(double current_position, double wanted_position){
     return(elevatorCONTROLLER.calculate(current_position, wanted_position));
   }
-  public void reset_encoder(){
-    encoder.reset();
-  }
+
 }

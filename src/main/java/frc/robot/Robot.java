@@ -31,12 +31,10 @@ public class Robot extends TimedRobot {
   private Timer timer;
 
   private int i = 0;
-  int state = 0;
 
-  private XboxController gamepad;
+
   //private Elevate elevate;
   private Elevator elevator;
-  private double d = 0;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -49,7 +47,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     timer = new Timer();
-    // gamepad = m_robotContainer.m_driverController;
     elevator =  m_robotContainer.elevator;
   }
 

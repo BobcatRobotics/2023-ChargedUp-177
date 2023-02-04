@@ -26,15 +26,8 @@ public class RobotContainer {
     private final Joystick driver = new Joystick(2);
     private final Joystick rotate = new Joystick(0);
     private final Joystick strafe = new Joystick(1);
-    
-    public final Elevator elevator = new Elevator();
+
  
-
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    public final CommandXboxController m_driverController = new CommandXboxController(2);
-    private Command raiseElevator = new raiseElevator(elevator);
-    private Command lowerElevator = new lowerElevator(elevator);
-
     // /* Drive Controls */
     // private final int translationAxis = XboxController.Axis.kLeftY.value;
     // private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -43,9 +36,16 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    public final CommandXboxController m_driverController = new CommandXboxController(2);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    public final Elevator elevator = new Elevator();
+
+
+    /* Initializing commands for Elevator */
+    private Command raiseElevator = new raiseElevator(elevator);
+    private Command lowerElevator = new lowerElevator(elevator);
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */

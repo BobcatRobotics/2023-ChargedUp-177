@@ -40,6 +40,7 @@ public class lowerElevator extends CommandBase {
     // int currState = elevator.get_state();
     //without comments it is
 
+    /* Moves elevator at -45% speed */
     double d = 0.0;
     if (!elevator.getBottomLimit()){
       d = -0.45;
