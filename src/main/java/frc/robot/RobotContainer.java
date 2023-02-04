@@ -6,6 +6,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -30,7 +31,9 @@ public class RobotContainer {
  
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    public final XboxController m_driverController = new XboxController(2);
+    public final CommandXboxController m_driverController = new CommandXboxController(2);
+    private Command raiseElevator = new raiseElevator(elevator);
+    private Command lowerElevator = new lowerElevator(elevator);
 
     // /* Drive Controls */
     // private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -70,6 +73,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        m_driverController.povUp().whileTrue(raiseElevator);
+        m_driverController.povDown().whileTrue(lowerElevator);
     }
 
     /**

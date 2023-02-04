@@ -25,49 +25,44 @@ public class Elevator extends SubsystemBase {
 
   private DigitalInput topLimit;
   private DigitalInput bottomLimit;
-  private DigitalInput middleLimit;
+  //private DigitalInput middleLimit;
   private WPI_TalonFX elevator_motor;
   private Encoder encoder;
-  private int state =0;
+  private int state;
   private PIDController elevatorCONTROLLER;
   private double tolerance = 0.2;
 
 
 
   public Elevator() { //gear reduction is 15 to 1
-    topLimit = new DigitalInput(Constants.elevator.toplimitSwitchcanport);
-    bottomLimit = new DigitalInput(Constants.elevator.bottomlimitSwitchcanport);
-    middleLimit = new DigitalInput(Constants.elevator.middlelimitSwitchcanport);
+    topLimit = new DigitalInput(Constants.elevator.toplimitSwitchPWMport);
+    bottomLimit = new DigitalInput(Constants.elevator.bottomlimitSwitchPWMport);
+    //middleLimit = new DigitalInput(Constants.elevator.middlelimitSwitchcanport);
     elevator_motor = new WPI_TalonFX(Constants.elevator.Elevator_motorCanID);
-    encoder = new Encoder(middleLimit, bottomLimit);
+    //encoder = new Encoder(topLimit, bottomLimit);
     elevatorCONTROLLER = new PIDController(0, 0, 0);
-    encoder.reset();
+    //encoder.reset();
     elevatorCONTROLLER.reset();
     elevatorCONTROLLER.setTolerance(tolerance);
   }
 
   public boolean getTopLimit() {
-    if (topLimit.get() == true){
-      state =1;
-      encoder.reset();
-    }
-    return topLimit.get();
+    return !topLimit.get();
   }
 
   public boolean getBottomLimit() {
-    if (bottomLimit.get() == true){
-      state =-1;
-      encoder.reset();
-    }
-    return bottomLimit.get();
+    // if (bottomLimit.get() == true){
+    //   System.out.println("Bot Lim:" + bottomLimit.get());
+    // }
+    return !bottomLimit.get();
   }
-  public boolean getMiddleLimit(){
-    if(middleLimit.get() == true){
-      state = 0;
-      encoder.reset();
-    }
-    return middleLimit.get();
-  }
+  // public boolean getMiddleLimit(){
+  //   if(middleLimit.get() == true){
+  //     state = 0;
+  //     encoder.reset();
+  //   }
+  //   return middleLimit.get();
+  // }
   
   public void stop() {
     elevator_motor.stopMotor();
@@ -76,6 +71,7 @@ public class Elevator extends SubsystemBase {
     elevator_motor.set(speed_amount);
     
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
