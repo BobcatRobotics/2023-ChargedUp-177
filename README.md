@@ -10,7 +10,11 @@ Original 364 Base Code: https://github.com/Team364/BaseFalconSwerve
 
 **Pathweaver**
 ---
-If you want to change the directory that paths are stored in on deploy, you have to change the ```  "outputDir":``` attribute of the ```pathweaver.json``` file
+If you want to change the directory that paths are stored in on deploy, you have to change the ```  "outputDir":``` attribute of the ```pathweaver.json``` file </br>
+
+**Elevator**
+---
+Note: During elevator testing we came across an issue when trying to use a single-use "Elevate" command, hence we created 2 seperate commands to raise and lower the elevator with corresponding limit switches  </br>
 
 # BaseFalconSwerve </br>
 
