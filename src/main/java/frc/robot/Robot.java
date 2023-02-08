@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     
     elevator.getBottomLimit();
-    elevator.getMiddleLimit();
+    // elevator.getMiddleLimit();
     elevator.getTopLimit();
     state = elevator.get_state();
     if (gamepad.getPOV() == Constants.elevator.D_Pad_Up){

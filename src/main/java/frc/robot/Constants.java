@@ -142,7 +142,7 @@ public final class Constants {
         public static final int D_Pad_Down = 180;
         public static final int D_Pad_Left = 270;
         public static final int D_Pad_Right = 90;
-        public static final int middlelimitSwitchcanport = -1;
+        //public static final int middlelimitSwitchcanport = -1;
       }
       
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

@@ -25,7 +25,7 @@ public class Elevator extends SubsystemBase {
 
   private DigitalInput topLimit;
   private DigitalInput bottomLimit;
-  private DigitalInput middleLimit;
+  //private DigitalInput middleLimit;
   private WPI_TalonFX elevator_motor;
   private Encoder encoder;
   private int state =0;
@@ -37,11 +37,11 @@ public class Elevator extends SubsystemBase {
   public Elevator() { //gear reduction is 15 to 1
     topLimit = new DigitalInput(Constants.elevator.toplimitSwitchcanport);
     bottomLimit = new DigitalInput(Constants.elevator.bottomlimitSwitchcanport);
-    middleLimit = new DigitalInput(Constants.elevator.middlelimitSwitchcanport);
+    //middleLimit = new DigitalInput(Constants.elevator.middlelimitSwitchcanport);
     elevator_motor = new WPI_TalonFX(Constants.elevator.Elevator_motorCanID);
-    encoder = new Encoder(middleLimit, bottomLimit);
+    // encoder = new Encoder(topLimit, bottomLimit);
     elevatorCONTROLLER = new PIDController(0, 0, 0);
-    encoder.reset();
+    // encoder.reset();
     elevatorCONTROLLER.reset();
     elevatorCONTROLLER.setTolerance(tolerance);
   }
@@ -49,7 +49,7 @@ public class Elevator extends SubsystemBase {
   public boolean getTopLimit() {
     if (topLimit.get() == true){
       state =1;
-      encoder.reset();
+    //   encoder.reset();
     }
     return topLimit.get();
   }
@@ -57,17 +57,17 @@ public class Elevator extends SubsystemBase {
   public boolean getBottomLimit() {
     if (bottomLimit.get() == true){
       state =-1;
-      encoder.reset();
+    //   encoder.reset();
     }
     return bottomLimit.get();
   }
-  public boolean getMiddleLimit(){
-    if(middleLimit.get() == true){
-      state = 0;
-      encoder.reset();
-    }
-    return middleLimit.get();
-  }
+//   public boolean getMiddleLimit(){
+//     if(middleLimit.get() == true){
+//       state = 0;
+//       encoder.reset();
+//     }
+//     return middleLimit.get();
+//   }
   
   public void stop() {
     elevator_motor.stopMotor();
@@ -95,16 +95,16 @@ public class Elevator extends SubsystemBase {
   public int get_state(){
     return(state);
   }
-  public double get_encoder_distance(){
-    return(elevator_motor.getSelectedSensorPosition());
-  }
+//   public double get_encoder_distance(){
+//     return(elevator_motor.getSelectedSensorPosition());
+//   }
   public void setpidpoint(double Setpoint){
     elevatorCONTROLLER.setSetpoint(Setpoint);
   }
   public double calculate(double current_position, double wanted_position){
     return(elevatorCONTROLLER.calculate(current_position, wanted_position));
   }
-  public void reset_encoder(){
-    encoder.reset();
-  }
+//   public void reset_encoder(){
+//     encoder.reset();
+//   }
 }
