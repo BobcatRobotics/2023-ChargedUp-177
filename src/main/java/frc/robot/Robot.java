@@ -31,12 +31,10 @@ public class Robot extends TimedRobot {
   private Timer timer;
 
   private int i = 0;
-  int state = 0;
 
-  private XboxController gamepad;
+
   //private Elevate elevate;
   private Elevator elevator;
-  private double d = 0;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -49,7 +47,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     timer = new Timer();
-    gamepad = m_robotContainer.m_driverController;
     elevator =  m_robotContainer.elevator;
   }
 
@@ -115,38 +112,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
-    elevator.getBottomLimit();
-    // elevator.getMiddleLimit();
-    elevator.getTopLimit();
-    state = elevator.get_state();
-    if (gamepad.getPOV() == Constants.elevator.D_Pad_Up){
-      if (state == -1 || state == 0){
-        d = 0.45;
-        state++;
-      }
-    }
-    else if (gamepad.getPOV() == Constants.elevator.D_Pad_Down){
-      if (state == 1 || state == 0){
-        state--;
-        d=-0.45;
-      }
-    }
-    if (d> -1 && d<1){
-      while (!elevator.getBottomLimit() || !elevator.getTopLimit()){
-        elevator.elevatorMotorset(d);
-      }
-    }
-    else{
-      if (d > 0){
-        d=1;
-        elevator.elevatorMotorset(d);
-      }
-      else{
-        d=-1;
-        elevator.elevatorMotorset(d);//motor sets
-      }
-    }
 
   }
 
