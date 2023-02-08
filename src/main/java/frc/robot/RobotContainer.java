@@ -44,8 +44,8 @@ public class RobotContainer {
 
 
     /* Initializing commands for Elevator */
-    private Command raiseElevator = new raiseElevator(elevator);
-    private Command lowerElevator = new lowerElevator(elevator);
+    private Command raiseElevator = new Elevate(elevator, true);
+    private Command lowerElevator = new Elevate(elevator, false);
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */

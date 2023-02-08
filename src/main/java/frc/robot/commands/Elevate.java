@@ -14,17 +14,21 @@ import edu.wpi.first.wpilibj.Joystick;
 //YOO WHATS UP YOUTUBE
 
 /** An example command that uses an example subsystem. */
-public class raiseElevator extends CommandBase {
+public class Elevate extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Elevator elevator;
+  private final boolean raise;
   
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public raiseElevator(Elevator subsystem) {
+  public Elevate(Elevator subsystem, boolean alt) {
     elevator = subsystem;
+    raise = alt;
+
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator);
   }
@@ -40,10 +44,12 @@ public class raiseElevator extends CommandBase {
     // int currState = elevator.get_state();
     //without comments it is
 
-    /* Moves elevator at 45% speed */
     double d = 0.0;
-    if (!elevator.getTopLimit()){
+    // System.out.println(elevator.get_state());
+    if (raise){
       d = 0.45;
+    } else if (!raise){
+      d =- 0.45;
     } 
 
     // if (d > 1.0){
@@ -67,10 +73,8 @@ public class raiseElevator extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(elevator.getTopLimit()){
-      elevator.stop();
-      System.out.println("Reached Goal");
-      return true;
+     if((raise && elevator.getTopLimit()) || (!raise && elevator.getBottomLimit())){
+       return true;
     }
     return false;
   }
