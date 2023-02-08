@@ -108,11 +108,4 @@ public class Elevator extends SubsystemBase {
   public double calculate(double current_position, double wanted_position){
     return(elevatorCONTROLLER.calculate(current_position, wanted_position));
   }
-<<<<<<< HEAD
-//   public void reset_encoder(){
-//     encoder.reset();
-//   }
-=======
-
->>>>>>> 7d521d7a837446dce265e4522929cdd442d800ff
 }
