@@ -150,4 +150,16 @@ public final class Constants {
         public static final double length = 10;
         public static final double width = 10;
     }
+
+    public static final class ArmConstants {
+        public static final int armMotorPort = 5; // arbitrary
+
+        // TODO: Change!
+        public static final int pos1 = 1000;
+        public static final int pos2 = 2000;
+        public static final int pos3 = 3000;
+
+        public static final double bottomLimit = 0.0;
+        public static final double topLimit = 4096.0;
+    }
 }
