@@ -31,6 +31,9 @@ public class Intake extends SubsystemBase {
     speed = MathUtils.throttlePercent(speed);
     motor.set(ControlMode.PercentOutput, speed);
   }
+  public void stop(){
+   motor.set(ControlMode.PercentOutput, 0); 
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

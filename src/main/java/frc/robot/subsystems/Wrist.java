@@ -38,6 +38,7 @@ public class Wrist extends SubsystemBase {
   public void wristSolenoidOFF(){
     solenoid.set(false);
   }
+
   public void turnWrist(double speed){
     speed = MathUtils.throttlePercent(speed);
     //if lower limit switch is tripped and we're trying to go down, don't

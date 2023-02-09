@@ -11,11 +11,11 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-    public static final int intakeMotorID = 0; //TODO: assign correct values
+    public static final int intakeMotorID = 6; //TODO: assign correct values
     public static final int wristSolenoidID = 0;
     public static final int wristMotorID = 0;
-    public static final int pHubID = 0;
-    public static final int compressorID = 0;
+    public static final int pHubID = 1;
+    public static final int compressorID = 1;
     public static final double stickDeadband = 0;
     public static final int Jake = 194; //Jake M is 194 cm tall
 

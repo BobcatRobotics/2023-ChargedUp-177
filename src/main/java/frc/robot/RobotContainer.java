@@ -38,20 +38,12 @@ public class RobotContainer {
     private final Trigger robotCentric = driver.leftBumper();
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
+    //private final Swerve s_Swerve = new Swerve();
     private final Intake m_Intake = new Intake();
+    private final Wrist m_Wrist = new Wrist();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
-                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
-                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
-                () -> robotCentric.getAsBoolean()
-            )
-        );
 
         // Configure the button bindings
         configureButtonBindings();
@@ -65,11 +57,11 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        driver.rightTrigger().whileTrue(new RunCommand(m_Intake::runIntakeIn));
-        driver.rightBumper().whileTrue(new RunCommand(m_Intake::runIntakeOut));
-        driver.a().onTrue(new InstantCommand(m_Intake::openGrabber));
-        driver.b().onTrue(new InstantCommand(m_Intake::closeGrabber));
+        //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driver.leftBumper().whileTrue((new RunCommand(m_Intake::runIntakeIn).andThen(new InstantCommand(m_Intake::stop))));
+        driver.rightBumper().whileTrue((new RunCommand(m_Intake::runIntakeOut).andThen(new InstantCommand(m_Intake::stop))));
+        driver.a().onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
+        driver.b().onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
     }
 
     /**
@@ -77,9 +69,9 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
+  //  public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
-        return new exampleAuto(s_Swerve);
-    }
+        //s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
+        //return new exampleAuto(s_Swerve);
+    //}
 }
