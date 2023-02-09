@@ -101,7 +101,7 @@ public class Swerve extends SubsystemBase {
 
     public void resetModulesToAbsolute(){
         for(SwerveModule mod : mSwerveMods){
-            mod.resetToAbsolute();
+            //mod.resetToAbsolute();
         }
     }
 

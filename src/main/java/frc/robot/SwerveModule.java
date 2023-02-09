@@ -116,7 +116,7 @@ public class SwerveModule {
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
         //Timer.delay(1000); // 1000 ms = 1 sec
-        resetToAbsolute();
+        //resetToAbsolute();
     }
 
     private void configDriveMotor(){        

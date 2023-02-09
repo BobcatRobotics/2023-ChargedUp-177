@@ -130,7 +130,7 @@ public final class Constants {
         }
     }
     public static class elevator {
-        public static final int Elevator_motorCanID = 9;
+        public static final int Elevator_motorCanID = 42;
         public static final int bottomlimitSwitchcanport = 0;
         public static final int toplimitSwitchcanport = 1;
     

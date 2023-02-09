@@ -47,9 +47,9 @@ public class Elevate extends CommandBase {
     double d = 0.0;
     // System.out.println(elevator.get_state());
     if (raise){
-      d = 0.45;
+      d = 1000;
     } else if (!raise){
-      d =- 0.45;
+      d =- 1000;
     } 
 
     // if (d > 1.0){
@@ -59,7 +59,7 @@ public class Elevate extends CommandBase {
     //   d=-1.0;
     // }
 
-    elevator.elevatorMotorset(d);
+    elevator.elevatorMotorset(1000);
     
   }
 
