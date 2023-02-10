@@ -13,7 +13,7 @@ public class Arm extends SubsystemBase {
     
     public Arm() {
         armMotor = new TalonFX(Constants.ArmConstants.armMotorPort);
-        armController = new PIDController(0, 0, 0); // TODO: Tune!
+        armController = new PIDController(0.3, 0, 0); // TODO: Tune!
     }
 
     public void setSpeed(double percent) {

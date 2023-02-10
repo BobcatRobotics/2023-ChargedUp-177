@@ -23,7 +23,7 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final CommandXboxController driver = new CommandXboxController(2);
+    private final Joystick driver = new Joystick(2);
     private final Joystick rotate = new Joystick(0);
     private final Joystick strafe = new Joystick(1);
 
@@ -34,29 +34,33 @@ public class RobotContainer {
 
     /* Driver Buttons */
     // private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final Trigger zeroGyro = driver.y();
+    private final JoystickButton zeroGyro = new JoystickButton(driver, 4); // y button
     // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final Trigger robotCentric = driver.leftBumper();
+    private final JoystickButton robotCentric = new JoystickButton(driver, 5);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final PhotonVision m_Camera = new PhotonVision();
+    private final Elevator m_Elevator = new Elevator();
+    private final Arm m_Arm = new Arm();
 
     /* Commands */
-    private final Command align = new AlignToAprilTag(s_Swerve, m_Camera);
-    private final Command follow = new FollowAprilTag(s_Swerve, m_Camera);
+    private final Command elevatorControls = new ElevatorControls(m_Elevator, driver);
+    private final Command armControls = new ArmControls(m_Arm, driver);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
-                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
-                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
-                () -> robotCentric.getAsBoolean()
-            )
-        );
+        // s_Swerve.setDefaultCommand(
+        //     new TeleopSwerve(
+        //         s_Swerve, 
+        //         () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
+        //         () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
+        //         () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
+        //         () -> robotCentric.getAsBoolean()
+        //     )
+        // );
+
+        m_Arm.setDefaultCommand(armControls);
+        m_Elevator.setDefaultCommand(elevatorControls);
 
         // Configure the button bindings
         configureButtonBindings();
@@ -71,8 +75,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        driver.povLeft().whileTrue(align);
-        driver.povRight().whileTrue(follow);
     }
 
     /**

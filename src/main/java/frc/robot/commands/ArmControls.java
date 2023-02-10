@@ -5,7 +5,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
 public class ArmControls extends CommandBase {
@@ -28,17 +30,19 @@ public class ArmControls extends CommandBase {
   public void execute() {
     if (Math.abs(gamepad.getRawAxis(1)) >= 0.05) {
       if (arm.isAtTopLimit() && gamepad.getRawAxis(1) > 0) {
+        Constants.ElevatorConstants.canMove = false;
         arm.setSpeed(0);
       } else if (arm.isAtBottomLimit() && gamepad.getRawAxis(1) < 0) {
+        Constants.ElevatorConstants.canMove = true;
         arm.setSpeed(0);
       } else {
+        // Constants.ElevatorConstants.canMove = true;
         arm.setSpeed(gamepad.getRawAxis(1));
       }
     } else {
+      // Constants.ElevatorConstants.canMove = true;
       arm.setSpeed(0);
     }
-
-
   }
 
   // Called once the command ends or is interrupted.
