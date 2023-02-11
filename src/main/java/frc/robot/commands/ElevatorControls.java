@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator;
 
@@ -31,36 +32,31 @@ public class ElevatorControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("top limits", elevator.getTopLimits());
-    SmartDashboard.putBoolean("bottom limits", elevator.getBottomLimits());
-    SmartDashboard.putNumber("top encoder value", Constants.ArmConstants.topLimit);
-    SmartDashboard.putBoolean("can move", Constants.ElevatorConstants.canMove);
-
-    if (Math.abs(gamepad.getRawAxis(3)) >= 0.05) {
-      if (elevator.getTopLimits() && gamepad.getRawAxis(3) > 0) {
-        Constants.ArmConstants.topLimit = 2048;
-        elevator.elevate(0);
-      } else if (elevator.getBottomLimits() && gamepad.getRawAxis(3) < 0) {
-        Constants.ArmConstants.topLimit = 4096;
-        elevator.elevate(0);
+    ElevatorConstants.elevatorState = elevator.getState();
+    // If none of the preset positions buttons are pressed, use continuous control
+    if (gamepad.getPOV() == -1) {
+      if (Math.abs(gamepad.getRawAxis(3)) >= 0.05) {
+        if (elevator.isAtTopLimit() && gamepad.getRawAxis(3) > 0) {
+          elevator.elevate(0);
+        } else if (elevator.isAtBottomLimit() && gamepad.getRawAxis(3) < 0) {
+          elevator.elevate(0);
+        } else {
+          elevator.elevate(gamepad.getRawAxis(3));
+        }
       } else {
-        Constants.ArmConstants.topLimit = 2048;
-        elevator.elevate(gamepad.getRawAxis(3));
+        elevator.elevate(0);
       }
     } else {
-      // Constants.ArmConstants.topLimit = 2048;
-      // elevator.elevate(0);
-    }
-
-    if (gamepad.getPOV() == 0 && ElevatorConstants.canMove) {
-      Constants.ArmConstants.topLimit = 4096;
-      elevator.setState(0);
-    } else if (gamepad.getPOV() == 90 && ElevatorConstants.canMove) {
-      Constants.ArmConstants.topLimit = 2048;
-      elevator.setState(1);
-    } else if (gamepad.getPOV() == 180 && ElevatorConstants.canMove) {
-      Constants.ArmConstants.topLimit = 2048;
-      elevator.setState(2);
+      if (ArmConstants.armState != 0) {
+        switch (gamepad.getPOV()) {
+          case 0: // d-pad up
+            elevator.setState(2); // top
+          case 90: // d-pad right
+            elevator.setState(1); // middle
+          case 180: // d-pad down
+            elevator.setState(0); // bottom
+        }
+      }
     }
   }
 

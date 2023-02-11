@@ -26,6 +26,9 @@ public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
   public Elevator() {
     elevatorMotor = new TalonFX(ElevatorConstants.elevatorMotorPort);
+    elevatorMotor.configFactoryDefault();
+    elevatorMotor.configIntegratedSensorOffset(elevatorMotor.getSelectedSensorPosition());
+
     topLimit = new DigitalInput(ElevatorConstants.topLimitPort);
     bottomLimit = new DigitalInput(ElevatorConstants.bottomLimitPort);
 
@@ -36,28 +39,40 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  public boolean getTopLimits() {
-    return !topLimit.get();
+  // public boolean getTopLimits() {
+  //   return !topLimit.get();
+  // }
+
+  // public boolean getBottomLimits() {
+  //   return !bottomLimit.get();
+  // }
+
+  public boolean isAtTopLimit() {
+    return elevatorMotor.getSelectedSensorPosition() >= Constants.ElevatorConstants.topLimit;
   }
 
-  public boolean getBottomLimits() {
-    return !bottomLimit.get();
+  public boolean isAtBottomLimit() {
+    return elevatorMotor.getSelectedSensorPosition() <= Constants.ElevatorConstants.bottomLimit;
   }
 
   public void setState(int state) {
     double output;
     if (state == 0) {
-      output = elevatorController.calculate(elevatorMotor.getSelectedSensorPosition(), Constants.ElevatorConstants.pos1);
+      output = elevatorController.calculate(elevatorMotor.getSelectedSensorPosition(), Constants.ElevatorConstants.pos0);
       elevatorMotor.set(ControlMode.Position, output);
     } else if (state == 1) {
-      output = elevatorController.calculate(elevatorMotor.getSelectedSensorPosition(), Constants.ElevatorConstants.pos2);
+      output = elevatorController.calculate(elevatorMotor.getSelectedSensorPosition(), Constants.ElevatorConstants.pos1);
       elevatorMotor.set(ControlMode.Position, output);
     } else {
-      output = elevatorController.calculate(elevatorMotor.getSelectedSensorPosition(), Constants.ElevatorConstants.pos3);
+      output = elevatorController.calculate(elevatorMotor.getSelectedSensorPosition(), Constants.ElevatorConstants.pos2);
       elevatorMotor.set(ControlMode.Position, output);
     }
-    SmartDashboard.putNumber("PID output", output);
-    SmartDashboard.putNumber("speed", elevatorMotor.getMotorOutputPercent());
+  }
+
+  public int getState() {
+    double pos = elevatorMotor.getSelectedSensorPosition();
+    if (pos <= 256) pos = 0;
+    return (int) Math.ceil(pos/4096);
   }
 
   @Override

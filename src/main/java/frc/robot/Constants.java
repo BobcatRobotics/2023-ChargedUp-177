@@ -155,12 +155,14 @@ public final class Constants {
         public static final int armMotorPort = 15; // arbitrary
 
         // TODO: Change!
-        public static final int pos1 = 0;
-        public static final int pos2 = 20480;
-        public static final int pos3 = 40960;
+        public static final int pos0 = 0;
+        public static final int pos1 = 4096;
+        public static final int pos2 = 8192;
 
         public static final double bottomLimit = 0.0;
-        public static double topLimit = 4096.0;
+        public static final double topLimit = 8192;
+
+        public static int armState = 0;
     }
 
     public static final class ElevatorConstants {
@@ -168,10 +170,13 @@ public final class Constants {
         public static final int topLimitPort = 0;
         public static final int bottomLimitPort = 2;
 
-        public static final int pos1 = 0;
-        public static final int pos2 = 20480;
-        public static final int pos3 = 40960;
+        public static final int pos0 = 0;
+        public static final int pos1 = 4096;
+        public static final int pos2 = 8192;
 
-        public static boolean canMove = true;
+        public static final double bottomLimit = 0.0;
+        public static final double topLimit = 8192;
+
+        public static int elevatorState = 0;
     }
 }

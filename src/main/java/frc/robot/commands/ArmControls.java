@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Arm;
 
 public class ArmControls extends CommandBase {
@@ -28,20 +30,36 @@ public class ArmControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(gamepad.getRawAxis(1)) >= 0.05) {
-      if (arm.isAtTopLimit() && gamepad.getRawAxis(1) > 0) {
-        Constants.ElevatorConstants.canMove = false;
-        arm.setSpeed(0);
-      } else if (arm.isAtBottomLimit() && gamepad.getRawAxis(1) < 0) {
-        Constants.ElevatorConstants.canMove = true;
-        arm.setSpeed(0);
+    ArmConstants.armState = arm.getState();
+    // If none of the preset positions buttons are pressed, use continuous control
+    if (!gamepad.getRawButton(6) && !gamepad.getRawButton(7) && !gamepad.getRawButton(8)) {
+      if (Math.abs(gamepad.getRawAxis(1)) >= 0.05) {
+        if (arm.isAtTopLimit() && gamepad.getRawAxis(1) > 0) {
+          arm.setSpeed(0);
+        } else if (arm.isAtBottomLimit() && gamepad.getRawAxis(1) < 0) {
+          arm.setSpeed(0);
+        } else {
+          arm.setSpeed(gamepad.getRawAxis(1));
+        }
       } else {
-        // Constants.ElevatorConstants.canMove = true;
-        arm.setSpeed(gamepad.getRawAxis(1));
+        arm.setSpeed(0);
       }
     } else {
-      // Constants.ElevatorConstants.canMove = true;
-      arm.setSpeed(0);
+      if (ElevatorConstants.elevatorState == 0) {
+        if (gamepad.getRawButton(8)) { // right trigger
+          arm.setState(2); // ground
+        } else if (gamepad.getRawButton(7)) { // left trigger
+          arm.setState(1); // middle
+        } else if (gamepad.getRawButton(6)) { // right bumper
+          arm.setState(0); // stowed
+        }
+      } else {
+        if (gamepad.getRawButton(8)) { // right trigger
+          arm.setState(2); // ground
+        } else if (gamepad.getRawButton(7)) { // left trigger
+          arm.setState(1); // middle
+        }
+      }
     }
   }
 
