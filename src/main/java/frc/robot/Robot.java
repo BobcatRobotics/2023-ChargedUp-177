@@ -5,9 +5,8 @@
 package frc.robot;
 
 import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -52,12 +51,18 @@ public class Robot extends TimedRobot {
     File commitFile = new File(deployDir, "commit.txt");
     String branch = "";
     String commit = "";
+
     try {
-      branch = FileUtils.readFileToString(branchFile, "UTF-8");
-      commit = FileUtils.readFileToString(commitFile, "UTF-8");
-    } catch (IOException e) {
+      Scanner scanner = new Scanner(branchFile);
+      branch = scanner.nextLine();
+      scanner.close();
+      scanner = new Scanner(commitFile);
+      commit = scanner.nextLine();
+      scanner.close();
+    } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
+    
     SmartDashboard.putString("Deployed code:", branch + " " + commit);
   }
 
