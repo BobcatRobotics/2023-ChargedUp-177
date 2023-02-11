@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,6 +46,19 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     timer = new Timer();
+
+    File deployDir = Filesystem.getDeployDirectory();
+    File branchFile = new File(deployDir, "branch.txt");
+    File commitFile = new File(deployDir, "commit.txt");
+    String branch = "";
+    String commit = "";
+    try {
+      branch = FileUtils.readFileToString(branchFile, "UTF-8");
+      commit = FileUtils.readFileToString(commitFile, "UTF-8");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    SmartDashboard.putString("Deployed code:", branch + " " + commit);
   }
 
   /**
