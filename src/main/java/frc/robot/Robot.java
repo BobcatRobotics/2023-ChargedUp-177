@@ -4,11 +4,12 @@
 
 package frc.robot;
 
+//import javax.management.monitor.GaugeMonitor;
+
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,17 +18,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static CTREConfigs ctreConfigs;
-
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
-  private boolean firstExecute = true;
-
-  private Timer timer;
-
-  private int i = 0;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -35,16 +28,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    ctreConfigs = new CTREConfigs();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    timer = new Timer();
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
+   * that you want ran during disabled, autonomous, teleoperated and test.
    *
    * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
@@ -69,7 +60,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    
+
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -78,17 +69,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    if(firstExecute){
-      firstExecute =false;
-      timer.start();
-    }
-    if (m_autonomousCommand.isFinished() && i==0) {
-      timer.stop();
-      i++;
-    }
-    SmartDashboard.putNumber("Time Path Ran For", timer.get());
-  }
+  public void autonomousPeriodic() {}
+
+  
+  
+  
 
   @Override
   public void teleopInit() {
@@ -96,8 +81,10 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
+    if (m_autonomousCommand != null) 
+    {
       m_autonomousCommand.cancel();
+      
     }
   }
 
@@ -114,4 +101,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  /** This function is called once when the robot is first started up. */
+  @Override
+  public void simulationInit() {}
+
+  /** This function is called periodically whilst in simulation. */
+  @Override
+  public void simulationPeriodic() {}
 }
