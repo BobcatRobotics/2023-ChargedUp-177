@@ -26,7 +26,7 @@ public class Arm extends SubsystemBase {
         armMotor.configPeakOutputReverse(-1, 20);
         armMotor.configAllowableClosedloopError(0, 0, 20);
         armMotor.config_kF(0, 0, 20);
-        armMotor.config_kP(0, 0.1, 20);
+        armMotor.config_kP(0, 0.15, 20);
         armMotor.config_kI(0, 0, 20);
         armMotor.config_kD(0, 0.5, 20);
     
@@ -58,6 +58,10 @@ public class Arm extends SubsystemBase {
 
     public boolean isAtBottomLimit() {
         return armMotor.getSelectedSensorPosition() <= Constants.ArmConstants.bottomLimit;
+    }
+
+    public boolean isAtConstrictedBottomLimit() {
+        return armMotor.getSelectedSensorPosition() <= Constants.ArmConstants.constrictedBottomLimit;
     }
     
 }

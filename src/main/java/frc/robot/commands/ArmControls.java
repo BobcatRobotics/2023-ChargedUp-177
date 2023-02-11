@@ -31,12 +31,15 @@ public class ArmControls extends CommandBase {
   @Override
   public void execute() {
     ArmConstants.armState = arm.getState();
+    SmartDashboard.putNumber("arm state", ArmConstants.armState);
     // If none of the preset positions buttons are pressed, use continuous control
     if (!gamepad.getRawButton(6) && !gamepad.getRawButton(7) && !gamepad.getRawButton(8)) {
       if (Math.abs(gamepad.getRawAxis(1)) >= 0.05) {
         if (arm.isAtTopLimit() && gamepad.getRawAxis(1) > 0) {
           arm.setSpeed(0);
         } else if (arm.isAtBottomLimit() && gamepad.getRawAxis(1) < 0) {
+          arm.setSpeed(0);
+        } else if (ElevatorConstants.elevatorState != 0 && arm.isAtConstrictedBottomLimit() && gamepad.getRawAxis(1) < 0) {
           arm.setSpeed(0);
         } else {
           arm.setSpeed(gamepad.getRawAxis(1));

@@ -39,7 +39,7 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.configPeakOutputReverse(-1, 20);
     elevatorMotor.configAllowableClosedloopError(0, 0, 20);
     elevatorMotor.config_kF(0, 0, 20);
-    elevatorMotor.config_kP(0, 0.1, 20);
+    elevatorMotor.config_kP(0, 0.15, 20);
     elevatorMotor.config_kI(0, 0, 20);
     elevatorMotor.config_kD(0, 0.5, 20);
 

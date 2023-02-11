@@ -160,6 +160,7 @@ public final class Constants {
         public static final int pos2 = 8192;
 
         public static final double bottomLimit = 0.0;
+        public static final double constrictedBottomLimit = 4096;
         public static final double topLimit = 8192;
 
         public static int armState = 0;
