@@ -28,7 +28,7 @@ public class ArmControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(gamepad.getRawAxis(1)) >= 0.05) {
+    if (Math.abs(gamepad.getRawAxis(1)) >= 0.05) { // Y axis on the left stick
       if (arm.isAtTopLimit() && gamepad.getRawAxis(1) > 0) {
         Constants.ElevatorConstants.canMove = false;
         arm.setSpeed(0);

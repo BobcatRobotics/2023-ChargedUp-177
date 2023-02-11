@@ -152,7 +152,7 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
-        public static final int armMotorPort = 15; // arbitrary
+        public static final int armMotorPort = 15; 
 
         // TODO: Change!
         public static final int pos1 = 0;
@@ -174,4 +174,5 @@ public final class Constants {
 
         public static boolean canMove = true;
     }
+    
 }

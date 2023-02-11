@@ -5,7 +5,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -16,20 +19,30 @@ import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
-  private TalonFX elevatorMotor;
+  private WPI_TalonFX elevatorMotor;
 
   private DigitalInput topLimit;
   private DigitalInput bottomLimit;
 
-  private PIDController elevatorController;
-
   /** Creates a new Elevator. */
   public Elevator() {
-    elevatorMotor = new TalonFX(ElevatorConstants.elevatorMotorPort);
+    elevatorMotor = new WPI_TalonFX(ElevatorConstants.elevatorMotorPort);
     topLimit = new DigitalInput(ElevatorConstants.topLimitPort);
     bottomLimit = new DigitalInput(ElevatorConstants.bottomLimitPort);
 
-    elevatorController = new PIDController(0.002, 0, 0);
+    elevatorMotor.configFactoryDefault();
+    elevatorMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
+    elevatorMotor.setSensorPhase(true);
+    elevatorMotor.configNominalOutputForward(0, 20);
+    elevatorMotor.configNominalOutputReverse(0, 20);
+    elevatorMotor.configPeakOutputForward(1, 20);
+    elevatorMotor.configPeakOutputReverse(-1, 20);
+    elevatorMotor.configAllowableClosedloopError(0, 0, 20);
+    elevatorMotor.config_kF(0, 0, 20);
+    elevatorMotor.config_kP(0, 0.1, 20);
+    elevatorMotor.config_kI(0, 0, 20);
+    elevatorMotor.config_kD(0, 0.5, 20);
+
   }
 
   public void elevate(double speed) {
@@ -45,18 +58,13 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setState(int state) {
-    double output;
     if (state == 0) {
-      output = elevatorController.calculate(elevatorMotor.getSelectedSensorPosition(), Constants.ElevatorConstants.pos1);
-      elevatorMotor.set(ControlMode.Position, output);
+      elevatorMotor.set(TalonFXControlMode.Position, Constants.ElevatorConstants.pos1);
     } else if (state == 1) {
-      output = elevatorController.calculate(elevatorMotor.getSelectedSensorPosition(), Constants.ElevatorConstants.pos2);
-      elevatorMotor.set(ControlMode.Position, output);
+      elevatorMotor.set(TalonFXControlMode.Position, Constants.ElevatorConstants.pos2);
     } else {
-      output = elevatorController.calculate(elevatorMotor.getSelectedSensorPosition(), Constants.ElevatorConstants.pos3);
-      elevatorMotor.set(ControlMode.Position, output);
+      elevatorMotor.set(TalonFXControlMode.Position, Constants.ElevatorConstants.pos3);
     }
-    SmartDashboard.putNumber("PID output", output);
     SmartDashboard.putNumber("speed", elevatorMotor.getMotorOutputPercent());
   }
 

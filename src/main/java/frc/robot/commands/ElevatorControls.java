@@ -37,7 +37,7 @@ public class ElevatorControls extends CommandBase {
     SmartDashboard.putBoolean("can move", Constants.ElevatorConstants.canMove);
 
     if (Math.abs(gamepad.getRawAxis(3)) >= 0.05) {
-      if (elevator.getTopLimits() && gamepad.getRawAxis(3) > 0) {
+      if (elevator.getTopLimits() && gamepad.getRawAxis(3) > 0) {//axis 3 is the y axis on the right stick
         Constants.ArmConstants.topLimit = 2048;
         elevator.elevate(0);
       } else if (elevator.getBottomLimits() && gamepad.getRawAxis(3) < 0) {
