@@ -85,7 +85,7 @@ public class BalanceChargeStation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    calc = -pid.calculate(dt.getPitch());
+    calc = pid.calculate(dt.getPitch());
     if (!isOffset){
     dt.drive(
       new Translation2d(

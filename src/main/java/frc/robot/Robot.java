@@ -83,6 +83,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     if (m_autonomousCommand != null) {
+      System.out.println("Canceling auto command");
       m_autonomousCommand.cancel();
     }
   }

@@ -50,13 +50,11 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         // s_Swerve.setDefaultCommand(
-        //     new TeleopSwerveImproved(
+        //     new TeleopSwerve(
         //         s_Swerve,
         //         () -> -strafe.getRawAxis(Joystick.AxisType.kY.value), 
         //         () -> -strafe.getRawAxis(Joystick.AxisType.kX.value), 
-        //         () -> -rotate.getRawAxis(Joystick.AxisType.kTwist.value),
         //         () -> -rotate.getRawAxis(Joystick.AxisType.kX.value),
-        //         () -> -rotate.getRawAxis(Joystick.AxisType.kY.value),
         //         () -> robotCentric.getAsBoolean()
         //     )
         // );

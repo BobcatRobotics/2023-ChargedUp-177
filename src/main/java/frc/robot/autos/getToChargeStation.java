@@ -23,8 +23,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 public class getToChargeStation extends SequentialCommandGroup {
-    String trajectoryJSON = "paths/autobalancing.wpilib.json";//"src/main/deploy/output/test11823.wpilib.json"; //"./src/main/deploy/output/test11823.wpilib.json";
-    Trajectory exampleTrajectory = new Trajectory();
+    // String trajectoryJSON = "paths/autobalancing.wpilib.json";//"src/main/deploy/output/test11823.wpilib.json"; //"./src/main/deploy/output/test11823.wpilib.json";
+    // Trajectory exampleTrajectory = new Trajectory();
 
     public getToChargeStation(Swerve s_Swerve){
         TrajectoryConfig config =
@@ -44,12 +44,12 @@ public class getToChargeStation extends SequentialCommandGroup {
         //         new Pose2d(3, 0, new Rotation2d(0)),
         //         config);
 
-        try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            exampleTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        } catch (IOException ex) {
-            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-        }
+        // try {
+        //     Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+        //     exampleTrajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        // } catch (IOException ex) {
+        //     DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+        // }
 
         var thetaController =
             new ProfiledPIDController(
@@ -58,7 +58,7 @@ public class getToChargeStation extends SequentialCommandGroup {
 
         SwerveControllerCommand swerveControllerCommand =
             new SwerveControllerCommand(
-                exampleTrajectory,
+                TrajectoryGenerator.generateTrajectory(new Pose2d(0,0,new Rotation2d(Math.toRadians(90))),List.of(new Translation2d(0, 1)), new Pose2d(new Translation2d(0,2), new Rotation2d(Math.toRadians(90))), config),
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -69,7 +69,7 @@ public class getToChargeStation extends SequentialCommandGroup {
 
 
         addCommands(
-            new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
+            new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(90))))),
             swerveControllerCommand
         );
     }
