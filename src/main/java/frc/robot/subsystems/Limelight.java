@@ -23,11 +23,13 @@ public class Limelight extends SubsystemBase {
 
   public void initializeLimeLight() {
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    turnOnLED();
     try {
       tTarget = table.getEntry("tv");
       tx = table.getEntry("tx");
       ty = table.getEntry("ty");
       ta = table.getEntry("ta");
+      
     } catch (Exception e) {
       return;
     }
@@ -46,6 +48,7 @@ public class Limelight extends SubsystemBase {
     } catch (Exception e) {
       return;
     }
+    
   }
 
   public NetworkTableEntry getEntry(String str) {
@@ -60,7 +63,6 @@ public class Limelight extends SubsystemBase {
     boolean hits = false;
     SmartDashboard.putBoolean("isInitialized", isInitialized());
     if (isInitialized()) {
-      SmartDashboard.putNumber("TV", getEntry("tv").getDouble(0));
       hits = (getEntry("tv").getDouble(0.0) == 1.0);
     }
     return hits;

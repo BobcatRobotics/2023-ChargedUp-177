@@ -49,6 +49,8 @@ public class AlignToTarget extends CommandBase {
   public void execute() {
     SmartDashboard.putBoolean("Executing", true);
     SmartDashboard.putBoolean("HasTarget", lime.hasTargets());
+    SmartDashboard.putBoolean("has targets",lime.hasTargets());
+    SmartDashboard.putBoolean("align finished", isFinished());
     if (lime.hasTargets() && !isFinished()) {
       xOffset = lime.x();
       calc = pidController.calculate(xOffset);
@@ -63,8 +65,8 @@ public class AlignToTarget extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    lime.turnOffLED();
     drivetrain.drive(new Translation2d(), 0, true, true);
+    SmartDashboard.putBoolean("Executing", false);
   }
 
   // Returns true when the command should end.
