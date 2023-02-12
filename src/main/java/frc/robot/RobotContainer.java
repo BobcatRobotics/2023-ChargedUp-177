@@ -49,18 +49,24 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        // s_Swerve.setDefaultCommand(
-        //     new TeleopSwerve(
-        //         s_Swerve,
-        //         () -> -strafe.getRawAxis(Joystick.AxisType.kY.value), 
-        //         () -> -strafe.getRawAxis(Joystick.AxisType.kX.value), 
-        //         () -> -rotate.getRawAxis(Joystick.AxisType.kX.value),
-        //         () -> robotCentric.getAsBoolean()
-        //     )
-        // );
-
         // Configure the button bindings
         configureButtonBindings();
+    }
+
+    public void scheduleDefaultTeleop() {
+        s_Swerve.setDefaultCommand(
+            new TeleopSwerve(
+                s_Swerve,
+                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value), 
+                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value), 
+                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value),
+                () -> robotCentric.getAsBoolean()
+            )
+        );
+    }
+
+    public void cancelDefaultTeleop() {
+        s_Swerve.getDefaultCommand().cancel();
     }
 
     /**

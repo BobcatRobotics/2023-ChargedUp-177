@@ -66,6 +66,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    m_robotContainer.cancelDefaultTeleop();
+
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -86,6 +88,8 @@ public class Robot extends TimedRobot {
       System.out.println("Canceling auto command");
       m_autonomousCommand.cancel();
     }
+
+    m_robotContainer.scheduleDefaultTeleop();
   }
 
   /** This function is called periodically during operator control. */
