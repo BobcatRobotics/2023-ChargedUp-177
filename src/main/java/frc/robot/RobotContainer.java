@@ -35,10 +35,13 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, bh.buttons.get("Y_Button"));
+    private final JoystickButton setYellow = new JoystickButton(driver, bh.buttons.get("D_Pad_Up"));
     private final JoystickButton robotCentric = new JoystickButton(driver, bh.buttons.get("Left_Bumper_Button"));
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final LEDLightControl l = new LEDLightControl();
+    SetColor sc;
 
     public double getJoystickAngle(){
         return  ((Math.atan2(rotate.getRawAxis(Joystick.AxisType.kY.value), rotate.getRawAxis(Joystick.AxisType.kX.value)) * 180 / Math.PI)+360)%360;
@@ -74,6 +77,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        setYellow.onTrue(new SetColor("Yellow"));
     }
 
     /**

@@ -13,14 +13,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.BalancingConstants;
 import frc.robot.subsystems.Swerve;
-//import frc.robot.subsystems.LEDLightControl;
-//import frc.robot.Constants.ButtonHashtable;
+import frc.robot.subsystems.LEDLightControl;
+import frc.robot.Constants.ButtonHashtable;
 
 public class BalanceChargeStation extends CommandBase {
   private boolean isContinuous = true; //if false, the command will end after the robot is balanced
   
-  // private LEDLightControl led = new LEDLightControl();
-  // private SetColor colors = new SetColor(led);
+  private LEDLightControl led = new LEDLightControl();
+  private SetColor colors = new SetColor();
 
   private PIDController pid; 
   // for in depth info on PID controllers, see https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/pidcontroller.html
@@ -49,7 +49,7 @@ public class BalanceChargeStation extends CommandBase {
   double sensitivity = BalancingConstants.kSensitivity;
   boolean isOffset = false;
 
-  //private ButtonHashtable bh = new ButtonHashtable();
+  private ButtonHashtable bh = new ButtonHashtable();
   
 
   /** Creates a new BalanceChargeStation. */
@@ -117,16 +117,16 @@ public class BalanceChargeStation extends CommandBase {
     SmartDashboard.putBoolean(" charge Setpoint", pid.atSetpoint());    
     SmartDashboard.putNumber("pid output", throttle(calc/sensitivity)*Constants.Swerve.maxSpeed);
     
-/* 
+ 
     if (!pid.atSetpoint()) {
       //0.61 is red
-      colors.setColor(bh.buttons.get("Red"));
+      colors.setColor("Red");
     } else {
       //0.73 is lime (green)
-      colors.setColor(bh.buttons.get("Red")); //shouldnt this be lime?
+      colors.setColor("Lime"); //shouldnt this be lime?
     }
   
-  */}
+  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
