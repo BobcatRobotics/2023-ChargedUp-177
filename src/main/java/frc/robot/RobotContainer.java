@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
@@ -76,6 +77,14 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
 
+    public SequentialCommandGroup MountAndBalance(Swerve s_Swerve){
+        // get on the charge station, then balance, then put the wheels in an x configuration
+        return new SequentialCommandGroup(
+            new MountChargeStation(s_Swerve, false),
+            new BalanceChargeStation(s_Swerve).andThen(new InstantCommand(() -> s_Swerve.configToX()))
+        );
+    }
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
@@ -83,6 +92,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new BalanceChargeStation(s_Swerve); //exampleAuto(s_Swerve);
+        return MountAndBalance(s_Swerve);
     }
 }
