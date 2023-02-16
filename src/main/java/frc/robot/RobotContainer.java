@@ -50,20 +50,32 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerveImproved(
-                s_Swerve,
-                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value), 
-                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value), 
-                () -> -rotate.getRawAxis(Joystick.AxisType.kTwist.value),
-                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value),
-                () -> -rotate.getRawAxis(Joystick.AxisType.kY.value),
-                () -> robotCentric.getAsBoolean()
-            )
-        );
+        /*
+         * Default commands should be scheduled here if they should run all the time (auto and teleop).
+         * Make sure that none of the default commands require the same subsystems that you intend to
+         * use during autonomous, because they will interrupt the autonomous command. If you want a default
+         * command to run just during teleop, schedule it in the scheduleDefaultTeleop method and cancel
+         * it in the cancelDefaultTeleop method.
+         */
 
         // Configure the button bindings
         configureButtonBindings();
+    }
+
+    public void scheduleDefaultTeleop() {
+        s_Swerve.setDefaultCommand(
+            new TeleopSwerve(
+                s_Swerve,
+                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value), 
+                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value), 
+                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value),
+                () -> robotCentric.getAsBoolean()
+            )
+        );
+    }
+
+    public void cancelDefaultTeleop() {
+        s_Swerve.getDefaultCommand().cancel();
     }
 
     /**

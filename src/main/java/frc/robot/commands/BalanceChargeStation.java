@@ -70,10 +70,11 @@ public class BalanceChargeStation extends CommandBase {
     isOffset = true;
   }
 
-  // sigmoid activation function
-  // high values return 1, low values return 0
-  public double sigmoid(double x){
-    return 1/(1+Math.exp(-x));
+  public double throttle(double x){
+    if (Math.abs(x) > 5){
+      return Math.signum(x);
+    }
+    return x;
   }
   
   // Called when the command is initially scheduled.
@@ -84,11 +85,11 @@ public class BalanceChargeStation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    calc = -pid.calculate(dt.getPitch());
+    calc = pid.calculate(dt.getPitch());
     if (!isOffset){
     dt.drive(
       new Translation2d(
-        sigmoid(calc/sensitivity)*Constants.Swerve.maxSpeed, //x & y may need to be switched
+        throttle(calc/sensitivity)*Constants.Swerve.maxSpeed, //x & y may need to be switched
         0
       ),
       0,
@@ -114,7 +115,7 @@ public class BalanceChargeStation extends CommandBase {
     }  */  
     SmartDashboard.putNumber("charge error", calc);
     SmartDashboard.putBoolean(" charge Setpoint", pid.atSetpoint());    
-    SmartDashboard.putNumber("charge station offset", stationOffset);
+    SmartDashboard.putNumber("pid output", throttle(calc/sensitivity)*Constants.Swerve.maxSpeed);
     
 /* 
     if (!pid.atSetpoint()) {
