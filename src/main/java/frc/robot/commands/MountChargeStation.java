@@ -38,7 +38,7 @@ public class MountChargeStation extends CommandBase {
   @Override
   public void execute() {
     pitch = swerve.getPitch();
-    swerve.drive(new Translation2d(0.5, 0), /*may need to be changed*/
+    swerve.drive(new Translation2d(0, 0.5), /*may need to be changed*/
      0, true, true);
 
     if (stage == 1) {
