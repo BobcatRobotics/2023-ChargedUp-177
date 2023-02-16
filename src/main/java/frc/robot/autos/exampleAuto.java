@@ -18,7 +18,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
 public class exampleAuto extends SequentialCommandGroup {
-    String trajectoryJSON = "paths/highCone6PickupBalance1.wpilib.json";
+    String trajectoryJSON = "paths/test11823.wpilib.json";
     //String trajectoryJSON2 = "paths/test11923.wpilib.json";
     Trajectory exampleTrajectory = new Trajectory();
     //Trajectory exampleTrajectory2 = new Trajectory();
