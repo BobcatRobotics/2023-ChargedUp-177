@@ -94,8 +94,7 @@ public class Swerve extends SubsystemBase {
     }    
 
     public Pose2d getPose() {
-        //return swerveOdometry.getPoseMeters();
-        return swervePoseEstimator.getEstimatedPosition();
+        return swerveOdometry.getPoseMeters();
     }
 
     public void resetOdometry(Pose2d pose) {
