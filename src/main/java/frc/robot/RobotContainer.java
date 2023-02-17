@@ -6,14 +6,16 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.autos.exampleAuto;
+import frc.robot.autos.RedHighCone6PickupBalance;
 import frc.robot.commands.AlignToTarget;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Limelight;
@@ -38,6 +40,7 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
+    private final JoystickButton resetToAbsolute = new JoystickButton(driver, 3);
     private final JoystickButton robotCentric = new JoystickButton(driver, 5);
     private final JoystickButton alignRobot = new JoystickButton(driver, 2);
 
@@ -48,6 +51,10 @@ public class RobotContainer {
     /* Commands */
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
+    private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
+
+    /* SendableChooser */
+    SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<>();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -61,6 +68,9 @@ public class RobotContainer {
             )
         );
 
+        // Sendable Chooser Setup
+        autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
+        SmartDashboard.putData(autoChooser);
         // Configure the button bindings
         configureButtonBindings();
         m_Limelight.initializeLimeLight();
@@ -75,6 +85,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        resetToAbsolute.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
         alignRobot.whileTrue(align.andThen(new InstantCommand(() -> SmartDashboard.putBoolean("alignpressed", true))));
     }
 
@@ -86,6 +97,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
-        return new exampleAuto(s_Swerve, m_Limelight);
+        return autoChooser.getSelected();
     }
 }

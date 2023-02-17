@@ -76,7 +76,12 @@ public class AlignToTargetAutos extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(2);
+    if (timer.hasElapsed(1)) {
+      timer.stop();
+      return true;
+    }
+    return false;
+    //return timer.hasElapsed(1);
     //return pidController.atSetpoint();
   }
 }
