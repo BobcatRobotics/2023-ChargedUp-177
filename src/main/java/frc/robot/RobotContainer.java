@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.autos.PathPlannerTest;
 import frc.robot.autos.RedHighCone6PickupBalance;
 import frc.robot.commands.AlignToTarget;
 import frc.robot.commands.TeleopSwerve;
@@ -45,13 +46,14 @@ public class RobotContainer {
     private final JoystickButton alignRobot = new JoystickButton(driver, 2);
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
-    private final Limelight m_Limelight = new Limelight();
+    public static Swerve s_Swerve = new Swerve();
+    public static Limelight m_Limelight = new Limelight();
 
     /* Commands */
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
+    private final PathPlannerTest pathPlannerTest = new PathPlannerTest();
 
     /* SendableChooser */
     SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<>();
@@ -70,6 +72,7 @@ public class RobotContainer {
 
         // Sendable Chooser Setup
         autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
+        autoChooser.addOption("PathPlanner Test", pathPlannerTest);
         SmartDashboard.putData(autoChooser);
         // Configure the button bindings
         configureButtonBindings();

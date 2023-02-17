@@ -73,6 +73,23 @@ public class Swerve extends SubsystemBase {
         
     }
 
+    public void drive(ChassisSpeeds targetSpeeds) {
+        SwerveModuleState[] swerveModuleStates =
+            Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+
+        for(SwerveModule mod : mSwerveMods){
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], true);
+        }
+        
+    }
+
+    public void enableBrakeMode(boolean enable) {
+        for (SwerveModule mod : mSwerveMods) {
+            mod.enableBrakeMode(enable);
+        }
+    }
+
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
