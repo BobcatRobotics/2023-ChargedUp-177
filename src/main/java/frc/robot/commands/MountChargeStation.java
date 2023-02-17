@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Swerve;
 
@@ -40,22 +41,17 @@ public class MountChargeStation extends CommandBase {
     pitch = swerve.getPitch();
     swerve.drive(new Translation2d(0.5, 0), /*may need to be changed*/
      0, true, true);
-    stage = 1;
-    if (stage == 1) {
+    
+    
       while (!(pitch > stage1Threshold)){
         pitch = swerve.getPitch();
-        System.out.println(stage + " " + pitch);
+        SmartDashboard.putString("ChargeStation", "stage 1: " + pitch);
       }
-      stage = 2;
-    }
-    if (stage == 2) {
       while (!(pitch < stage2Threshold)){
         pitch = swerve.getPitch();
-        System.out.println(stage + " " + pitch);
+        SmartDashboard.putString("ChargeStation", "stage 2: " + pitch);
       }
       finished = true;
-    }
-
   }
 
   // Called once the command ends or is interrupted.

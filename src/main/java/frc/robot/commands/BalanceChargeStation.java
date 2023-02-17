@@ -17,7 +17,7 @@ import frc.robot.subsystems.Swerve;
 //import frc.robot.Constants.ButtonHashtable;
 
 public class BalanceChargeStation extends CommandBase {
-  private boolean isContinuous = true; //if false, the command will end after the robot is balanced
+  private boolean isContinuous; //if false, the command will end after the robot is balanced
   
   // private LEDLightControl led = new LEDLightControl();
   // private SetColor colors = new SetColor(led);
@@ -53,21 +53,12 @@ public class BalanceChargeStation extends CommandBase {
   
 
   /** Creates a new BalanceChargeStation. */
-  public BalanceChargeStation(Swerve dt) {
+  public BalanceChargeStation(Swerve dt, boolean isContinuous) {
     pid = new PIDController(BalancingConstants.kP, BalancingConstants.kI, BalancingConstants.kD);
     pid.setTolerance(BalancingConstants.kToleranceDegrees);
     this.dt = dt;
+    this.isContinuous = isContinuous;
     pid.setSetpoint(BalancingConstants.kSetpoint);
-  }
-
-  /**@param stationOffset the heading that we need to be at to be aligned with the charge station */
-  public BalanceChargeStation(Swerve dt, double stationOffset) {
-    pid = new PIDController(BalancingConstants.kP, BalancingConstants.kI, BalancingConstants.kD);
-    pid.setTolerance(BalancingConstants.kToleranceDegrees);
-    this.dt = dt;
-    this.stationOffset = stationOffset%360;
-    pid.setSetpoint(BalancingConstants.kSetpoint);
-    isOffset = true;
   }
 
   public double throttle(double x){
@@ -89,7 +80,7 @@ public class BalanceChargeStation extends CommandBase {
     if (!isOffset){
     dt.drive(
       new Translation2d(
-        throttle(calc/sensitivity)*Constants.Swerve.maxSpeed, //x & y may need to be switched
+        throttle(calc/sensitivity)*Constants.Swerve.maxSpeed,
         0
       ),
       0,
@@ -97,22 +88,6 @@ public class BalanceChargeStation extends CommandBase {
       true
       );
     }
-    //TODO: figure out driving with an offset driverstation angle
-    //were probably never gonna use this, and I have other stuff to do,
-    //so I'm just gonna leave this here for now
-    /*else{
-      dt.drive(
-        // angle -> slope of line with that angle
-        // slope = tan(angle * pi/180)
-        new Translation2d(
-          
-          
-        ),
-        0,
-        true,
-        true
-      )
-    }  */  
     SmartDashboard.putNumber("charge error", calc);
     SmartDashboard.putBoolean(" charge Setpoint", pid.atSetpoint());    
     SmartDashboard.putNumber("pid output", throttle(calc/sensitivity)*Constants.Swerve.maxSpeed);

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.BalanceChargeStation;
+import frc.robot.subsystems.Swerve;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,7 +24,7 @@ public class Robot extends TimedRobot {
   
 
   private RobotContainer m_robotContainer;
-
+  Swerve s_swerve = m_robotContainer.s_Swerve;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -58,7 +59,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    
+    SmartDashboard.putNumber("pitch", s_swerve.getPitch());
+    SmartDashboard.putNumber("yaw", s_swerve.getRoll());
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

@@ -40,7 +40,7 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, bh.buttons.get("Left_Bumper_Button"));
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
+    public final Swerve s_Swerve = new Swerve();
 
     public double getJoystickAngle(){
         return  ((Math.atan2(rotate.getRawAxis(Joystick.AxisType.kY.value), rotate.getRawAxis(Joystick.AxisType.kX.value)) * 180 / Math.PI)+360)%360;
@@ -96,7 +96,7 @@ public class RobotContainer {
         // get on the charge station, then balance, then put the wheels in an x configuration
         return new SequentialCommandGroup(
             new MountChargeStation(s_Swerve, false),
-            new BalanceChargeStation(s_Swerve).andThen(new InstantCommand(() -> s_Swerve.configToX()))
+            new BalanceChargeStation(s_Swerve, false).andThen(new InstantCommand(() -> s_Swerve.configToX()))
         );
     }
 

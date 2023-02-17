@@ -49,6 +49,9 @@ public class Swerve extends SubsystemBase {
     public double getPitch(){
         return gyro.getPitch();
     }
+    public double getRoll(){
+        return gyro.getRoll();
+    }
     //sets the wheels in an x shape
     public void configToX(){
         mSwerveMods[0].setDesiredState(new SwerveModuleState(0, new Rotation2d(Math.toRadians(315))), true);
@@ -125,6 +128,7 @@ public class Swerve extends SubsystemBase {
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
+
 
     /** @param break true for break, false for coast */
     public void setBrakeMode(boolean brake){
