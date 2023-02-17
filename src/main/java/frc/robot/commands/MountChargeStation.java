@@ -15,8 +15,8 @@ public class MountChargeStation extends CommandBase {
   
   private Swerve swerve;
   private double pitch;
-  private double stage1Threshold = 4;
-  private double stage2Threshold = 2;
+  private double stage1Threshold = 35;
+  private double stage2Threshold = 15;
   private int stage = 1;
   private boolean isRed;
   private boolean finished = false;
