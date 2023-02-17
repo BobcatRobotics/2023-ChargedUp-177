@@ -86,6 +86,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
-        return new exampleAuto(s_Swerve);
+        return new exampleAuto(s_Swerve, m_Limelight);
     }
 }

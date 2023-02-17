@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,6 +16,7 @@ public class AlignToTargetAutos extends CommandBase {
   private Swerve drivetrain;
   private Limelight lime;
   private PIDController pidController;
+  private Timer timer;
 
   private double kp = 0.2;
   private double ki = 0;
@@ -29,6 +31,7 @@ public class AlignToTargetAutos extends CommandBase {
   public AlignToTargetAutos(Swerve dt, Limelight lm) {
     drivetrain = dt;
     lime = lm;
+    timer = new Timer();
 
     pidController = new PIDController(kp, ki, kd);
     pidController.setSetpoint(setpoint);
@@ -41,6 +44,7 @@ public class AlignToTargetAutos extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.start();
     lime.turnOnLED();
   }
 
@@ -51,7 +55,7 @@ public class AlignToTargetAutos extends CommandBase {
     SmartDashboard.putBoolean("HasTarget", lime.hasTargets());
     SmartDashboard.putBoolean("has targets",lime.hasTargets());
     SmartDashboard.putBoolean("align finished", isFinished());
-    if (lime.hasTargets()) {
+    if (lime.hasTargets() & !isFinished()) {
       xOffset = lime.x();
       calc = pidController.calculate(xOffset);
       SmartDashboard.putNumber("xOffset", xOffset);
@@ -72,6 +76,7 @@ public class AlignToTargetAutos extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pidController.atSetpoint();
+    return timer.hasElapsed(2);
+    //return pidController.atSetpoint();
   }
 }
