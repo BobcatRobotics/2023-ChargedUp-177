@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
-public class AlignToTarget extends CommandBase {
+public class AlignToTargetAutos extends CommandBase {
   private Swerve drivetrain;
   private Limelight lime;
   private PIDController pidController;
@@ -26,7 +26,7 @@ public class AlignToTarget extends CommandBase {
   private double calc;
 
   /** Creates a new AlignToTarget. */
-  public AlignToTarget(Swerve dt, Limelight lm) {
+  public AlignToTargetAutos(Swerve dt, Limelight lm) {
     drivetrain = dt;
     lime = lm;
 

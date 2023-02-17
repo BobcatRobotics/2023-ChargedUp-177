@@ -31,6 +31,7 @@ public class Limelight extends SubsystemBase {
       ta = table.getEntry("ta");
       
     } catch (Exception e) {
+      SmartDashboard.putBoolean("couldn't get nt entries", true);
       return;
     }
     initialized = true;
