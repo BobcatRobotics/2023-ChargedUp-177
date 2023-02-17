@@ -27,7 +27,7 @@ import frc.robot.subsystems.Swerve;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(2);
+    private final CommandXboxController driver = new CommandXboxController(2);
     private final Joystick rotate = new Joystick(0);
     private final Joystick strafe = new Joystick(1);
 
