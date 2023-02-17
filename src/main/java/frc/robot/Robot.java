@@ -123,6 +123,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    SmartDashboard.putNumber("PID Value", 0);
   }
 
   /** This function is called periodically during operator control. */
