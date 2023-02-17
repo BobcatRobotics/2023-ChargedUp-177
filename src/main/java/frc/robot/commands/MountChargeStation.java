@@ -15,8 +15,8 @@ public class MountChargeStation extends CommandBase {
   
   private Swerve swerve;
   private double pitch;
-  private double stage1Threshold = 35;
-  private double stage2Threshold = 15;
+  private double stage1Threshold = 5;
+  private double stage2Threshold = 3;
   private int stage = 1;
   private boolean isRed;
   private boolean finished = false;
@@ -38,18 +38,20 @@ public class MountChargeStation extends CommandBase {
   @Override
   public void execute() {
     pitch = swerve.getPitch();
-    swerve.drive(new Translation2d(0, 0.5), /*may need to be changed*/
+    swerve.drive(new Translation2d(0.5, 0), /*may need to be changed*/
      0, true, true);
-
+    stage = 1;
     if (stage == 1) {
       while (!(pitch > stage1Threshold)){
         pitch = swerve.getPitch();
+        System.out.println(stage + " " + pitch);
       }
       stage = 2;
     }
     if (stage == 2) {
       while (!(pitch < stage2Threshold)){
         pitch = swerve.getPitch();
+        System.out.println(stage + " " + pitch);
       }
       finished = true;
     }
