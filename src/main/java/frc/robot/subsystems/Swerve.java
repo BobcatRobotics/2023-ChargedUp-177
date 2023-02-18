@@ -10,7 +10,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -21,7 +24,11 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -144,7 +151,7 @@ public class Swerve extends SubsystemBase {
 
     // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
     public Command followTrajectoryCommand() {
-        path1 = new DriveFollowPath("New Path", 1, 1);
+        path1 = new DriveFollowPath("New Path", 4.5, 3);
         //path1.initialize();
 
         FollowPathWithEvents command = new FollowPathWithEvents(
