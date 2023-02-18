@@ -8,7 +8,16 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import frc.robot.autos.*;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
+import frc.robot.Constants;
+import frc.robot.Constants.ButtonHashtable;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -26,6 +35,9 @@ import frc.robot.subsystems.Swerve;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    //for the xbox controller buttons
+    private Constants.ButtonHashtable bh = new Constants.ButtonHashtable();
+
     /* Controllers */
     private final Joystick driver = new Joystick(2);
     private final Joystick rotate = new Joystick(0);
@@ -49,8 +61,33 @@ public class RobotContainer {
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
 
+    public double getJoystickAngle(){
+        return  ((Math.atan2(rotate.getRawAxis(Joystick.AxisType.kY.value), rotate.getRawAxis(Joystick.AxisType.kX.value)) * 180 / Math.PI)+360)%360;
+    }
+    public void displayGyro(){
+        SmartDashboard.putNumber("pitch", s_Swerve.getPitch());
+        SmartDashboard.putNumber("yaw", s_Swerve.getRoll());
+    }
+    // returns the angle of the joystick in degrees
+   
+    public Command getDefaultCommand(){
+        return s_Swerve.getDefaultCommand();
+    }
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        /*
+         * Default commands should be scheduled here if they should run all the time (auto and teleop).
+         * Make sure that none of the default commands require the same subsystems that you intend to
+         * use during autonomous, because they will interrupt the autonomous command. If you want a default
+         * command to run just during teleop, schedule it in the scheduleDefaultTeleop method and cancel
+         * it in the cancelDefaultTeleop method.
+         */
+
+        // Configure the button bindings
+        configureButtonBindings();
+    }
+
+    public void scheduleDefaultTeleop() {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -60,6 +97,8 @@ public class RobotContainer {
                 () -> robotCentric.getAsBoolean()
             )
         );
+    }
+
 
         // Configure the button bindings
         configureButtonBindings();
@@ -76,6 +115,15 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         alignRobot.whileTrue(align.andThen(new InstantCommand(() -> SmartDashboard.putBoolean("alignpressed", true))));
+    }
+
+    public SequentialCommandGroup MountAndBalance(Swerve s_Swerve){
+        // get on the charge station, then balance, then put the wheels in an x configuration
+        return new SequentialCommandGroup(
+            new MountChargeStation(s_Swerve, false),
+            new BalanceChargeStation(s_Swerve, false),
+            new InstantCommand(() -> s_Swerve.configToX())
+        );
     }
 
     /**

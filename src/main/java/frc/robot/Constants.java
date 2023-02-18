@@ -6,9 +6,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
+import java.util.Hashtable;
 
 public final class Constants {
     public static final double stickDeadband = 0;
@@ -147,9 +147,49 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+    public class BalancingConstants{
+        public static final double kP = 0.4;//TODO: tune
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kToleranceDegrees = 2.5;//acceptable absolute error in degrees
+        public static final double kSetpoint = 0.0; // we want a pitch of 0 degrees
+        public static final double kSensitivity = 20; // sigmoid(pid/sensitivity)*max speed = meters per second to drive    
+    }
+    
+    public static class ButtonHashtable {
+        //hashtable used here to make use of key - value pairs
+        //access through table.get(key);
+        //add or change through table.put(key, value);
+        //remove through table.remove(key);
+
+        //If the types specified in the <>'s of the "New Hashtable<>" are the same as the first, you don't have to include them
+        //Be sure to use WRAPPER CLASSES for primitive types
+        public Hashtable<String, Integer> buttons = new Hashtable<>();
+        public ButtonHashtable () {
+            buttons.put("X_Button", 1);
+            buttons.put("A_Button", 2);
+            buttons.put("B_Button", 3);
+            buttons.put("Y_Button", 4);
+            
+            buttons.put("Left_Bumper_Button", 5);
+            buttons.put("Right_Bumper_Button", 6);
+            buttons.put("Left_Trigger_Button", 7);
+            buttons.put("Right_Trigger_Button", 8);
+
+            //for some reason there are some variables in 2022 rapid react also
+            //with 1 and 0
+
+            buttons.put("D_Pad_Up", 0);
+            buttons.put("D_Pad_Right", 90);
+            buttons.put("D_Pad_Down", 180);
+            buttons.put("D_Pad_Left", 2700);
+        }
+        
+    }   
 
     public static final class FieldConstants {
         public static final double length = 10;
         public static final double width = 10;
     }
+
 }
