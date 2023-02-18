@@ -64,7 +64,7 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [],
         "executionBehavior": "parallel",
@@ -99,9 +99,15 @@
   ],
   "markers": [
     {
-      "position": 2.000000000000055,
+      "position": 0.98,
       "names": [
-        "waitCommand"
+        "alignToTarget"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "event"
       ]
     }
   ]
