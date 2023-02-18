@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
     private final double outSpeed;
     
     // CAN IDs for the motor
-    public static final int topMotorPort = 8;
+    public static final int topMotorPort = 11;
     
     
     //intake motor objects
