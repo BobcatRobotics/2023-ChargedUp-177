@@ -23,8 +23,6 @@ public class Wrist extends SubsystemBase {
   double pressure;
   PneumaticHub phub;
   Compressor compressor;
-  DigitalInput upperLimit;
-  DigitalInput lowerLimit;
 
   public Wrist() {
     motor  = new TalonFX(Constants.intakeMotorID);
@@ -39,17 +37,17 @@ public class Wrist extends SubsystemBase {
     solenoid.set(false);
   }
 
-  public void turnWrist(double speed){
-    speed = MathUtils.throttlePercent(speed);
-    //if lower limit switch is tripped and we're trying to go down, don't
-    //if upper limit switch is tripped and we're trying to go up, don't
-    //otherwise drive at given speed
-    if(!((Math.signum(speed) == -1 && lowerLimit.get() == true))){
-      if(!((Math.signum(speed) == 1 && lowerLimit.get() == false))){
-        motor.set(TalonFXControlMode.PercentOutput, speed);
-      }
-    }
-  }
+  // public void turnWrist(double speed){
+  //   speed = MathUtils.throttlePercent(speed);
+  //   //if lower limit switch is tripped and we're trying to go down, don't
+  //   //if upper limit switch is tripped and we're trying to go up, don't
+  //   //otherwise drive at given speed
+  //   if(!((Math.signum(speed) == -1 && lowerLimit.get() == true))){
+  //     if(!((Math.signum(speed) == 1 && lowerLimit.get() == false))){
+  //       motor.set(TalonFXControlMode.PercentOutput, speed);
+  //     }
+  //   }
+  // }
   @Override
   public void periodic() {
     compressor.enableAnalog(80, 115);//TODO: check limits
