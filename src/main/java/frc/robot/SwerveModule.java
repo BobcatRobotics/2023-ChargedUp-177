@@ -58,7 +58,6 @@ public class SwerveModule {
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
     }
-
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
         if(isOpenLoop){
             double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
@@ -146,5 +145,8 @@ public class SwerveModule {
             Conversions.falconToMeters(mDriveMotor.getSelectedSensorPosition(), Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio), 
             getAngle()
         );
+    }
+    public double getDistanceMeters(){
+        return Conversions.falconToMeters(mDriveMotor.getSelectedSensorPosition(), Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
     }
 }

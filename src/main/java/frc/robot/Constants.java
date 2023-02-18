@@ -12,10 +12,12 @@ import java.util.Hashtable;
 
 public final class Constants {
     public static final double stickDeadband = 0;
-
+    public static final int jake = 194; //Jake M is 194 cm tall
     public static final class Swerve {
         public static final int pigeonID = 1;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
+        
+        public static final String CANivore = "CANt_open_file";// name of the canivore
 
         public static final COTSFalconSwerveConstants chosenModule =  //TODO: This must be tuned to specific robot
             COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L3);
@@ -80,7 +82,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot
+        public static final double maxSpeed = 5.5; //TODO: This must be tuned to specific robot
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
 
@@ -94,7 +96,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 1;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(170.7);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(172);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -104,7 +106,7 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 2;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(187.6);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(186.85);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -114,7 +116,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 3;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(57.12);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(52.558);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -124,14 +126,14 @@ public final class Constants {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 4;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(105.29);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(105.556);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxSpeedMetersPerSecond = 4.5;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
@@ -151,9 +153,9 @@ public final class Constants {
         public static final double kD = 0;
         public static final double kToleranceDegrees = 2.5;//acceptable absolute error in degrees
         public static final double kSetpoint = 0.0; // we want a pitch of 0 degrees
-        public static final double kSensitivity = 20; // sigmoid(pid/sensitivity)*max speed = meters per second to drive 
-        
+        public static final double kSensitivity = 20; // sigmoid(pid/sensitivity)*max speed = meters per second to drive    
     }
+    
     public static class ButtonHashtable {
         //hashtable used here to make use of key - value pairs
         //access through table.get(key);
@@ -183,39 +185,11 @@ public final class Constants {
             buttons.put("D_Pad_Left", 2700);
         }
         
+    }   
+
+    public static final class FieldConstants {
+        public static final double length = 10;
+        public static final double width = 10;
     }
-    public static class ColorHashtable {
-        //guide to hashtables in ButtonHashtable
-        public Hashtable<String, Double> colors = new Hashtable<>();
-        public ColorHashtable () {
-            //TODO: add patterns and not just solid colors
-            //possibly make a var and add .02 to it
-            //in every argument so it is higher
-            //for the next time it is called
-            colors.put("Hot Pink", 0.57);
-            colors.put("Dark Red", 0.59);
-            colors.put("Red", 0.61);
-            colors.put("Red Orange", 0.63);
-            colors.put("Orange", 0.65);
-            colors.put("Gold", 0.67);
-            colors.put("Yellow", 0.69);
-            colors.put("Lawn Green", 0.71);
-            colors.put("Lime", 0.73);
-            colors.put("Dark Green", 0.75);
-            colors.put("Green", 0.77);
-            colors.put("Blue Green", 0.79);
-            colors.put("Aqua", 0.81);
-            colors.put("Sky Blue", 0.83);
-            colors.put("Dark Blue", 0.85);
-            colors.put("Blue", 0.87);
-            colors.put("Blue Violet", 0.89);
-            colors.put("Violet", 0.91);
-            colors.put("White", 0.93);
-            colors.put("Gray", 0.95);
-            colors.put("Dark Gray", 0.97);
-            colors.put("Black", 0.99);
-            
-        }
-    }
-    
+
 }

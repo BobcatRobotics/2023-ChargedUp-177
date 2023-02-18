@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -15,6 +18,15 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.Constants;
 import frc.robot.Constants.ButtonHashtable;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.autos.exampleAuto;
+import frc.robot.commands.AlignToTarget;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Swerve;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,11 +49,17 @@ public class RobotContainer {
     // private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, bh.buttons.get("Y_Button"));
-    private final JoystickButton robotCentric = new JoystickButton(driver, bh.buttons.get("Left_Bumper_Button"));
-    private final JoystickButton xconfig = new JoystickButton(driver, bh.buttons.get("X_Button"));
+    private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
+    private final JoystickButton robotCentric = new JoystickButton(driver, 5);
+    private final JoystickButton alignRobot = new JoystickButton(driver, 2);
+
     /* Subsystems */
-    public final Swerve s_Swerve = new Swerve();
+    private final Swerve s_Swerve = new Swerve();
+    private final Limelight m_Limelight = new Limelight();
+
+    /* Commands */
+    //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
+    private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
 
     public double getJoystickAngle(){
         return  ((Math.atan2(rotate.getRawAxis(Joystick.AxisType.kY.value), rotate.getRawAxis(Joystick.AxisType.kX.value)) * 180 / Math.PI)+360)%360;
@@ -72,17 +90,19 @@ public class RobotContainer {
     public void scheduleDefaultTeleop() {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
-                s_Swerve,
-                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value), 
-                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value), 
-                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value),
+                s_Swerve, 
+                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
+                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
+                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
                 () -> robotCentric.getAsBoolean()
             )
         );
     }
 
-    public void cancelDefaultTeleop() {
-        s_Swerve.getDefaultCommand().cancel();
+
+        // Configure the button bindings
+        configureButtonBindings();
+        m_Limelight.initializeLimeLight();
     }
 
     /**
@@ -94,6 +114,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        alignRobot.whileTrue(align.andThen(new InstantCommand(() -> SmartDashboard.putBoolean("alignpressed", true))));
     }
 
     public SequentialCommandGroup MountAndBalance(Swerve s_Swerve){
@@ -112,6 +133,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return MountAndBalance(s_Swerve);
+        s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
+        return new exampleAuto(s_Swerve, m_Limelight);
     }
 }

@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -17,17 +18,24 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+
     public double rot;
+    public PhotonVision photonCam;
+
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
+        photonCam = new PhotonVision();
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -81,6 +89,9 @@ public class Swerve extends SubsystemBase {
         }
         rot = rotation;
     }    
+        
+    }
+
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -139,14 +150,15 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
-        swerveOdometry.update(getYaw(), getModulePositions());  
-        
+        swerveOdometry.update(getYaw(), getModulePositions()); 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getDistanceMeters());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
         }
-        SmartDashboard.putNumber("pitch", getPitch());
-        SmartDashboard.putNumber("rot", rot);
+        
+        SmartDashboard.putNumber("swerveOdometry Pose X Meters", swerveOdometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("swerveOdometry Pose Y Meters", swerveOdometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("swerveOdometry Pose Rotation Degrees", swerveOdometry.getPoseMeters().getRotation().getDegrees());
     }
 }
