@@ -152,7 +152,7 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
-        public static final int armMotorPort = 15; 
+        public static final int armMotorPort = 10; 
 
         // TODO: Change!
         public static final int pos0 = 0;
@@ -167,7 +167,7 @@ public final class Constants {
     }
 
     public static final class ElevatorConstants {
-        public static final int elevatorMotorPort = 10;
+        public static final int elevatorMotorPort = 9;
         public static final int topLimitPort = 0;
         public static final int bottomLimitPort = 2;
 
