@@ -62,6 +62,22 @@ public class DriveFollowPath extends CommandBase {
         this.pathName = pathName;
     }
 
+    public DriveFollowPath(PathPlannerTrajectory traj, boolean resetOdometry) {
+        addRequirements(RobotContainer.s_Swerve);
+        
+        this.trajectory = traj;
+
+        PIDController xController = new PIDController(Constants.AutoConstants.kPXController, 0, 0);
+        PIDController yController = new PIDController(Constants.AutoConstants.kPYController, 0, 0);
+        ProfiledPIDController thetaController = new ProfiledPIDController(
+                Constants.AutoConstants.kPThetaController, 0, 0,
+                new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond,
+                        Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        this.controller = new HolonomicDriveController(xController, yController, thetaController);
+        this.resetOdometry = resetOdometry;        
+    }
+
     public PathPlannerTrajectory getTraj() {
         return trajectory;
     }

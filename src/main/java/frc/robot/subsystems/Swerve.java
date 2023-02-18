@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 
@@ -31,7 +32,7 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     public PhotonVision photonCam;
-    public DriveFollowPath path1;
+    public static DriveFollowPath path1;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -143,14 +144,11 @@ public class Swerve extends SubsystemBase {
     }
 
     // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
-    public Command followTrajectoryCommand() {
-        path1 = new DriveFollowPath("New Path", 1, 1);
+    public static Command followTrajectoryCommand(PathPlannerTrajectory ppt, boolean resetOdometry) {
+        path1 = new DriveFollowPath(ppt, resetOdometry);
         //path1.initialize();
 
-        FollowPathWithEvents command = new FollowPathWithEvents(
-            path1, 
-            path1.getTraj().getMarkers(), 
-            RobotContainer.eventMap);
+        FollowPathWithEvents command = new FollowPathWithEvents(path1, path1.getTraj().getMarkers(), Constants.AutoConstants.eventMap);
         
         return command;
     }

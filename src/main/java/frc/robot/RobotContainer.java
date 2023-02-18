@@ -3,6 +3,9 @@ package frc.robot;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -54,11 +57,10 @@ public class RobotContainer {
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
-    //private final PathPlannerTest pathPlannerTest = new PathPlannerTest();
+    private final PathPlannerTest pathPlannerTest = new PathPlannerTest();
 
     /* SendableChooser */
     SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<>();
-    public static HashMap<String, Command> eventMap = new HashMap<>();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -74,10 +76,10 @@ public class RobotContainer {
 
         // Sendable Chooser Setup
         autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
-        //autoChooser.addOption("PathPlanner Test", pathPlannerTest);
-        autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(s_Swerve.followTrajectoryCommand()));
+        autoChooser.addOption("PathPlanner Test w/ Stop", pathPlannerTest);
+        autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         SmartDashboard.putData(autoChooser);
-        eventMap.put("chargeStation", align);
+        Constants.AutoConstants.eventMap.put("chargeStation", align);
         // Configure the button bindings
         configureButtonBindings();
         m_Limelight.initializeLimeLight();
