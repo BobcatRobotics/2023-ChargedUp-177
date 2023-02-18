@@ -76,8 +76,8 @@ public class RobotContainer {
 
         // Sendable Chooser Setup
         autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
-        autoChooser.addOption("PathPlanner Test w/ Stop", pathPlannerTest);
-        autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
+        autoChooser.addOption("PathPlanner Test w/ X-Stance", pathPlannerTest);
+        //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         SmartDashboard.putData(autoChooser);
         Constants.AutoConstants.eventMap.put("chargeStation", align);
         // Configure the button bindings

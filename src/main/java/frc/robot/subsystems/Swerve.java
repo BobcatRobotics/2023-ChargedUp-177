@@ -143,6 +143,14 @@ public class Swerve extends SubsystemBase {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
+    //sets the wheels in an x shape
+    public void configToX(){
+        mSwerveMods[0].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(45))), true);
+        mSwerveMods[1].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
+        mSwerveMods[2].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
+        mSwerveMods[3].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(45))), true);
+    }
+
     // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
     public static Command followTrajectoryCommand(PathPlannerTrajectory ppt, boolean resetOdometry) {
         path1 = new DriveFollowPath(ppt, resetOdometry);
@@ -152,6 +160,8 @@ public class Swerve extends SubsystemBase {
         
         return command;
     }
+
+    
 
     public void resetOdometryAutos() {
         path1.initialize();
