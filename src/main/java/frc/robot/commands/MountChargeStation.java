@@ -38,17 +38,18 @@ public class MountChargeStation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    swerve.resetModulesToAbsolute();
     pitch = swerve.getPitch();
-    swerve.drive(new Translation2d(0.5, 0), /*may need to be changed*/
+    swerve.drive(new Translation2d(1, 0), /*may need to be changed*/
      0, true, true);
     
     
       while (!(pitch > stage1Threshold)){
-        pitch = swerve.getPitch();
+        pitch = Math.abs(swerve.getPitch());
         SmartDashboard.putString("ChargeStation", "stage 1: " + pitch);
       }
       while (!(pitch < stage2Threshold)){
-        pitch = swerve.getPitch();
+        pitch = Math.abs(swerve.getPitch());
         SmartDashboard.putString("ChargeStation", "stage 2: " + pitch);
       }
       finished = true;

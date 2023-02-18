@@ -54,10 +54,10 @@ public class Swerve extends SubsystemBase {
     }
     //sets the wheels in an x shape
     public void configToX(){
-        mSwerveMods[0].setDesiredState(new SwerveModuleState(0, new Rotation2d(Math.toRadians(315))), true);
-        mSwerveMods[1].setDesiredState(new SwerveModuleState(0, new Rotation2d(Math.toRadians(45))), true);
-        mSwerveMods[2].setDesiredState(new SwerveModuleState(0, new Rotation2d(Math.toRadians(315))), true);
-        mSwerveMods[3].setDesiredState(new SwerveModuleState(0, new Rotation2d(Math.toRadians(45))), true);
+        mSwerveMods[0].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(45))), true);
+        mSwerveMods[1].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
+        mSwerveMods[2].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
+        mSwerveMods[3].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(45))), true);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {

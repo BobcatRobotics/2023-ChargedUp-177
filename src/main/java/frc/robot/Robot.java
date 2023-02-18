@@ -24,7 +24,6 @@ public class Robot extends TimedRobot {
   
 
   private RobotContainer m_robotContainer;
-  Swerve s_swerve = m_robotContainer.s_Swerve;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -59,8 +58,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    SmartDashboard.putNumber("pitch", s_swerve.getPitch());
-    SmartDashboard.putNumber("yaw", s_swerve.getRoll());
+    m_robotContainer.displayGyro();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

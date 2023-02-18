@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -38,14 +39,17 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, bh.buttons.get("Y_Button"));
     private final JoystickButton robotCentric = new JoystickButton(driver, bh.buttons.get("Left_Bumper_Button"));
-
+    private final JoystickButton xconfig = new JoystickButton(driver, bh.buttons.get("X_Button"));
     /* Subsystems */
     public final Swerve s_Swerve = new Swerve();
 
     public double getJoystickAngle(){
         return  ((Math.atan2(rotate.getRawAxis(Joystick.AxisType.kY.value), rotate.getRawAxis(Joystick.AxisType.kX.value)) * 180 / Math.PI)+360)%360;
     }
-
+    public void displayGyro(){
+        SmartDashboard.putNumber("pitch", s_Swerve.getPitch());
+        SmartDashboard.putNumber("yaw", s_Swerve.getRoll());
+    }
     // returns the angle of the joystick in degrees
    
     public Command getDefaultCommand(){
@@ -96,7 +100,8 @@ public class RobotContainer {
         // get on the charge station, then balance, then put the wheels in an x configuration
         return new SequentialCommandGroup(
             new MountChargeStation(s_Swerve, false),
-            new BalanceChargeStation(s_Swerve, false).andThen(new InstantCommand(() -> s_Swerve.configToX()))
+            new BalanceChargeStation(s_Swerve, false),
+            new InstantCommand(() -> s_Swerve.configToX())
         );
     }
 
