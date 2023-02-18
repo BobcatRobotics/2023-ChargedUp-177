@@ -62,13 +62,18 @@ public class DriveFollowPath extends CommandBase {
         this.pathName = pathName;
     }
 
+    public PathPlannerTrajectory getTraj() {
+        return trajectory;
+    }
+
     @Override
     public void initialize() {
         RobotContainer.s_Swerve.enableBrakeMode(true);
         timer.reset();
         timer.start();
-        Pose2d initialPose = trajectory.getInitialPose();
-        if(resetOdometry) RobotContainer.s_Swerve.resetOdometry(new Pose2d(initialPose.getTranslation(), RobotContainer.s_Swerve.getYaw()));
+        Pose2d initialPose = trajectory.getInitialHolonomicPose();
+        SmartDashboard.putString("initialPose", initialPose.toString());
+        if(resetOdometry) RobotContainer.s_Swerve.resetOdometry(new Pose2d(initialPose.getTranslation(), initialPose.getRotation())); // RobotContainer.s_Swerve.getYaw()
     }
 
     @Override
@@ -77,8 +82,8 @@ public class DriveFollowPath extends CommandBase {
         PathPlannerState desiredState = (PathPlannerState) trajectory.sample(time);
         ChassisSpeeds targetSpeeds = controller.calculate(RobotContainer.s_Swerve.getPose(), desiredState, new Rotation2d(desiredState.holonomicRotation.getRadians()));
 
-        targetSpeeds.vyMetersPerSecond = -targetSpeeds.vyMetersPerSecond;
-        targetSpeeds.omegaRadiansPerSecond = -targetSpeeds.omegaRadiansPerSecond;
+        targetSpeeds.vyMetersPerSecond = targetSpeeds.vyMetersPerSecond;
+        targetSpeeds.omegaRadiansPerSecond = targetSpeeds.omegaRadiansPerSecond;
 
         // System.out.println("x:   " + RobotContainer.drive.getPoseMeters().getTranslation().getX() + " y:   " + RobotContainer.drive.getPoseMeters().getTranslation().getY() + " r: " + RobotContainer.drive.getPoseMeters().getRotation().getDegrees());
         // System.out.println("tx:  " + desiredState.poseMeters.getTranslation().getX() + " ty: " + desiredState.poseMeters.getTranslation().getY() + " tr:" + desiredState.holonomicRotation.getDegrees());
