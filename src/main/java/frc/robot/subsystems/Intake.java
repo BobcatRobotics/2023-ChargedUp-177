@@ -22,11 +22,12 @@ public class Intake extends SubsystemBase {
   }
 
   public void runIntakeIn(){
-    motor.set(ControlMode.PercentOutput, 0.7);
+    motor.set(ControlMode.PercentOutput, -1);
   }
   public void runIntakeOut(){
-    motor.set(ControlMode.PercentOutput, -0.4);
+    motor.set(ControlMode.PercentOutput, 0.4);
   }
+
   public void runIntakePercent(double speed){
     speed = MathUtils.throttlePercent(speed);
     motor.set(ControlMode.PercentOutput, speed);

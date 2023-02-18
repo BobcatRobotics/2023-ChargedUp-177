@@ -11,7 +11,7 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-    public static final int intakeMotorID = 6; //TODO: assign correct values
+    public static final int intakeMotorID = 11; //TODO: assign correct values
     public static final int wristSolenoidID = 0;
     public static final int wristMotorID = 0;
     public static final int pHubID = 1;

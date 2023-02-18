@@ -60,6 +60,8 @@ public class RobotContainer {
         //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         driver.leftBumper().whileTrue((new RunCommand(m_Intake::runIntakeIn).andThen(new InstantCommand(m_Intake::stop))));
         driver.rightBumper().whileTrue((new RunCommand(m_Intake::runIntakeOut).andThen(new InstantCommand(m_Intake::stop))));
+        driver.rightBumper().whileFalse((new InstantCommand(() -> m_Intake.stop())));
+        driver.leftBumper().whileFalse((new InstantCommand(() -> m_Intake.stop())));
         driver.a().onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
         driver.b().onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
     }

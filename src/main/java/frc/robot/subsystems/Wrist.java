@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Util.MathUtils;
@@ -29,6 +30,7 @@ public class Wrist extends SubsystemBase {
     solenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.wristSolenoidID);
     phub = new PneumaticHub(Constants.pHubID);
     compressor = new Compressor(Constants.compressorID, PneumaticsModuleType.REVPH);
+    
   }
   public void wristSolenoidON(){
     solenoid.set(true);
@@ -51,5 +53,6 @@ public class Wrist extends SubsystemBase {
   @Override
   public void periodic() {
     compressor.enableAnalog(80, 115);//TODO: check limits
+    SmartDashboard.putNumber("compressor psi", compressor.getPressure());
   }
 }
