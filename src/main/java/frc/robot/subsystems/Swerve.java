@@ -150,11 +150,14 @@ public class Swerve extends SubsystemBase {
     }
 
     // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
-    public Command followTrajectoryCommand(PathPlannerTrajectory path1) {
+    public Command followTrajectoryCommand() {
+        path1 = new DriveFollowPath("New Path", 4.5, 3);
+        //path1.initialize();
+
         FollowPathWithEvents command = new FollowPathWithEvents(
             path1, 
-            path1.getMarkers(), 
-            Constants.AutoConstants.eventMap);
+            path1.getTraj().getMarkers(), 
+            RobotContainer.eventMap);
         
         return command;
     }
