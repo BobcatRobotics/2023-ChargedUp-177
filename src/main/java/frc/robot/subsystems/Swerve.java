@@ -126,7 +126,8 @@ public class Swerve extends SubsystemBase {
         return positions;
     }
 
-    public void resetModulesToAbsolute(){
+    public void resetModulesToAbsolute() {
+        //zeroGyro();
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
         }

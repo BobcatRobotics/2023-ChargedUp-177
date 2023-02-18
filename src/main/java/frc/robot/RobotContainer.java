@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -45,21 +47,34 @@ public class RobotContainer {
 
     // /* Drive Controls */
     // private final int translationAxis = XboxController.Axis.kLeftY.value;
-    // private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    // private final int rotationAxis = XboxController.Axis.kRightX.value;
+    private final int strafeAxis = XboxController.Axis.kLeftX.value;
+    private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
-    private final JoystickButton robotCentric = new JoystickButton(driver, 5);
+    //private final JoystickButton robotCentric = new JoystickButton(driver, 5);
     private final JoystickButton alignRobot = new JoystickButton(driver, 2);
 
+
+    private final JoystickButton leftBumper = new JoystickButton(driver, 5); //left bumper
+    private final JoystickButton rightBumper = new JoystickButton(driver, 6);//right bumper
+    private final JoystickButton a = new JoystickButton(driver, 2);
+    private final JoystickButton b = new JoystickButton(driver, 3);
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final Limelight m_Limelight = new Limelight();
 
+    private final Elevator m_Elevator = new Elevator();
+    private final Intake m_Intake = new Intake();
+    private final Arm m_Arm = new Arm();
+    private final Wrist m_Wrist = new Wrist();
+    
     /* Commands */
+    private final Command elevatorControls = new ElevatorControls(m_Elevator, driver);
+    private final Command armControls = new ArmControls(m_Arm, driver);
+    private final Limelight m_Limelight = new Limelight();
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
+
 
     public double getJoystickAngle(){
         return  ((Math.atan2(rotate.getRawAxis(Joystick.AxisType.kY.value), rotate.getRawAxis(Joystick.AxisType.kX.value)) * 180 / Math.PI)+360)%360;
@@ -94,11 +109,14 @@ public class RobotContainer {
                 () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
                 () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
                 () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
-                () -> robotCentric.getAsBoolean()
+                () -> false//() -> robotCentric.getAsBoolean()
             )
         );
     }
 
+
+        m_Arm.setDefaultCommand(armControls);
+        m_Elevator.setDefaultCommand(elevatorControls);
 
         // Configure the button bindings
         configureButtonBindings();
@@ -114,6 +132,14 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+
+        leftBumper.whileTrue((new RunCommand(m_Intake::runIntakeIn).andThen(new InstantCommand(m_Intake::stop))));
+        rightBumper.whileTrue((new RunCommand(m_Intake::runIntakeOut).andThen(new InstantCommand(m_Intake::stop))));
+        rightBumper.whileFalse((new InstantCommand(() -> m_Intake.stop())));
+        leftBumper.whileFalse((new InstantCommand(() -> m_Intake.stop())));
+        a.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
+        b.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
+
         alignRobot.whileTrue(align.andThen(new InstantCommand(() -> SmartDashboard.putBoolean("alignpressed", true))));
     }
 
@@ -124,6 +150,7 @@ public class RobotContainer {
             new BalanceChargeStation(s_Swerve, false),
             new InstantCommand(() -> s_Swerve.configToX())
         );
+
     }
 
     /**
@@ -131,7 +158,7 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
+  //  public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
         return new exampleAuto(s_Swerve, m_Limelight);
