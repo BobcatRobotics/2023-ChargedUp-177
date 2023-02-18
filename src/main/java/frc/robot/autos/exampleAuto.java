@@ -21,9 +21,10 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class exampleAuto extends SequentialCommandGroup {
-    String trajectoryJSON = "paths/test12123.wpilib.json";//"src/main/deploy/output/test11823.wpilib.json"; //"./src/main/deploy/output/test11823.wpilib.json";
+    String trajectoryJSON = "paths/test11923.wpilib.json";//"src/main/deploy/output/test11823.wpilib.json"; //"./src/main/deploy/output/test11823.wpilib.json";
     Trajectory exampleTrajectory = new Trajectory();
 
     public exampleAuto(Swerve s_Swerve){
@@ -70,7 +71,7 @@ public class exampleAuto extends SequentialCommandGroup {
         
         addCommands(
             new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
-            swerveControllerCommand
+            swerveControllerCommand, new WaitCommand(2)
         );
     }
 }

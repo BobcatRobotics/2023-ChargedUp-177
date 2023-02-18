@@ -34,16 +34,37 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final Trigger zeroGyro = driver.y();
-    private final Trigger robotCentric = driver.leftBumper();
+
+    // private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, 4); // y button
+    // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton robotCentric = new JoystickButton(driver, 5);
 
     /* Subsystems */
-    //private final Swerve s_Swerve = new Swerve();
+    private final Swerve s_Swerve = new Swerve();
+    private final Elevator m_Elevator = new Elevator();
     private final Intake m_Intake = new Intake();
+    private final Arm m_Arm = new Arm();
     private final Wrist m_Wrist = new Wrist();
+    
+    /* Commands */
+    private final Command elevatorControls = new ElevatorControls(m_Elevator, driver);
+    private final Command armControls = new ArmControls(m_Arm, driver);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        // s_Swerve.setDefaultCommand(
+        //     new TeleopSwerve(
+        //         s_Swerve, 
+        //         () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
+        //         () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
+        //         () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
+        //         () -> robotCentric.getAsBoolean()
+        //     )
+        // );
+
+        m_Arm.setDefaultCommand(armControls);
+        m_Elevator.setDefaultCommand(elevatorControls);
 
         // Configure the button bindings
         configureButtonBindings();
