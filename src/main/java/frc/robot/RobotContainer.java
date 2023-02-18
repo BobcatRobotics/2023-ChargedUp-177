@@ -112,7 +112,7 @@ public class RobotContainer {
                 () -> false//() -> robotCentric.getAsBoolean()
             )
         );
-    }
+
 
 
         m_Arm.setDefaultCommand(armControls);
@@ -158,7 +158,7 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-  //  public Command getAutonomousCommand() {
+    public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
         return new exampleAuto(s_Swerve, m_Limelight);
