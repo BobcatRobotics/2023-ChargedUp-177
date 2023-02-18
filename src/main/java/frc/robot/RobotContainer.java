@@ -24,7 +24,7 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final CommandXboxController driver = new CommandXboxController(2);
+    private final Joystick driver = new Joystick(2);
     private final Joystick rotate = new Joystick(0);
     private final Joystick strafe = new Joystick(1);
 
@@ -38,8 +38,12 @@ public class RobotContainer {
     // private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton zeroGyro = new JoystickButton(driver, 4); // y button
     // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, 5);
+    //private final JoystickButton robotCentric = new JoystickButton(driver, 5);
 
+    private final JoystickButton leftBumper = new JoystickButton(driver, 5); //left bumper
+    private final JoystickButton rightBumper = new JoystickButton(driver, 6);//right bumper
+    private final JoystickButton a = new JoystickButton(driver, 2);
+    private final JoystickButton b = new JoystickButton(driver, 3);
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Elevator m_Elevator = new Elevator();
@@ -53,15 +57,15 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        // s_Swerve.setDefaultCommand(
-        //     new TeleopSwerve(
-        //         s_Swerve, 
-        //         () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
-        //         () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
-        //         () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
-        //         () -> robotCentric.getAsBoolean()
-        //     )
-        // );
+        s_Swerve.setDefaultCommand(
+            new TeleopSwerve(
+                s_Swerve, 
+                () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
+                () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
+                () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
+                () -> false//() -> robotCentric.getAsBoolean()
+            )
+        );
 
         m_Arm.setDefaultCommand(armControls);
         m_Elevator.setDefaultCommand(elevatorControls);
@@ -78,13 +82,13 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        driver.leftBumper().whileTrue((new RunCommand(m_Intake::runIntakeIn).andThen(new InstantCommand(m_Intake::stop))));
-        driver.rightBumper().whileTrue((new RunCommand(m_Intake::runIntakeOut).andThen(new InstantCommand(m_Intake::stop))));
-        driver.rightBumper().whileFalse((new InstantCommand(() -> m_Intake.stop())));
-        driver.leftBumper().whileFalse((new InstantCommand(() -> m_Intake.stop())));
-        driver.a().onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
-        driver.b().onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
+        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        leftBumper.whileTrue((new RunCommand(m_Intake::runIntakeIn).andThen(new InstantCommand(m_Intake::stop))));
+        rightBumper.whileTrue((new RunCommand(m_Intake::runIntakeOut).andThen(new InstantCommand(m_Intake::stop))));
+        rightBumper.whileFalse((new InstantCommand(() -> m_Intake.stop())));
+        leftBumper.whileFalse((new InstantCommand(() -> m_Intake.stop())));
+        a.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
+        b.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
     }
 
     /**
