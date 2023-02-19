@@ -1,3 +1,10 @@
+**TODO before Waterbury**
+-update vendordeps and recharacterize so pigeon measures rotations
+-put limits and setpoints in for arm and elevator
+-merge autoTesting
+
+Note: ResetToAbsolute doesn't work but isn't necessarily that needed atm
+AprilTag visual pose also isn't in the works but with simple autos that don't pass the charge station till going on it at the end, it's not neccessary either
 Tested & working for teleop & pathweaver autos
 
 TODO: Update WPILIB @ 2/18/2023
