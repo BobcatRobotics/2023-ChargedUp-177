@@ -59,10 +59,19 @@ public class ElevatorControls extends CommandBase {
     //   }
     // }
     SmartDashboard.putBoolean("bottom limits", elevator.getBottomLimits());
+    SmartDashboard.putNumber("elevator encoder", elevator.getEncoder());
+    if (elevator.getBottomLimits()) {
+      elevator.resetEncoderPos();
+    }
+    // -207000
     if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0) {
       elevator.elevate(0);
+    } else if (elevator.isAtTopLimit() && gamepad.getRawAxis(3) < 0) {
+      elevator.elevate(0);
+    } else if (Math.abs(gamepad.getRawAxis(3)) < 0.05) {
+      elevator.holdPosition();
     } else {
-      elevator.elevate(gamepad.getRawAxis(3)/10);
+      elevator.elevate(gamepad.getRawAxis(3)/2);
     }
   }
 

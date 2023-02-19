@@ -38,6 +38,10 @@ public class Arm extends SubsystemBase {
         armMotor.set(ControlMode.PercentOutput, speed);
     }
 
+    public void holdPosition() {
+        armMotor.set(ControlMode.Position, armMotor.getSelectedSensorPosition());
+    }
+
     public void setState(int state) {
         if (state == 0) {
             armMotor.set(TalonFXControlMode.Position, ArmConstants.pos0);
@@ -66,4 +70,7 @@ public class Arm extends SubsystemBase {
         return armMotor.getSelectedSensorPosition() <= Constants.ArmConstants.constrictedBottomLimit;
     }
     
+    public boolean isAtHardStop() {
+        return armMotor.getStatorCurrent() >= 30.0;
+    }
 }

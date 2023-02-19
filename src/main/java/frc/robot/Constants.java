@@ -75,16 +75,16 @@ public final class Constants {
         public static final double angleKF = chosenModule.angleKF;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.05; //TODO: This must be tuned to specific robot
+        public static final double driveKP = 2.0087; //TODO: This must be tuned to specific robot
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;
 
         /* Drive Motor Characterization Values 
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-        public static final double driveKS = (0.47309 / 12); // TUNED
-        public static final double driveKV = (0.66261 / 12);
-        public static final double driveKA = (0.071697 / 12);
+        public static final double driveKS = (0.24128 / 12); // TUNED
+        public static final double driveKV = (1.988 / 12);
+        public static final double driveKA = (1.0449 / 12);
 
         /* Swerve Profiling Values */
         /** Meters per Second */
@@ -229,8 +229,7 @@ public final class Constants {
         public static final int pos1 = 4096;
         public static final int pos2 = 8192;
 
-        public static final double bottomLimit = 0.0;
-        public static final double topLimit = 8192;
+        public static final double topLimit = -207000;
 
         public static int elevatorState = 0;
     }

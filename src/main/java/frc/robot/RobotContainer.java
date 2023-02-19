@@ -113,7 +113,7 @@ public class RobotContainer {
                 () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
                 () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
                 () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
-                () -> true //() -> robotCentric.getAsBoolean()
+                () -> false //() -> robotCentric.getAsBoolean()
             )
         );
 

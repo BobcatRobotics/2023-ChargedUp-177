@@ -64,7 +64,15 @@ public class ArmControls extends CommandBase {
     //     }
     //   }
     // }
-    arm.setSpeed(gamepad.getRawAxis(1)/10);
+    if (Math.abs(gamepad.getRawAxis(1)) < 0.05) {
+      arm.holdPosition();
+    } else if (arm.isAtHardStop()) {
+      arm.setSpeed(0);
+    } else if (gamepad.getRawAxis(1) < 0) {
+      arm.setSpeed(gamepad.getRawAxis(1)/7);
+    } else {
+      arm.setSpeed(gamepad.getRawAxis(1)/5);
+    }
   }
 
   // Called once the command ends or is interrupted.

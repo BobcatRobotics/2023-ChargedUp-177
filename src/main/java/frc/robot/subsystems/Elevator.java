@@ -51,6 +51,14 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.set(ControlMode.PercentOutput, speed);
   }
 
+  public void holdPosition() {
+    elevatorMotor.set(ControlMode.Position, elevatorMotor.getSelectedSensorPosition());
+  }
+
+  public void resetEncoderPos() {
+    elevatorMotor.setSelectedSensorPosition(0);
+  }
+
   // public boolean getTopLimits() {
   //   return !topLimit.get();
   // }
@@ -59,13 +67,10 @@ public class Elevator extends SubsystemBase {
     return !bottomLimit.get();
   }
 
-  // public boolean isAtTopLimit() {
-  //   return elevatorMotor.getSelectedSensorPosition() >= Constants.ElevatorConstants.topLimit;
-  // }
-
-  // public boolean isAtBottomLimit() {
-  //   return elevatorMotor.getSelectedSensorPosition() <= Constants.ElevatorConstants.bottomLimit;
-  // }
+  // TODO: as you go up, elevator encoder values get more negative
+  public boolean isAtTopLimit() {
+    return elevatorMotor.getSelectedSensorPosition() <= Constants.ElevatorConstants.topLimit;
+  }
 
   public void setState(int state) {
     if (state == 0) {
@@ -82,6 +87,14 @@ public class Elevator extends SubsystemBase {
     if (pos <= 256) pos = 0;
     return (int) Math.ceil(pos/4096);
   }
+
+  public double getEncoder() {
+    return elevatorMotor.getSelectedSensorPosition();
+  }
+
+  // public boolean isAtHardStop() {
+  //   return elevatorMotor.getStatorCurrent() >= 40.0;
+  // }
 
   @Override
   public void periodic() {
