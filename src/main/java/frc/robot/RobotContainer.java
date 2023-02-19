@@ -51,8 +51,12 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
-    //private final JoystickButton robotCentric = new JoystickButton(driver, 5);
+    //private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
+    //ruffy buttons
+    private final JoystickButton ruffy0 = new JoystickButton(rotate, 0);
+    private final JoystickButton ruffy1 = new JoystickButton(strafe, 0);
+
+    private final JoystickButton gamepadY = new JoystickButton(driver, 5);
     private final JoystickButton alignRobot = new JoystickButton(driver, 1);
 
 
@@ -141,7 +145,9 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        ruffy0.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        ruffy1.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
         leftBumper.whileTrue((new RunCommand(m_Intake::runIntakeIn).andThen(new InstantCommand(m_Intake::stop))));
         rightBumper.whileTrue((new RunCommand(m_Intake::runIntakeOut).andThen(new InstantCommand(m_Intake::stop))));
