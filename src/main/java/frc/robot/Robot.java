@@ -133,6 +133,7 @@ public class Robot extends TimedRobot {
     }
 
     SmartDashboard.putNumber("PID Value", 0);
+    m_robotContainer.resetToAbsolute();
     m_robotContainer.scheduleDefaultTeleop();
   }
 

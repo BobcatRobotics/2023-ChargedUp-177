@@ -19,14 +19,14 @@ import frc.robot.Util.MathUtils;
 
 public class Wrist extends SubsystemBase {
   /** Creates a new Wrist. */
-  TalonFX motor;
+  // TalonFX motor;
   Solenoid solenoid;
   double pressure;
   PneumaticHub phub;
   Compressor compressor;
 
   public Wrist() {
-    motor  = new TalonFX(Constants.intakeMotorID);
+    // motor  = new TalonFX(Constants.intakeMotorID);
     solenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.wristSolenoidID);
     phub = new PneumaticHub(Constants.pHubID);
     compressor = new Compressor(Constants.compressorID, PneumaticsModuleType.REVPH);

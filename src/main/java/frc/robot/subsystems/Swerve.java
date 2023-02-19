@@ -45,7 +45,8 @@ public class Swerve extends SubsystemBase {
         };
 
         Timer.delay(1.0);
-        resetModulesToAbsolute();
+        //SmartDashboard.putBoolean("resetModsToAbsCalled", true);
+        //resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
 

@@ -88,6 +88,10 @@ public class RobotContainer {
     public Command getDefaultCommand(){
         return s_Swerve.getDefaultCommand();
     }
+
+    public void resetToAbsolute() {
+        s_Swerve.resetModulesToAbsolute();
+    }
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         /*
