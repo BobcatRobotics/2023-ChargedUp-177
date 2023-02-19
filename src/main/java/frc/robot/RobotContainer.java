@@ -53,7 +53,7 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
     //private final JoystickButton robotCentric = new JoystickButton(driver, 5);
-    private final JoystickButton alignRobot = new JoystickButton(driver, 2);
+    private final JoystickButton alignRobot = new JoystickButton(driver, 1);
 
 
     private final JoystickButton leftBumper = new JoystickButton(driver, 5); //left bumper
@@ -109,7 +109,7 @@ public class RobotContainer {
                 () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
                 () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
                 () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
-                () -> false//() -> robotCentric.getAsBoolean()
+                () -> true //() -> robotCentric.getAsBoolean()
             )
         );
 
@@ -121,6 +121,12 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
         m_Limelight.initializeLimeLight();
+    }
+
+    public void cancelDefaultTeleop() {
+        s_Swerve.getDefaultCommand().cancel();
+        m_Arm.getDefaultCommand().cancel();
+        m_Elevator.getDefaultCommand().cancel();
     }
 
     /**
@@ -140,7 +146,7 @@ public class RobotContainer {
         a.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
         b.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
 
-        alignRobot.whileTrue(align.andThen(new InstantCommand(() -> SmartDashboard.putBoolean("alignpressed", true))));
+        alignRobot.whileTrue(align);
     }
 
     public SequentialCommandGroup MountAndBalance(Swerve s_Swerve){

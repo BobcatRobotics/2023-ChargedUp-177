@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -27,7 +28,7 @@ public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
   public Elevator() {
     elevatorMotor = new WPI_TalonFX(ElevatorConstants.elevatorMotorPort);
-    topLimit = new DigitalInput(ElevatorConstants.topLimitPort);
+    // topLimit = new DigitalInput(ElevatorConstants.topLimitPort);
     bottomLimit = new DigitalInput(ElevatorConstants.bottomLimitPort);
 
     elevatorMotor.configFactoryDefault();
@@ -42,7 +43,8 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.config_kP(0, 0.15, 20);
     elevatorMotor.config_kI(0, 0, 20);
     elevatorMotor.config_kD(0, 0.5, 20);
-
+    elevatorMotor.setInverted(true);
+    elevatorMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   public void elevate(double speed) {
@@ -53,17 +55,17 @@ public class Elevator extends SubsystemBase {
   //   return !topLimit.get();
   // }
 
-  // public boolean getBottomLimits() {
-  //   return !bottomLimit.get();
+  public boolean getBottomLimits() {
+    return !bottomLimit.get();
+  }
+
+  // public boolean isAtTopLimit() {
+  //   return elevatorMotor.getSelectedSensorPosition() >= Constants.ElevatorConstants.topLimit;
   // }
 
-  public boolean isAtTopLimit() {
-    return elevatorMotor.getSelectedSensorPosition() >= Constants.ElevatorConstants.topLimit;
-  }
-
-  public boolean isAtBottomLimit() {
-    return elevatorMotor.getSelectedSensorPosition() <= Constants.ElevatorConstants.bottomLimit;
-  }
+  // public boolean isAtBottomLimit() {
+  //   return elevatorMotor.getSelectedSensorPosition() <= Constants.ElevatorConstants.bottomLimit;
+  // }
 
   public void setState(int state) {
     if (state == 0) {

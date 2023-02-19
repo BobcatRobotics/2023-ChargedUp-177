@@ -32,31 +32,37 @@ public class ElevatorControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ElevatorConstants.elevatorState = elevator.getState();
-    SmartDashboard.putNumber("elevator state", ElevatorConstants.elevatorState);
-    // If none of the preset positions buttons are pressed, use continuous control
-    if (gamepad.getPOV() == -1) {
-      if (Math.abs(gamepad.getRawAxis(3)) >= 0.05 && ArmConstants.armState != 0) {
-        if (elevator.isAtTopLimit() && gamepad.getRawAxis(3) > 0) {
-          elevator.elevate(0);
-        } else if (elevator.isAtBottomLimit() && gamepad.getRawAxis(3) < 0) {
-          elevator.elevate(0);
-        } else {
-          elevator.elevate(gamepad.getRawAxis(3));
-        }
-      } else {
-        elevator.elevate(0);
-      }
+    // ElevatorConstants.elevatorState = elevator.getState();
+    // SmartDashboard.putNumber("elevator state", ElevatorConstants.elevatorState);
+    // // If none of the preset positions buttons are pressed, use continuous control
+    // if (gamepad.getPOV() == -1) {
+    //   if (Math.abs(gamepad.getRawAxis(3)) >= 0.05 && ArmConstants.armState != 0) {
+    //     if (elevator.isAtTopLimit() && gamepad.getRawAxis(3) > 0) {
+    //       elevator.elevate(0);
+    //     } else if (elevator.isAtBottomLimit() && gamepad.getRawAxis(3) < 0) {
+    //       elevator.elevate(0);
+    //     } else {
+    //       elevator.elevate(gamepad.getRawAxis(3));
+    //     }
+    //   } else {
+    //     elevator.elevate(0);
+    //   }
+    // } else {
+    //   if (ArmConstants.armState != 0) {
+    //     if (gamepad.getPOV() == 0) {
+    //       elevator.setState(2);
+    //     } else if (gamepad.getPOV() == 90) {
+    //       elevator.setState(1);
+    //     } else if (gamepad.getPOV() == 180) {
+    //       elevator.setState(0);
+    //     }
+    //   }
+    // }
+    SmartDashboard.putBoolean("bottom limits", elevator.getBottomLimits());
+    if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0) {
+      elevator.elevate(0);
     } else {
-      if (ArmConstants.armState != 0) {
-        if (gamepad.getPOV() == 0) {
-          elevator.setState(2);
-        } else if (gamepad.getPOV() == 90) {
-          elevator.setState(1);
-        } else if (gamepad.getPOV() == 180) {
-          elevator.setState(0);
-        }
-      }
+      elevator.elevate(gamepad.getRawAxis(3)/10);
     }
   }
 

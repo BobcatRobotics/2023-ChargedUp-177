@@ -32,7 +32,7 @@ public class Swerve extends SubsystemBase {
 
 
     public Swerve() {
-        gyro = new Pigeon2(Constants.Swerve.pigeonID);
+        gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.CANivore);
         gyro.configFactoryDefault();
         zeroGyro();
         photonCam = new PhotonVision();

@@ -223,7 +223,7 @@ public final class Constants {
     public static final class ElevatorConstants {
         public static final int elevatorMotorPort = 9;
         public static final int topLimitPort = 0;
-        public static final int bottomLimitPort = 2;
+        public static final int bottomLimitPort = 0;
 
         public static final int pos0 = 0;
         public static final int pos1 = 4096;

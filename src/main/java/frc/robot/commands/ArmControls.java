@@ -30,40 +30,41 @@ public class ArmControls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ArmConstants.armState = arm.getState();
-    SmartDashboard.putNumber("arm state", ArmConstants.armState);
-    // If none of the preset positions buttons are pressed, use continuous control
-    if (!gamepad.getRawButton(6) && !gamepad.getRawButton(7) && !gamepad.getRawButton(8)) {
-      if (Math.abs(gamepad.getRawAxis(1)) >= 0.05) {
-        if (arm.isAtTopLimit() && gamepad.getRawAxis(1) > 0) {
-          arm.setSpeed(0);
-        } else if (arm.isAtBottomLimit() && gamepad.getRawAxis(1) < 0) {
-          arm.setSpeed(0);
-        } else if (ElevatorConstants.elevatorState != 0 && arm.isAtConstrictedBottomLimit() && gamepad.getRawAxis(1) < 0) {
-          arm.setSpeed(0);
-        } else {
-          arm.setSpeed(gamepad.getRawAxis(1));
-        }
-      } else {
-        arm.setSpeed(0);
-      }
-    } else {
-      if (ElevatorConstants.elevatorState == 0) {
-        if (gamepad.getRawButton(8)) { // right trigger
-          arm.setState(2); // ground
-        } else if (gamepad.getRawButton(7)) { // left trigger
-          arm.setState(1); // middle
-        } else if (gamepad.getRawButton(6)) { // right bumper
-          arm.setState(0); // stowed
-        }
-      } else {
-        if (gamepad.getRawButton(8)) { // right trigger
-          arm.setState(2); // ground
-        } else if (gamepad.getRawButton(7)) { // left trigger
-          arm.setState(1); // middle
-        }
-      }
-    }
+    // ArmConstants.armState = arm.getState();
+    // SmartDashboard.putNumber("arm state", ArmConstants.armState);
+    // // If none of the preset positions buttons are pressed, use continuous control
+    // if (!gamepad.getRawButton(6) && !gamepad.getRawButton(7) && !gamepad.getRawButton(8)) {
+    //   if (Math.abs(gamepad.getRawAxis(1)) >= 0.05) {
+    //     if (arm.isAtTopLimit() && gamepad.getRawAxis(1) > 0) {
+    //       arm.setSpeed(0);
+    //     } else if (arm.isAtBottomLimit() && gamepad.getRawAxis(1) < 0) {
+    //       arm.setSpeed(0);
+    //     } else if (ElevatorConstants.elevatorState != 0 && arm.isAtConstrictedBottomLimit() && gamepad.getRawAxis(1) < 0) {
+    //       arm.setSpeed(0);
+    //     } else {
+    //       arm.setSpeed(gamepad.getRawAxis(1));
+    //     }
+    //   } else {
+    //     arm.setSpeed(0);
+    //   }
+    // } else {
+    //   if (ElevatorConstants.elevatorState == 0) {
+    //     if (gamepad.getRawButton(8)) { // right trigger
+    //       arm.setState(2); // ground
+    //     } else if (gamepad.getRawButton(7)) { // left trigger
+    //       arm.setState(1); // middle
+    //     } else if (gamepad.getRawButton(6)) { // right bumper
+    //       arm.setState(0); // stowed
+    //     }
+    //   } else {
+    //     if (gamepad.getRawButton(8)) { // right trigger
+    //       arm.setState(2); // ground
+    //     } else if (gamepad.getRawButton(7)) { // left trigger
+    //       arm.setState(1); // middle
+    //     }
+    //   }
+    // }
+    arm.setSpeed(gamepad.getRawAxis(1)/10);
   }
 
   // Called once the command ends or is interrupted.

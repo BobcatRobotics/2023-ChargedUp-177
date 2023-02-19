@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -29,7 +30,8 @@ public class Arm extends SubsystemBase {
         armMotor.config_kP(0, 0.15, 20);
         armMotor.config_kI(0, 0, 20);
         armMotor.config_kD(0, 0.5, 20);
-    
+        armMotor.setInverted(true);
+        armMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     public void setSpeed(double speed) {
