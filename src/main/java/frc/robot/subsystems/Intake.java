@@ -20,12 +20,22 @@ public class Intake extends SubsystemBase {
   public Intake() {
    motor = new WPI_TalonFX(Constants.intakeMotorID);
   }
-
+  
   public void runIntakeIn(){
-    motor.set(ControlMode.PercentOutput, -1);
+    if (isAtHardStop()) {
+      return;
+    }
+    motor.set(ControlMode.PercentOutput, -0.9);
   }
   public void runIntakeOut(){
+    if (isAtHardStop()) {
+      return;
+    }
     motor.set(ControlMode.PercentOutput, 0.4);
+  }
+
+  public boolean isAtHardStop() {
+    return motor.getStatorCurrent() >= 20.0;
   }
 
   public void runIntakePercent(double speed){
