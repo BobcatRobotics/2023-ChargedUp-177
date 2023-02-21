@@ -31,11 +31,14 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+
+    public double rot;
     public PhotonVision photonCam;
     public static DriveFollowPath path1;
 
+
     public Swerve() {
-        gyro = new Pigeon2(Constants.Swerve.pigeonID);
+        gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.CANivore);
         gyro.configFactoryDefault();
         zeroGyro();
         photonCam = new PhotonVision();
@@ -48,6 +51,7 @@ public class Swerve extends SubsystemBase {
         };
 
         Timer.delay(1.0);
+        //SmartDashboard.putBoolean("resetModsToAbsCalled", true);
         resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
@@ -55,6 +59,20 @@ public class Swerve extends SubsystemBase {
         // for(SwerveModule mod : mSwerveMods){
         //     System.out.println("CANcoder on Module " + mod.moduleNumber + " took " + mod.CANcoderInitTime + " ms to be ready.");
         // }
+    }
+
+    public double getPitch(){
+        return gyro.getPitch();
+    }
+    public double getRoll(){
+        return gyro.getRoll();
+    }
+    //sets the wheels in an x shape
+    public void configToX(){
+        mSwerveMods[0].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(45))), true);
+        mSwerveMods[1].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
+        mSwerveMods[2].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
+        mSwerveMods[3].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(45))), true);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -76,8 +94,11 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
+        rot = rotation;
+    }    
         
-    }
+    
+
 
     public void drive(ChassisSpeeds targetSpeeds) {
         SwerveModuleState[] swerveModuleStates =
@@ -129,7 +150,8 @@ public class Swerve extends SubsystemBase {
         return positions;
     }
 
-    public void resetModulesToAbsolute(){
+    public void resetModulesToAbsolute() {
+        //zeroGyro();
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
         }
@@ -142,6 +164,7 @@ public class Swerve extends SubsystemBase {
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
+
 
     //sets the wheels in an x shape
     public void configToX(){
@@ -165,18 +188,24 @@ public class Swerve extends SubsystemBase {
 
     public void resetOdometryAutos() {
         path1.initialize();
+        }
+
+    /** @param break true for break, false for coast */
+    public void setBrakeMode(boolean brake){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setBrakeMode(brake);
+        }
     }
 
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions()); 
-
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getDistanceMeters());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
         }
-
+        
         SmartDashboard.putNumber("swerveOdometry Pose X Meters", swerveOdometry.getPoseMeters().getX());
         SmartDashboard.putNumber("swerveOdometry Pose Y Meters", swerveOdometry.getPoseMeters().getY());
         SmartDashboard.putNumber("swerveOdometry Pose Rotation Degrees", swerveOdometry.getPoseMeters().getRotation().getDegrees());
