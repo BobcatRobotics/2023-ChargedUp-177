@@ -197,6 +197,33 @@ public class RobotContainer {
         );
 
     }
+    
+    //elevator down, arm in, wrist?
+    public SequentialCommandGroup startingConfig(){}
+    
+    // elevator down, arm up, wrist down, intake on until hard stop (voltage spike) is reached
+    public SequentialCommandGroup downAndSuck(){}
+
+    // elevator down, arm down, wrist up, intake untill hard stop
+    public SequentialCommandGroup upAndSuck(){}
+
+    // elevator mid?, arm out, wrist up, intake in 
+    public SequentialCommandGroup grabFromHP(){}
+
+
+
+    // different for cones and cubes?
+    // get wrist out of elevator then run first three in parallel?
+    // how long to run intake out?
+
+    // elevator high, arm out, wrist down, intake out
+    public SequentialCommandGroup scoreHigh(){}
+
+    // elevator mid, arm out, wrist down, intake out
+    public SequentialCommandGroup scoreMid(){}
+
+    // starting config, intake out
+    public SequentialCommandGroup scoreHybrid(){}
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
