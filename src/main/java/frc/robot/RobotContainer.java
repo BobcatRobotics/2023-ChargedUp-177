@@ -57,8 +57,8 @@ public class RobotContainer {
     //private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
     
     //ruffy buttons
-    private final JoystickButton ruffy0 = new JoystickButton(rotate, 0);
-    private final JoystickButton ruffy1 = new JoystickButton(strafe, 0);
+    private final JoystickButton ruffy0 = new JoystickButton(rotate, 1);
+    private final JoystickButton ruffy1 = new JoystickButton(strafe, 1);
 
     private final JoystickButton alignRobot = new JoystickButton(driver, 1);
 
@@ -164,7 +164,7 @@ public class RobotContainer {
         /* Driver Buttons */
 
         resetToAbsolute.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
-        alignRobot.whileTrue(align.andThen(new InstantCommand(() -> SmartDashboard.putBoolean("alignpressed", true))));
+        alignRobot.whileTrue(align);
         //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         ruffy0.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         ruffy1.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
