@@ -66,6 +66,9 @@ public class Elevator extends SubsystemBase {
   public boolean getBottomLimits() {
     return !bottomLimit.get();
   }
+  public double getEncoderPos() {
+    return elevatorMotor.getSelectedSensorPosition();
+  }
 
   // TODO: as you go up, elevator encoder values get more negative
   public boolean isAtTopLimit() {

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.BalanceChargeStation;
+import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.subsystems.Swerve;
 //=talonfx(canid, "CANt_open_file")
 /**

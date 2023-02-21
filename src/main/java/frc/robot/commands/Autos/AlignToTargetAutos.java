@@ -2,8 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Autos;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,10 +12,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
-public class AlignToTarget extends CommandBase {
+public class AlignToTargetAutos extends CommandBase {
   private Swerve drivetrain;
   private Limelight lime;
   private PIDController pidController;
+  private Timer timer;
 
   private double kp = 0.2;
   private double ki = 0;
@@ -26,9 +28,10 @@ public class AlignToTarget extends CommandBase {
   private double calc;
 
   /** Creates a new AlignToTarget. */
-  public AlignToTarget(Swerve dt, Limelight lm) {
+  public AlignToTargetAutos(Swerve dt, Limelight lm) {
     drivetrain = dt;
     lime = lm;
+    timer = new Timer();
 
     pidController = new PIDController(kp, ki, kd);
     pidController.setSetpoint(setpoint);
@@ -41,6 +44,7 @@ public class AlignToTarget extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.start();
     lime.turnOnLED();
   }
 
@@ -51,7 +55,7 @@ public class AlignToTarget extends CommandBase {
     SmartDashboard.putBoolean("HasTarget", lime.hasTargets());
     SmartDashboard.putBoolean("has targets",lime.hasTargets());
     SmartDashboard.putBoolean("align finished", isFinished());
-    if (lime.hasTargets()) {
+    if (lime.hasTargets() & !isFinished()) {
       xOffset = lime.x();
       calc = pidController.calculate(xOffset);
       SmartDashboard.putNumber("xOffset", xOffset);
@@ -72,6 +76,12 @@ public class AlignToTarget extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pidController.atSetpoint();
+    if (timer.hasElapsed(1)) {
+      timer.stop();
+      return true;
+    }
+    return false;
+    //return timer.hasElapsed(1);
+    //return pidController.atSetpoint();
   }
 }

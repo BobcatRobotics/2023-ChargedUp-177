@@ -1,10 +1,6 @@
 package frc.robot;
 
-import java.util.HashMap;
-import java.util.function.BooleanSupplier;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -13,29 +9,23 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import frc.robot.autos.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
-import frc.robot.Constants;
-import frc.robot.Constants.ButtonHashtable;
-
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import frc.robot.commands.*;
+import frc.robot.commands.Autos.AlignToTarget;
+import frc.robot.commands.Autos.BalanceChargeStation;
+import frc.robot.commands.Presets.RetractArm;
+import frc.robot.commands.Presets.ZeroElevator;
+import frc.robot.subsystems.*;
+
 import frc.robot.autos.PathPlannerTest;
 import frc.robot.autos.RedHighCone6PickupBalance;
-import frc.robot.commands.AlignToTarget;
-import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
@@ -47,7 +37,7 @@ import frc.robot.subsystems.Swerve;
  */
 public class RobotContainer {
     //for the xbox controller buttons
-    private Constants.ButtonHashtable bh = new Constants.ButtonHashtable();
+    //private Constants.ButtonHashtable bh = new Constants.ButtonHashtable();
 
     /* Controllers */
     private final Joystick driver = new Joystick(2);
@@ -61,14 +51,15 @@ public class RobotContainer {
 
     /* Driver Buttons */
 
+
     private final JoystickButton resetToAbsolute = new JoystickButton(driver, 3);
-    private final JoystickButton alignRobot = new JoystickButton(driver, 2);
+    //private final JoystickButton alignRobot = new JoystickButton(driver, 2);
     //private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
+    
     //ruffy buttons
     private final JoystickButton ruffy0 = new JoystickButton(rotate, 0);
     private final JoystickButton ruffy1 = new JoystickButton(strafe, 0);
 
-    private final JoystickButton gamepadY = new JoystickButton(driver, 5);
     private final JoystickButton alignRobot = new JoystickButton(driver, 1);
 
 
@@ -90,7 +81,6 @@ public class RobotContainer {
     /* Commands */
     private final Command elevatorControls = new ElevatorControls(m_Elevator, driver);
     private final Command armControls = new ArmControls(m_Arm, driver);
-    private final Limelight m_Limelight = new Limelight();
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
@@ -99,15 +89,16 @@ public class RobotContainer {
     /* SendableChooser */
     SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<>();
 
-
+    // returns the angle of the joystick in degrees
     public double getJoystickAngle(){
         return  ((Math.atan2(rotate.getRawAxis(Joystick.AxisType.kY.value), rotate.getRawAxis(Joystick.AxisType.kX.value)) * 180 / Math.PI)+360)%360;
     }
+
     public void displayGyro(){
         SmartDashboard.putNumber("pitch", s_Swerve.getPitch());
         SmartDashboard.putNumber("yaw", s_Swerve.getRoll());
     }
-    // returns the angle of the joystick in degrees
+
    
     public Command getDefaultCommand(){
         return s_Swerve.getDefaultCommand();
@@ -137,7 +128,7 @@ public class RobotContainer {
                 () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
                 () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
                 () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
-                () -> false //() -> robotCentric.getAsBoolean()
+                () -> false //() -> robotCentric.getAsBoolean() //always field centric
             )
         );
 
@@ -198,17 +189,47 @@ public class RobotContainer {
 
     }
     
+    // time to run out the intake when placing peices
+    double intakeTime = 3;
+
+    // TODO: interuption behavior 
+    // TODO: config to x in parallel while placing?
+
     //elevator down, arm in, wrist?
-    public SequentialCommandGroup startingConfig(){}
+    public SequentialCommandGroup startingConfig(){
+        SequentialCommandGroup commands = new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new ZeroElevator(m_Elevator),
+                new RetractArm(m_Elevator, m_Arm)
+            )
+            
+        );
+        return commands;
+    }
     
     // elevator down, arm up, wrist down, intake on until hard stop (voltage spike) is reached
-    public SequentialCommandGroup downAndSuck(){}
+    public SequentialCommandGroup downAndSuck(){
+        SequentialCommandGroup commands = new SequentialCommandGroup(
+
+        );
+        return commands;
+    }
 
     // elevator down, arm down, wrist up, intake untill hard stop
-    public SequentialCommandGroup upAndSuck(){}
+    public SequentialCommandGroup upAndSuck(){
+        SequentialCommandGroup commands = new SequentialCommandGroup(
+
+        );
+        return commands;
+    }
 
     // elevator mid?, arm out, wrist up, intake in 
-    public SequentialCommandGroup grabFromHP(){}
+    public SequentialCommandGroup grabFromHP(){
+        SequentialCommandGroup commands = new SequentialCommandGroup(
+
+        );
+        return commands;
+    }
 
 
 
@@ -217,13 +238,31 @@ public class RobotContainer {
     // how long to run intake out?
 
     // elevator high, arm out, wrist down, intake out
-    public SequentialCommandGroup scoreHigh(){}
+    public SequentialCommandGroup scoreHigh(){
+        SequentialCommandGroup commands = new SequentialCommandGroup(
+
+        );
+        return commands;
+    }
 
     // elevator mid, arm out, wrist down, intake out
-    public SequentialCommandGroup scoreMid(){}
+    public SequentialCommandGroup scoreMid(){
+        SequentialCommandGroup commands = new SequentialCommandGroup(
+
+        );
+        return commands;
+    }
 
     // starting config, intake out
-    public SequentialCommandGroup scoreHybrid(){}
+    public SequentialCommandGroup scoreHybrid(){
+        SequentialCommandGroup commands = new SequentialCommandGroup(
+            startingConfig(),
+            new InstantCommand(() -> m_Intake.runIntakeOut()),
+            new WaitCommand(intakeTime),
+            new InstantCommand(() -> m_Intake.stop())
+        );
+        return commands;
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

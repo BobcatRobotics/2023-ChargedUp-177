@@ -4,7 +4,7 @@
 
 /* Follows a path planner path */
 
-package frc.robot.commands;
+package frc.robot.commands.Autos;
 
 import javax.print.attribute.standard.Destination;
 
