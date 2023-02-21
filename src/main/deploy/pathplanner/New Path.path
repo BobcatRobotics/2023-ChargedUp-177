@@ -1,0 +1,101 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.8306575001775598,
+        "y": 4.9009337829102195
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.7587380388030924,
+        "y": 4.957921385037083
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.138655386315513,
+        "y": 4.976917252412704
+      },
+      "prevControl": {
+        "x": 2.874899889563258,
+        "y": 4.916738419234026
+      },
+      "nextControl": {
+        "x": 5.135938423535616,
+        "y": 5.0244069208517566
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.3611718692631705,
+        "y": 4.5400123027734205
+      },
+      "prevControl": {
+        "x": 5.8387855164335924,
+        "y": 5.005411053476136
+      },
+      "nextControl": {
+        "x": 6.834700577106263,
+        "y": 4.118141272149574
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 2.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.658324776365193,
+        "y": 2.697413167338184
+      },
+      "prevControl": {
+        "x": 6.190209062882581,
+        "y": 3.2103015864799502
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "chargeStation"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": []
+}

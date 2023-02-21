@@ -20,14 +20,14 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class exampleAuto extends SequentialCommandGroup {
+public class RedHighCone6PickupBalance extends SequentialCommandGroup {
     String trajectoryJSON = "paths/highCone6PickupBalance1.wpilib.json";//"src/main/deploy/output/test11823.wpilib.json"; //"./src/main/deploy/output/test11823.wpilib.json";
     String trajectoryJSON2 = "paths/highCone6PickupBalance2.wpilib.json";
     Trajectory exampleTrajectory = new Trajectory();
     Trajectory exampleTrajectory2 = new Trajectory();
     AlignToTargetAutos alignToTargetAutos;
 
-    public exampleAuto(Swerve s_Swerve, Limelight lime){
+    public RedHighCone6PickupBalance(Swerve s_Swerve, Limelight lime){
         TrajectoryConfig config =
             new TrajectoryConfig(
                     Constants.AutoConstants.kMaxSpeedMetersPerSecond,

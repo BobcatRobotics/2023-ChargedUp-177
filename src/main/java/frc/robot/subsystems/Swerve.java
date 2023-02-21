@@ -1,14 +1,18 @@
 package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
+import frc.robot.commands.DriveFollowPath;
 import frc.robot.Constants;
-
+import frc.robot.RobotContainer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.Optional;
 
@@ -29,6 +34,7 @@ public class Swerve extends SubsystemBase {
 
     public double rot;
     public PhotonVision photonCam;
+    public static DriveFollowPath path1;
 
 
     public Swerve() {
@@ -94,6 +100,23 @@ public class Swerve extends SubsystemBase {
     
 
 
+    public void drive(ChassisSpeeds targetSpeeds) {
+        SwerveModuleState[] swerveModuleStates =
+            Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+
+        for(SwerveModule mod : mSwerveMods){
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], true);
+        }
+        
+    }
+
+    public void enableBrakeMode(boolean enable) {
+        for (SwerveModule mod : mSwerveMods) {
+            mod.enableBrakeMode(enable);
+        }
+    }
+
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
@@ -142,6 +165,30 @@ public class Swerve extends SubsystemBase {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
+
+    //sets the wheels in an x shape
+    public void configToX(){
+        mSwerveMods[0].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(45))), true);
+        mSwerveMods[1].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
+        mSwerveMods[2].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
+        mSwerveMods[3].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(45))), true);
+    }
+
+    // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
+    public static Command followTrajectoryCommand(PathPlannerTrajectory ppt, boolean resetOdometry) {
+        path1 = new DriveFollowPath(ppt, resetOdometry);
+        //path1.initialize();
+
+        FollowPathWithEvents command = new FollowPathWithEvents(path1, path1.getTraj().getMarkers(), Constants.AutoConstants.eventMap);
+        
+        return command;
+    }
+
+    
+
+    public void resetOdometryAutos() {
+        path1.initialize();
+        }
 
     /** @param break true for break, false for coast */
     public void setBrakeMode(boolean brake){

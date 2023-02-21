@@ -1,15 +1,22 @@
 package frc.robot;
 
+import java.util.HashMap;
 import java.util.function.BooleanSupplier;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -20,11 +27,13 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.Constants;
 import frc.robot.Constants.ButtonHashtable;
+
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.autos.exampleAuto;
+import frc.robot.autos.PathPlannerTest;
+import frc.robot.autos.RedHighCone6PickupBalance;
 import frc.robot.commands.AlignToTarget;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Limelight;
@@ -51,6 +60,9 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
+
+    private final JoystickButton resetToAbsolute = new JoystickButton(driver, 3);
+    private final JoystickButton alignRobot = new JoystickButton(driver, 2);
     //private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
     //ruffy buttons
     private final JoystickButton ruffy0 = new JoystickButton(rotate, 0);
@@ -65,7 +77,10 @@ public class RobotContainer {
     private final JoystickButton a = new JoystickButton(driver, 2);
     private final JoystickButton b = new JoystickButton(driver, 3);
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
+
+
+    public static Swerve s_Swerve = new Swerve();
+    public static Limelight m_Limelight = new Limelight();
 
     private final Elevator m_Elevator = new Elevator();
     private final Intake m_Intake = new Intake();
@@ -78,6 +93,11 @@ public class RobotContainer {
     private final Limelight m_Limelight = new Limelight();
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
+    private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
+    private final PathPlannerTest pathPlannerTest = new PathPlannerTest();
+
+    /* SendableChooser */
+    SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<>();
 
 
     public double getJoystickAngle(){
@@ -121,10 +141,16 @@ public class RobotContainer {
             )
         );
 
-
+        // Sendable Chooser Setup
+        autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
+        autoChooser.addOption("PathPlanner Test w/ X-Stance", pathPlannerTest);
+        //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
+        SmartDashboard.putData(autoChooser);
+        Constants.AutoConstants.eventMap.put("chargeStation", align);
 
         m_Arm.setDefaultCommand(armControls);
         m_Elevator.setDefaultCommand(elevatorControls);
+
 
         // Configure the button bindings
         configureButtonBindings();
@@ -145,6 +171,9 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
+
+        resetToAbsolute.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
+        alignRobot.whileTrue(align.andThen(new InstantCommand(() -> SmartDashboard.putBoolean("alignpressed", true))));
         //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         ruffy0.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         ruffy1.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
@@ -177,6 +206,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
-        return new exampleAuto(s_Swerve, m_Limelight);
+        return autoChooser.getSelected();
     }
 }
