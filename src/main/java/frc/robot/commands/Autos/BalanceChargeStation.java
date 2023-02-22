@@ -76,6 +76,7 @@ public class BalanceChargeStation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putString("ChargeStation", "balancing");
     calc = pid.calculate(dt.getPitch());
     if (!isOffset){
     dt.drive(
@@ -90,7 +91,7 @@ public class BalanceChargeStation extends CommandBase {
     }
     SmartDashboard.putNumber("charge error", calc);
     SmartDashboard.putBoolean(" charge Setpoint", pid.atSetpoint());    
-    SmartDashboard.putNumber("pid output", throttle(calc/sensitivity)*Constants.Swerve.maxSpeed);
+    SmartDashboard.putNumber("charge output", throttle(calc/sensitivity)*Constants.Swerve.maxSpeed);
     
 /* 
     if (!pid.atSetpoint()) {
@@ -107,6 +108,11 @@ public class BalanceChargeStation extends CommandBase {
   public void end(boolean interrupted) {
     dt.setBrakeMode(true);
     dt.drive(new Translation2d(0, 0), 0, true, false);  
+    if(!interrupted){
+      SmartDashboard.putString("ChargeStation", "balance Finished");
+    }else{
+      SmartDashboard.putString("ChargeStation", "balance interrupted");
+    }
   }
 
   // Returns true when the command should end.

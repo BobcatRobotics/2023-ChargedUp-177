@@ -40,7 +40,7 @@ public class MountChargeStation extends CommandBase {
   public void execute() {
     swerve.resetModulesToAbsolute();
     pitch = swerve.getPitch();
-    swerve.drive(new Translation2d(1, 0), /*may need to be changed*/
+    swerve.drive(new Translation2d(-4, 0), /*may need to be changed*/
      0, true, true);
     
     
@@ -59,6 +59,8 @@ public class MountChargeStation extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     swerve.drive(new Translation2d(0, 0), 0, true, true);
+    
+    SmartDashboard.putString("ChargeStation", "Finished: " + pitch);
   }
 
   // Returns true when the command should end.

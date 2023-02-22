@@ -4,20 +4,34 @@
 
 package frc.robot.commands.Presets;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
+import edu.wpi.first.wpilibj.Joystick;
+
 
 public class RunIntake extends CommandBase {
   /** Creates a new RunIntake. */
   Intake i;
-  boolean in;
+  boolean runIn;
   double time;
-  public RunIntake(Intake i, boolean in, double time){
+  Joystick gp;
+  int in = 5;
+  int out = 6;
+  public RunIntake(Intake i, boolean runIn, double time){
+    this.i = i;
+    this.runIn = runIn;
+    this.time = time;
+    addRequirements(i);
+  }
+  public RunIntake(Intake i, Joystick gp){
     this.i = i;
     this.in = in;
-    this.time = time;
+    this.gp = gp;
+    addRequirements(i);
   }
-
+ 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -25,20 +39,34 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(in){
+   if(gp.getRawButton(in)){
       i.runIntakeIn();
-    } else {
+    } else if(gp.getRawButton(out)){
       i.runIntakeOut();
+    }else{
+      i.stop();
     }
-  }
+    }
+  
+
+  
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    i.stop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(gp.getRawButton(in)){
+      return false;
+    }else if (gp.getRawButton(out)){
+      return false;
+    }else{
+      return true;
+    }
   }
 }
+
