@@ -189,80 +189,13 @@ public class RobotContainer {
 
     }
     
-    // time to run out the intake when placing peices
-    double intakeTime = 3;
-
-    // TODO: interuption behavior 
+    //for presets
     // TODO: config to x in parallel while placing?
-
-    //elevator down, arm in, wrist?
-    public SequentialCommandGroup startingConfig(){
-        SequentialCommandGroup commands = new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                new ZeroElevator(m_Elevator),
-                new RetractArm(m_Elevator, m_Arm)
-            )
-            
-        );
-        return commands;
-    }
-    
-    // elevator down, arm up, wrist down, intake on until hard stop (voltage spike) is reached
-    public SequentialCommandGroup downAndSuck(){
-        SequentialCommandGroup commands = new SequentialCommandGroup(
-
-        );
-        return commands;
-    }
-
-    // elevator down, arm down, wrist up, intake untill hard stop
-    public SequentialCommandGroup upAndSuck(){
-        SequentialCommandGroup commands = new SequentialCommandGroup(
-
-        );
-        return commands;
-    }
-
-    // elevator mid?, arm out, wrist up, intake in 
-    public SequentialCommandGroup grabFromHP(){
-        SequentialCommandGroup commands = new SequentialCommandGroup(
-
-        );
-        return commands;
-    }
-
-
-
     // different for cones and cubes?
-    // get wrist out of elevator then run first three in parallel?
-    // how long to run intake out?
+    
 
-    // elevator high, arm out, wrist down, intake out
-    public SequentialCommandGroup scoreHigh(){
-        SequentialCommandGroup commands = new SequentialCommandGroup(
 
-        );
-        return commands;
-    }
 
-    // elevator mid, arm out, wrist down, intake out
-    public SequentialCommandGroup scoreMid(){
-        SequentialCommandGroup commands = new SequentialCommandGroup(
-
-        );
-        return commands;
-    }
-
-    // starting config, intake out
-    public SequentialCommandGroup scoreHybrid(){
-        SequentialCommandGroup commands = new SequentialCommandGroup(
-            startingConfig(),
-            new InstantCommand(() -> m_Intake.runIntakeOut()),
-            new WaitCommand(intakeTime),
-            new InstantCommand(() -> m_Intake.stop())
-        );
-        return commands;
-    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
