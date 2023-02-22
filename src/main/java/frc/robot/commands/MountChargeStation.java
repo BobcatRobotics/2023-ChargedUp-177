@@ -17,7 +17,7 @@ public class MountChargeStation extends CommandBase {
   private Swerve swerve;
   private double pitch;
   private double stage1Threshold = 5;
-  private double stage2Threshold = 3;
+  private double stage2Threshold = 10;
   private int stage = 1;
   private boolean isRed;
   private boolean finished = false;
@@ -40,19 +40,19 @@ public class MountChargeStation extends CommandBase {
   public void execute() {
     swerve.resetModulesToAbsolute();
     pitch = swerve.getPitch();
-    swerve.drive(new Translation2d(-4, 0), /*may need to be changed*/
+    swerve.drive(new Translation2d(-2.5, 0), /*may need to be changed*/
      0, true, true);
     
     
-      while (!(pitch > stage1Threshold)){
-        pitch = Math.abs(swerve.getPitch());
+      if((pitch > stage1Threshold)){
         SmartDashboard.putString("ChargeStation", "stage 1: " + pitch);
+        stage = 2;
       }
-      while (!(pitch < stage2Threshold)){
-        pitch = Math.abs(swerve.getPitch());
+      else if(stage == 2 && (pitch < stage2Threshold)){
         SmartDashboard.putString("ChargeStation", "stage 2: " + pitch);
+        finished = true;
       }
-      finished = true;
+      
   }
 
   // Called once the command ends or is interrupted.
