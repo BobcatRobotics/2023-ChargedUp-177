@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
 public class GrabFromHP extends SequentialCommandGroup {
-  // elevator mid?, arm out, wrist up, intake in 
+  // elevator mid?, arm out, wrist up 
   public GrabFromHP() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

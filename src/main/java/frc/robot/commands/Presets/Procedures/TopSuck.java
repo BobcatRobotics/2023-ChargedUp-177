@@ -7,10 +7,10 @@ package frc.robot.commands.Presets.Procedures;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
-public class UpAndSuck extends SequentialCommandGroup {
+public class TopSuck extends SequentialCommandGroup {
   // elevator down, arm down, wrist up, intake untill hard stop
 
-  public UpAndSuck() {
+  public TopSuck() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands();

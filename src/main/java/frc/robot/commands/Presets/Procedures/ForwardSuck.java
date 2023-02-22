@@ -12,10 +12,10 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 
 
-public class DownAndSuck extends SequentialCommandGroup {
-  // elevator down, arm up, wrist down, intake on until hard stop (voltage spike) is reached
+public class ForwardSuck extends SequentialCommandGroup {
+  // elevator down, arm up, wrist down
   
-  public DownAndSuck(Elevator e, Arm a) {
+  public ForwardSuck(Elevator e, Arm a) {
 
     addCommands(
       new ParallelCommandGroup(
