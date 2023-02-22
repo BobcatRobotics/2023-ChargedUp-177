@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.MathUtil;
@@ -19,6 +20,7 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   public Intake() {
    motor = new WPI_TalonFX(Constants.intakeMotorID);
+   motor.setNeutralMode(NeutralMode.Brake);
   }
   
   public void runIntakeIn(){

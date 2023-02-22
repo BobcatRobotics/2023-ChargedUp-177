@@ -168,7 +168,7 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
     public class BalancingConstants{
-        public static final double kP = 0.4;//TODO: tune
+        public static final double kP = 0.25;//TODO: tune
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kToleranceDegrees = 2.5;//acceptable absolute error in degrees

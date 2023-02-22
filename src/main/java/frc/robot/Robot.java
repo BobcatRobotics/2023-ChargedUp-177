@@ -87,7 +87,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  
+    CommandScheduler.getInstance().cancelAll();
+    
+  }
 
   @Override
   public void disabledPeriodic() {
@@ -98,8 +102,11 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RobotContainer.s_Swerve.resetOdometryAutos();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    try{
     m_robotContainer.cancelDefaultTeleop();
+    }catch(NullPointerException e){
 
+    }
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

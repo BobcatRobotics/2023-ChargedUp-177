@@ -20,7 +20,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.AlignToTarget;
 import frc.robot.commands.Autos.BalanceChargeStation;
+import frc.robot.commands.Autos.MountAndBalance;
 import frc.robot.commands.Presets.RetractArm;
+import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.ZeroElevator;
 import frc.robot.subsystems.*;
 
@@ -141,6 +143,7 @@ public class RobotContainer {
 
         m_Arm.setDefaultCommand(armControls);
         m_Elevator.setDefaultCommand(elevatorControls);
+        m_Intake.setDefaultCommand(new RunIntake(m_Intake, driver));
 
 
         // Configure the button bindings
@@ -169,25 +172,14 @@ public class RobotContainer {
         ruffy0.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         ruffy1.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-        leftBumper.whileTrue((new RunCommand(m_Intake::runIntakeIn).andThen(new InstantCommand(m_Intake::stop))));
-        rightBumper.whileTrue((new RunCommand(m_Intake::runIntakeOut).andThen(new InstantCommand(m_Intake::stop))));
-        rightBumper.whileFalse((new InstantCommand(() -> m_Intake.stop())));
-        leftBumper.whileFalse((new InstantCommand(() -> m_Intake.stop())));
+        
         a.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
         b.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
 
         alignRobot.whileTrue(align);
     }
 
-    public SequentialCommandGroup MountAndBalance(Swerve s_Swerve){
-        // get on the charge station, then balance, then put the wheels in an x configuration
-        return new SequentialCommandGroup(
-            new MountChargeStation(s_Swerve, false),
-            new BalanceChargeStation(s_Swerve, false),
-            new InstantCommand(() -> s_Swerve.configToX())
-        );
-
-    }
+  
     
     // time to run out the intake when placing peices
     double intakeTime = 3;
@@ -271,7 +263,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
-        return autoChooser.getSelected();
+       // s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
+        return new MountAndBalance(s_Swerve); //autoChooser.getSelected();
     }
 }
