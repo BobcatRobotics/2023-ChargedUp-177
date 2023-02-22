@@ -181,8 +181,7 @@ public class RobotContainer {
 
   
     
-    //for presets
-    // TODO: config to x in parallel while placing?
+    // for presets
     // different for cones and cubes?
     
 
