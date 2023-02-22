@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Presets.SetArm;
 import frc.robot.commands.Presets.ZeroElevator;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 
 
@@ -18,8 +19,8 @@ public class DownAndSuck extends SequentialCommandGroup {
 
     addCommands(
       new ParallelCommandGroup(
-        new ZeroElevator(e), //TODO: arm conflicts?
-        new SetArm(),
+        new ZeroElevator(e)//, //TODO: arm conflicts?
+        //new SetArm()
       )
     );
   }
