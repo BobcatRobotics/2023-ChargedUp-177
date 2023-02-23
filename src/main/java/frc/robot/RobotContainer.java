@@ -72,7 +72,7 @@ public class RobotContainer {
     /* Subsystems */
 
 
-    public static Swerve s_Swerve = new Swerve();
+    public static final Swerve s_Swerve = new Swerve();
     public static Limelight m_Limelight = new Limelight();
 
     private final Elevator m_Elevator = new Elevator();
