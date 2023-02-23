@@ -2,6 +2,8 @@ package frc.robot;
 
 
 
+import java.util.ArrayList;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,8 +18,12 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.SwerveAutoBuilder;
 
 import frc.robot.commands.*;
+import frc.robot.Constants;
 import frc.robot.commands.Autos.AlignToTarget;
 import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.commands.Autos.MountAndBalance;
@@ -37,7 +43,7 @@ import frc.robot.subsystems.Swerve;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-public static class RobotContainer {
+public class RobotContainer {
     //for the xbox controller buttons
     //private Constants.ButtonHashtable bh = new Constants.ButtonHashtable();
 
@@ -87,6 +93,8 @@ public static class RobotContainer {
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
     private final PathPlannerTest pathPlannerTest = new PathPlannerTest();
+
+    private SwerveAutoBuilder swerveAutoBuilder;
 
     /* SendableChooser */
     SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<>();
@@ -184,7 +192,21 @@ public static class RobotContainer {
     // for presets
     // different for cones and cubes?
     
+    public static Command buildAuto(ArrayList<PathPlannerTrajectory> trajs) {
+        swerveAutoBuilder = new SwerveAutoBuilder(
+            s_Swerve::getPose,
+            s_Swerve::resetOdometry,
+            Constants.Swerve.swerveKinematics,
+            new PIDConstants(0.5, 0, 0),
+            new PIDConstants(0.5, 0, 0),
+            s_Swerve::setModuleStates,
+            Constants.AutoConstants.eventMap,
+            true,
+            s_Swerve
+        );
 
+        return autoBuilder.fullAuto(trajs);
+    }
 
 
 
@@ -196,6 +218,7 @@ public static class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
        // s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
-        return new MountAndBalance(s_Swerve); //autoChooser.getSelected();
+        //return new MountAndBalance(s_Swerve); //autoChooser.getSelected();
+        return autoChooser.getSelected();
     }
 }
