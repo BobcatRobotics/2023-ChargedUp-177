@@ -73,4 +73,7 @@ public class Arm extends SubsystemBase {
     public boolean isAtHardStop() {
         return armMotor.getStatorCurrent() >= 30.0;
     }
+    public void resetEncoder(){
+        armMotor.setSelectedSensorPosition(0);
+    }
 }

@@ -13,9 +13,10 @@ public class RetractArm extends CommandBase {
   
   // if the elevator is at the bottom, retract the arm
   // otherwise, do nothing
-  
-  Elevator e;
-   Arm a;
+  Arm a;
+  Elevator e ;
+
+
   
    public RetractArm(Elevator e, Arm a) {
    this.e = e;
@@ -28,15 +29,22 @@ public class RetractArm extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if(e.getState()!=0){
+      a.setState(0);
+    }
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    a.resetEncoder();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return a.isAtBottomLimit();
   }
 }
