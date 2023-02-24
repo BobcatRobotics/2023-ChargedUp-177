@@ -4,24 +4,26 @@
 
 package frc.robot.commands.Presets.Procedures;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.SetArm;
+import frc.robot.commands.Presets.SetElevator;
 import frc.robot.commands.Presets.ZeroElevator;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 
 
 public class ForwardSuck extends SequentialCommandGroup {
   // elevator down, arm up, wrist down
   
-  public ForwardSuck(Elevator e, Arm a) {
-
+  public ForwardSuck(Elevator e, Arm a, Intake i) {
     addCommands(
-      new ParallelCommandGroup(
-        new ZeroElevator(e)//, //TODO: arm conflicts?
-        //new SetArm()
-      )
+      new SequentialCommandGroup(
+      Commands.parallel(new SetElevator(e),new SetArm(a)),
+      new RunIntake(i,true,12))
     );
   }
 }
