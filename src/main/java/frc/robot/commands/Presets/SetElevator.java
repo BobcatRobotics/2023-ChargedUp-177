@@ -5,10 +5,11 @@
 package frc.robot.commands.Presets;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Elevator; 
 
 public class SetElevator extends CommandBase {
   /** Creates a new SetElevator. */
-  public SetElevator() {
+  public SetElevator(Elevator e) {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
