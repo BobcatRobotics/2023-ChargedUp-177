@@ -3,6 +3,7 @@ package frc.robot;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -20,7 +21,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.SwerveAutoBuilder;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import frc.robot.commands.*;
 import frc.robot.Constants;
@@ -32,7 +34,7 @@ import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.ZeroElevator;
 import frc.robot.subsystems.*;
 
-import frc.robot.autos.PathPlannerTest;
+import frc.robot.autos.ScorePreloadedIntakeBalance;
 import frc.robot.autos.RedHighCone6PickupBalance;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
@@ -92,9 +94,11 @@ public class RobotContainer {
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
-    private final PathPlannerTest pathPlannerTest = new PathPlannerTest();
+    private final ScorePreloadedIntakeBalance scorePreloadedIntakeBalance = new ScorePreloadedIntakeBalance();
+    private final MountAndBalance mountAndBalance  = new MountAndBalance(s_Swerve);
 
-    private SwerveAutoBuilder swerveAutoBuilder;
+
+    private static SwerveAutoBuilder swerveAutoBuilder;
 
     /* SendableChooser */
     SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<>();
@@ -144,10 +148,11 @@ public class RobotContainer {
 
         // Sendable Chooser Setup
         autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
-        autoChooser.addOption("PathPlanner Test w/ X-Stance", pathPlannerTest);
+        autoChooser.addOption("Score Preloaded Piece, Intake Another, & Balance", scorePreloadedIntakeBalance);
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         SmartDashboard.putData(autoChooser);
-        Constants.AutoConstants.eventMap.put("chargeStation", align);
+        Constants.AutoConstants.eventMap.put("chargeStation", mountAndBalance);
+        
 
         m_Arm.setDefaultCommand(armControls);
         m_Elevator.setDefaultCommand(elevatorControls);
@@ -192,7 +197,7 @@ public class RobotContainer {
     // for presets
     // different for cones and cubes?
     
-    public static Command buildAuto(ArrayList<PathPlannerTrajectory> trajs) {
+    public static Command buildAuto(List<PathPlannerTrajectory> trajs) {
         swerveAutoBuilder = new SwerveAutoBuilder(
             s_Swerve::getPose,
             s_Swerve::resetOdometry,
@@ -205,7 +210,7 @@ public class RobotContainer {
             s_Swerve
         );
 
-        return autoBuilder.fullAuto(trajs);
+        return swerveAutoBuilder.fullAuto(trajs);
     }
 
 
