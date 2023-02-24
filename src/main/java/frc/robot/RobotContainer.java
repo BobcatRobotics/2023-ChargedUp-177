@@ -34,7 +34,7 @@ import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.ZeroElevator;
 import frc.robot.subsystems.*;
 
-import frc.robot.autos.ScorePreloadedIntakeBalance;
+import frc.robot.autos.Score1BalanceLeft;
 import frc.robot.autos.RedHighCone6PickupBalance;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
@@ -94,7 +94,7 @@ public class RobotContainer {
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
-    private final ScorePreloadedIntakeBalance scorePreloadedIntakeBalance = new ScorePreloadedIntakeBalance();
+    private final Score1BalanceLeft score1BalanceLeft = new Score1BalanceLeft();
     private final MountAndBalance mountAndBalance  = new MountAndBalance(s_Swerve);
 
 
@@ -148,11 +148,11 @@ public class RobotContainer {
 
         // Sendable Chooser Setup
         autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
-        autoChooser.addOption("Score Preloaded Piece, Intake Another, & Balance", scorePreloadedIntakeBalance);
+        autoChooser.addOption("Score One Balance Left", score1BalanceLeft);
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         SmartDashboard.putData(autoChooser);
         Constants.AutoConstants.eventMap.put("chargeStation", mountAndBalance);
-        
+
 
         m_Arm.setDefaultCommand(armControls);
         m_Elevator.setDefaultCommand(elevatorControls);

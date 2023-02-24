@@ -12,9 +12,9 @@ import frc.robot.commands.SetToX;
 import frc.robot.commands.Autos.DriveFollowPath;
 import frc.robot.subsystems.Swerve;
 
-public class ScorePreloadedIntakeBalance extends SequentialCommandGroup {
-    public ScorePreloadedIntakeBalance() {
-        List<PathPlannerTrajectory> pptList = PathPlanner.loadPathGroup("ScorePreloadedIntakeBalance", 1, 1);
+public class Score1BalanceLeft extends SequentialCommandGroup {
+    public Score1BalanceLeft() {
+        List<PathPlannerTrajectory> pptList = PathPlanner.loadPathGroup("Score1BalanceLeft", 1, 1);
         
         // addCommands(
         //     Swerve.followTrajectoryCommand(pptList.get(0), true),
