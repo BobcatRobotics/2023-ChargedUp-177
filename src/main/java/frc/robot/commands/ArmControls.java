@@ -70,8 +70,10 @@ public class ArmControls extends CommandBase {
       arm.setSpeed(0);
     } else if (gamepad.getRawAxis(1) < 0) {
       arm.setSpeed(gamepad.getRawAxis(1)/7);
+      arm.setHoldPosition();
     } else {
       arm.setSpeed(gamepad.getRawAxis(1)/4);
+      arm.setHoldPosition();
     }
   }
 

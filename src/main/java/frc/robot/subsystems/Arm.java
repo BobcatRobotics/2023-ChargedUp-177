@@ -14,6 +14,8 @@ import frc.robot.Constants.ArmConstants;
 
 public class Arm extends SubsystemBase {
     private WPI_TalonFX armMotor;
+
+    private double holdPos;
     
     public Arm() {
         armMotor = new WPI_TalonFX(Constants.ArmConstants.armMotorPort);
@@ -39,7 +41,11 @@ public class Arm extends SubsystemBase {
     }
 
     public void holdPosition() {
-        armMotor.set(ControlMode.Position, armMotor.getSelectedSensorPosition());
+        armMotor.set(ControlMode.Position, holdPos);
+    }
+
+    public void setHoldPosition() {
+        holdPos = armMotor.getSelectedSensorPosition();
     }
 
     public void setState(int state) {

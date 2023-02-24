@@ -25,6 +25,8 @@ public class Elevator extends SubsystemBase {
   private DigitalInput topLimit;
   private DigitalInput bottomLimit;
 
+  private double holdPos;
+
   /** Creates a new Elevator. */
   public Elevator() {
     elevatorMotor = new WPI_TalonFX(ElevatorConstants.elevatorMotorPort);
@@ -52,7 +54,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public void holdPosition() {
-    elevatorMotor.set(ControlMode.Position, elevatorMotor.getSelectedSensorPosition());
+    elevatorMotor.set(ControlMode.Position, holdPos);
+  }
+
+  public void setHoldPosition() {
+    holdPos = elevatorMotor.getSelectedSensorPosition();
   }
 
   public void resetEncoderPos() {
