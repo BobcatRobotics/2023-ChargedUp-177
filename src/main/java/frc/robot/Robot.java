@@ -60,7 +60,7 @@ public class Robot extends TimedRobot {
 
     // Record both DS control and joystick data
     DriverStation.startDataLog(DataLogManager.getLog());
-
+    //log.appendString(i, null, i);
     batteryVoltage = new DoubleLogEntry(log, "/my/batteryVoltage");
     encoderOdometry = new StringLogEntry(log, "/my/encoderOdometry");
     poseEstimatorOdometry = new StringLogEntry(log, "/my/poseEstimatorOdometry");
