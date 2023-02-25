@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -43,7 +39,7 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.config_kP(0, 0.15, 20);
     elevatorMotor.config_kI(0, 0, 20);
     elevatorMotor.config_kD(0, 0.5, 20);
-    elevatorMotor.setInverted(true);
+    elevatorMotor.setInverted(false); // used to be true but we flipped motor direction 2/25/23
     elevatorMotor.setNeutralMode(NeutralMode.Brake);
   }
 
@@ -66,16 +62,17 @@ public class Elevator extends SubsystemBase {
   public boolean getBottomLimits() {
     return !bottomLimit.get();
   }
-  public boolean getToplimit(){
-    return !topLimit.get();
-  }
   public double getEncoderPos() {
     return elevatorMotor.getSelectedSensorPosition();
   }
 
   // TODO: as you go up, elevator encoder values get more negative
   public boolean isAtTopLimit() {
-    return getToplimit();
+    return elevatorMotor.getSelectedSensorPosition() <= Constants.ElevatorConstants.topLimit;
+  }
+
+  public boolean topLimitSwitch() {
+    return !topLimit.get();
   }
 
   public void setState(int state) {
@@ -91,7 +88,7 @@ public class Elevator extends SubsystemBase {
   public int getState() {
     double pos = elevatorMotor.getSelectedSensorPosition();
     if (pos <= 256) pos = 0;
-    return (int) Math.ceil(pos/(Constants.ElevatorConstants.topLimit/3));
+    return (int) Math.ceil(pos/4096);
   }
 
   public double getEncoder() {

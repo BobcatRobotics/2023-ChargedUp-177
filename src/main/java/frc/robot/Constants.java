@@ -224,7 +224,9 @@ public final class Constants {
         public static final double constrictedBottomLimit = 4096;
         public static final double topLimit = 8192;
 
-        public static final int armlimitport = 2;
+        //public static final int armlimitport = 2;
+
+        public static final int stowedLimitSwitch = 2;
 
         public static int armState = 0;
     }

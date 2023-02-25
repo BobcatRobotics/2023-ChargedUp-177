@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -15,11 +16,14 @@ import frc.robot.Constants.ArmConstants;
 
 public class Arm extends SubsystemBase {
     private WPI_TalonFX armMotor;
-    private DigitalInput armlimit;
+    private TalonFXSensorCollection absoluteEncoder;
+    private DigitalInput armLimit;
     
     public Arm() {
         armMotor = new WPI_TalonFX(Constants.ArmConstants.armMotorPort);
-        armlimit = new DigitalInput (Constants.ArmConstants.armlimitport);
+        armLimit = new DigitalInput(Constants.ArmConstants.stowedLimitSwitch);
+        absoluteEncoder = new TalonFXSensorCollection(armMotor);
+
         armMotor.configFactoryDefault();
         armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
         armMotor.setSensorPhase(true);
@@ -54,10 +58,18 @@ public class Arm extends SubsystemBase {
         }
     }
 
+    public boolean isAtStowedLimit() {
+        return !armLimit.get();
+    }
+
     public int getState() {
         double pos = armMotor.getSelectedSensorPosition();
         if (pos <= 256) pos = 0;
         return (int) Math.ceil(pos/4096);
+    }
+
+    public double getPos() {
+        return armMotor.getSelectedSensorPosition();
     }
 
     public boolean isAtTopLimit() {
@@ -65,17 +77,22 @@ public class Arm extends SubsystemBase {
     }
 
     public boolean isAtBottomLimit() {
-        return !armlimit.get();
+        return armMotor.getSelectedSensorPosition() <= Constants.ArmConstants.bottomLimit;
     }
 
     public boolean isAtConstrictedBottomLimit() {
         return armMotor.getSelectedSensorPosition() <= Constants.ArmConstants.constrictedBottomLimit;
     }
+
+    public double absoluteEncoderVal() {
+        return absoluteEncoder.getIntegratedSensorAbsolutePosition();
+    }
     
     public boolean isAtHardStop() {
         return armMotor.getStatorCurrent() >= 30.0;
     }
-    public void resetEncoder(){
+
+    public void resetEncoder() {
         armMotor.setSelectedSensorPosition(0);
     }
 }
