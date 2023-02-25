@@ -64,7 +64,9 @@ public class ArmControls extends CommandBase {
     //     }
     //   }
     // }
-    if (Math.abs(gamepad.getRawAxis(1)) < 0.05) {
+    if (arm.isAtStowedLimit() && gamepad.getRawAxis(1) < 0) {
+      arm.setSpeed(0);
+    } else if (Math.abs(gamepad.getRawAxis(1)) < 0.05) {
       arm.holdPosition();
     } else if (arm.isAtHardStop()) {
       arm.setSpeed(0);
@@ -73,6 +75,9 @@ public class ArmControls extends CommandBase {
     } else {
       arm.setSpeed(gamepad.getRawAxis(1)/4);
     }
+    SmartDashboard.putNumber("arm encoder pos", arm.getPos());
+    SmartDashboard.putBoolean("arm stowed", arm.isAtStowedLimit());
+    SmartDashboard.putNumber("arm abs encoder pos", arm.absoluteEncoderVal());
   }
 
   // Called once the command ends or is interrupted.
