@@ -30,7 +30,7 @@ public class RetractArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(e.getState()!=0){
+    if(e.getState() == 0 && a.getState() != 0){
       a.setState(0);
     }
 

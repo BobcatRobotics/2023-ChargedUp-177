@@ -10,20 +10,21 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.SetArm;
 import frc.robot.commands.Presets.SetElevator;
+import frc.robot.commands.Presets.SetWrist;
 import frc.robot.commands.Presets.ZeroElevator;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Wrist;
 
 
 public class ForwardSuck extends SequentialCommandGroup {
   // elevator down, arm up, wrist down
   
-  public ForwardSuck(Elevator e, Arm a, Intake i) {
+  public ForwardSuck(Elevator e, Arm a, Intake i, Wrist w) {
     addCommands(
-      new SequentialCommandGroup(
       new SetArm(a,1),
-      Commands.parallel(new SetElevator(e,0),new SetArm(a,2)))
+      Commands.parallel(new SetElevator(e,0),new SetArm(a,2), new SetWrist(w,false))
     );
   }
 }

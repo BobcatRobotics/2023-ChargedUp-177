@@ -23,7 +23,14 @@ import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.commands.Autos.MountAndBalance;
 import frc.robot.commands.Presets.RetractArm;
 import frc.robot.commands.Presets.RunIntake;
+import frc.robot.commands.Presets.SetArm;
+import frc.robot.commands.Presets.SetElevator;
+import frc.robot.commands.Presets.StartingConfig;
 import frc.robot.commands.Presets.ZeroElevator;
+import frc.robot.commands.Presets.Procedures.ForwardSuck;
+import frc.robot.commands.Presets.Procedures.ScoreHigh;
+import frc.robot.commands.Presets.Procedures.ScoreMid;
+import frc.robot.commands.Presets.Procedures.TopSuck;
 import frc.robot.subsystems.*;
 
 import frc.robot.autos.PathPlannerTest;
@@ -69,6 +76,8 @@ public class RobotContainer {
     private final JoystickButton rightBumper = new JoystickButton(driver, 6);//right bumper
     private final JoystickButton a = new JoystickButton(driver, 2);
     private final JoystickButton b = new JoystickButton(driver, 3);
+    private final JoystickButton righttrigger = new JoystickButton(driver, 8);
+    private final JoystickButton lefttrigger = new JoystickButton(driver, 7);
     /* Subsystems */
 
 
@@ -83,6 +92,16 @@ public class RobotContainer {
     /* Commands */
     private final Command elevatorControls = new ElevatorControls(m_Elevator, driver);
     private final Command armControls = new ArmControls(m_Arm, driver);
+    private final Command setarm0 = new SetArm(m_Arm,0);
+    private final Command setarm1 = new SetArm(m_Arm,1);
+    private final Command setarm2 = new SetArm(m_Arm,2);
+    private final Command setelevator0 = new SetElevator(m_Elevator,0);
+    private final Command setelevator2 = new SetElevator(m_Elevator,2);
+    
+    
+    
+
+
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
@@ -173,8 +192,23 @@ public class RobotContainer {
         ruffy1.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
         
-        a.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
-        b.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
+        righttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
+        lefttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
+
+        if(driver.getPOV() == 0){
+            new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist);
+        }
+        else if(driver.getPOV() == 180){
+            new StartingConfig(m_Elevator, m_Arm);
+        }
+        else if(driver.getPOV() == 270){
+            new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist);
+        }
+        else if (driver.getPOV() == 360){
+            new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist);
+        }
+        a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Intake, m_Wrist));
+        b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist));
 
         alignRobot.whileTrue(align);
     }

@@ -6,10 +6,12 @@ package frc.robot.commands.Presets.Procedures;
 import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.SetArm;
 import frc.robot.commands.Presets.SetElevator;
+import frc.robot.commands.Presets.SetWrist;
 import frc.robot.commands.Presets.SetElevator;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Wrist;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -17,13 +19,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class TopSuck extends SequentialCommandGroup {
   // elevator down, arm down, wrist up, intake untill hard stop
 
-  public TopSuck(Elevator e, Arm a, Intake i) {
+  public TopSuck(Elevator e, Arm a, Intake i, Wrist W) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SequentialCommandGroup(
         new SetArm(a,1),
-      Commands.parallel(new SetElevator(e,2),new SetArm(a,2)))
+      Commands.parallel(new SetElevator(e,2),new SetArm(a,2), new SetWrist(W, true))
     );
   }
 }

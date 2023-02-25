@@ -8,16 +8,18 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
 public class Arm extends SubsystemBase {
     private WPI_TalonFX armMotor;
+    private DigitalInput armlimit;
     
     public Arm() {
         armMotor = new WPI_TalonFX(Constants.ArmConstants.armMotorPort);
-
+        armlimit = new DigitalInput (Constants.ArmConstants.armlimitport);
         armMotor.configFactoryDefault();
         armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
         armMotor.setSensorPhase(true);
@@ -63,7 +65,7 @@ public class Arm extends SubsystemBase {
     }
 
     public boolean isAtBottomLimit() {
-        return armMotor.getSelectedSensorPosition() <= Constants.ArmConstants.bottomLimit;
+        return !armlimit.get();
     }
 
     public boolean isAtConstrictedBottomLimit() {

@@ -224,12 +224,14 @@ public final class Constants {
         public static final double constrictedBottomLimit = 4096;
         public static final double topLimit = 8192;
 
+        public static final int armlimitport = 2;
+
         public static int armState = 0;
     }
 
     public static final class ElevatorConstants {
         public static final int elevatorMotorPort = 9;
-        public static final int topLimitPort = 0;
+        public static final int topLimitPort = 1;
         public static final int bottomLimitPort = 0;
 
         public static final int pos0 = 0;

@@ -41,6 +41,7 @@ public class SetArm extends CommandBase {
     if(arm.isAtBottomLimit() && state == 0){
       arm.resetEncoder();
     }
+    arm.holdPosition();
   }
 
   // Returns true when the command should end.

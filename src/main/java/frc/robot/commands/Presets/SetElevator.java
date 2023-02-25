@@ -37,6 +37,7 @@ public class SetElevator extends CommandBase {
       elevator.setState(2);
     }
 
+
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +46,7 @@ public class SetElevator extends CommandBase {
     if (elevator.getBottomLimits() && state == 0){
       elevator.resetEncoderPos();
     }
+    elevator.holdPosition();
   }
 
   // Returns true when the command should end.
