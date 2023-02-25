@@ -16,7 +16,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.subsystems.Swerve;
-//=talonfx(canid, "CANt_open_file")
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DataLogEntry;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -37,12 +42,30 @@ public class Robot extends TimedRobot {
 
   private int i = 0;
 
+  DoubleLogEntry batteryVoltage;
+  StringLogEntry encoderOdometry;
+  StringLogEntry poseEstimatorOdometry;
+  StringLogEntry limelightBotPose;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
   public void robotInit() {
+    // Starts recording to data log
+    DataLogManager.start();
+
+    DataLog log = DataLogManager.getLog();
+
+    // Record both DS control and joystick data
+    DriverStation.startDataLog(DataLogManager.getLog());
+
+    batteryVoltage = new DoubleLogEntry(log, "/my/batteryVoltage");
+    encoderOdometry = new StringLogEntry(log, "/my/encoderOdometry");
+    poseEstimatorOdometry = new StringLogEntry(log, "/my/poseEstimatorOdometry");
+    limelightBotPose = new StringLogEntry(log, "/my/limelightBotPose");
+    
     ctreConfigs = new CTREConfigs();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
