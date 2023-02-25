@@ -30,10 +30,10 @@ public class Intake extends SubsystemBase {
     motor.set(ControlMode.PercentOutput, -0.9);
   }
   public void runIntakeOut(){
-    if (isAtHardStop()) {
+    if (isAtHardStop()) { 
       return;
     }
-    motor.set(ControlMode.PercentOutput, 0.4);
+    motor.set(ControlMode.PercentOutput, 0.6);
   }
 
   public boolean isAtHardStop() {

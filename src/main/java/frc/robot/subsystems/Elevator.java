@@ -28,7 +28,7 @@ public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
   public Elevator() {
     elevatorMotor = new WPI_TalonFX(ElevatorConstants.elevatorMotorPort);
-    // topLimit = new DigitalInput(ElevatorConstants.topLimitPort);
+    topLimit = new DigitalInput(ElevatorConstants.topLimitPort);
     bottomLimit = new DigitalInput(ElevatorConstants.bottomLimitPort);
 
     elevatorMotor.configFactoryDefault();
@@ -43,7 +43,7 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.config_kP(0, 0.15, 20);
     elevatorMotor.config_kI(0, 0, 20);
     elevatorMotor.config_kD(0, 0.5, 20);
-    elevatorMotor.setInverted(true);
+    elevatorMotor.setInverted(false); // used to be true but we flipped motor direction 2/25/23
     elevatorMotor.setNeutralMode(NeutralMode.Brake);
   }
 
@@ -73,6 +73,10 @@ public class Elevator extends SubsystemBase {
   // TODO: as you go up, elevator encoder values get more negative
   public boolean isAtTopLimit() {
     return elevatorMotor.getSelectedSensorPosition() <= Constants.ElevatorConstants.topLimit;
+  }
+
+  public boolean topLimitSwitch() {
+    return !topLimit.get();
   }
 
   public void setState(int state) {
