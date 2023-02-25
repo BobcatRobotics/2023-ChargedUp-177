@@ -95,9 +95,9 @@ public class Elevator extends SubsystemBase {
     return elevatorMotor.getSelectedSensorPosition();
   }
 
-  // public boolean isAtHardStop() {
-  //   return elevatorMotor.getStatorCurrent() >= 40.0;
-  // }
+  public boolean isAtHardStop() {
+    return elevatorMotor.getStatorCurrent() >= 35.0;
+  }
 
   @Override
   public void periodic() {

@@ -65,7 +65,9 @@ public class ElevatorControls extends CommandBase {
       elevator.resetEncoderPos();
     }
     // -207000
-    if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0) {
+    if (elevator.isAtHardStop()) {
+      elevator.elevate(0);
+    } else if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0) {
       elevator.elevate(0);
     } else if (elevator.isAtTopLimit() && gamepad.getRawAxis(3) < 0) {
       elevator.elevate(0);

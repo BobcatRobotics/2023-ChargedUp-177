@@ -16,13 +16,13 @@ import frc.robot.Constants.ArmConstants;
 
 public class Arm extends SubsystemBase {
     private WPI_TalonFX armMotor;
-    private TalonFXSensorCollection absoluteEncoder;
+    //private TalonFXSensorCollection absoluteEncoder;
     private DigitalInput armLimit;
     
     public Arm() {
         armMotor = new WPI_TalonFX(Constants.ArmConstants.armMotorPort);
         armLimit = new DigitalInput(Constants.ArmConstants.stowedLimitSwitch);
-        absoluteEncoder = new TalonFXSensorCollection(armMotor);
+        //absoluteEncoder = new TalonFXSensorCollection(armMotor);
 
         armMotor.configFactoryDefault();
         armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
@@ -84,9 +84,9 @@ public class Arm extends SubsystemBase {
         return armMotor.getSelectedSensorPosition() <= Constants.ArmConstants.constrictedBottomLimit;
     }
 
-    public double absoluteEncoderVal() {
-        return absoluteEncoder.getIntegratedSensorAbsolutePosition();
-    }
+    // public double absoluteEncoderVal() {
+    //     return absoluteEncoder.getIntegratedSensorAbsolutePosition();
+    // }
     
     public boolean isAtHardStop() {
         return armMotor.getStatorCurrent() >= 30.0;

@@ -77,7 +77,7 @@ public class ArmControls extends CommandBase {
     }
     SmartDashboard.putNumber("arm encoder pos", arm.getPos());
     SmartDashboard.putBoolean("arm stowed", arm.isAtStowedLimit());
-    SmartDashboard.putNumber("arm abs encoder pos", arm.absoluteEncoderVal());
+    //SmartDashboard.putNumber("arm abs encoder pos", arm.absoluteEncoderVal());
   }
 
   // Called once the command ends or is interrupted.
