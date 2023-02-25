@@ -9,7 +9,11 @@ import frc.robot.subsystems.Arm;
 
 public class SetArm extends CommandBase {
   /** Creates a new SetArm. */
-  public SetArm(Arm a) {
+  Arm arm;
+  int state;
+  public SetArm(Arm a, int state_g) {
+    state = state_g;
+    arm = a;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -19,15 +23,32 @@ public class SetArm extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (state == 0){
+      arm.setState(0);
+    }
+    else if(state == 1){
+      arm.setState(1);
+    }
+    else if(state == 2){
+      arm.setState(2);
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    if(arm.isAtBottomLimit() && state == 0){
+      arm.resetEncoder();
+    }
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(arm.getState() == state){
+      return true;
+    }
     return false;
   }
 }

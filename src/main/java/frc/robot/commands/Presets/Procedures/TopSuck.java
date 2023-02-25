@@ -22,8 +22,8 @@ public class TopSuck extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SequentialCommandGroup(
-      Commands.parallel(new SetElevator(e),new SetArm(a)),
-      new RunIntake(i,true,12))
+        new SetArm(a,1),
+      Commands.parallel(new SetElevator(e,2),new SetArm(a,2)))
     );
   }
 }

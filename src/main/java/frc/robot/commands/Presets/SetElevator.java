@@ -5,11 +5,17 @@
 package frc.robot.commands.Presets;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator; 
 
 public class SetElevator extends CommandBase {
+  Elevator elevator;
+  int state;
   /** Creates a new SetElevator. */
-  public SetElevator(Elevator e) {
+  public SetElevator(Elevator e, int state_g) {
+    elevator = e;
+    state = state_g;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -19,15 +25,34 @@ public class SetElevator extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+    if(state == 0){
+      elevator.setState(0);
+    }
+    else if(state == 1){
+      elevator.setState(1);
+    }
+    else if(state == 2){
+      elevator.setState(2);
+    }
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    if (elevator.getBottomLimits() && state == 0){
+      elevator.resetEncoderPos();
+    }
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(elevator.getState() == state){
+      return true;
+    }
     return false;
   }
 }

@@ -3,9 +3,9 @@
 2. Score cubes levels 1-3
     - limelight align
     - set all subsystems to position
-3. Intake cone standing up (TopSuck) and laying down (ForwardSuck) -- need to work on the set arm command and set elevator command
+3. Intake cone standing up (TopSuck) and laying down (ForwardSuck) -- done I think 
     - set all subsystems to positions
-4. Score cones 1-3
+4. Score cones 1-3 -- Completed not tested and no limelight
     - limelight align
     - set all subsystems to position 
-5. Return to original position -- Completed
+5. Return to original position -- Completed Not tested

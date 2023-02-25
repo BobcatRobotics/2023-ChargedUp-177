@@ -19,12 +19,13 @@ import frc.robot.subsystems.Intake;
 public class ScoreHigh extends SequentialCommandGroup {
     // elevator high, arm out, wrist down, intake out
       public ScoreHigh(Elevator e, Arm a, Intake i) {
+  
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+
     addCommands(//will not work because we need to create the set elevator and arm commands
-      new SequentialCommandGroup(
-      Commands.parallel(new SetElevator(e),new SetArm(a)),
-      new RunIntake(i,false,12))
+      new SetArm(a,1),//set arm to pos 1      
+      Commands.parallel(new SetElevator(e,2),new SetArm(a,2))
     );
   }
 }
