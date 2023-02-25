@@ -204,9 +204,7 @@ public class RobotContainer {
         else if(driver.getPOV() == 270){
             new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist);
         }
-        else if (driver.getPOV() == 360){
-            new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist);
-        }
+
         a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Intake, m_Wrist));
         b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist));
 
