@@ -60,6 +60,7 @@ public class ElevatorControls extends CommandBase {
     // }
     SmartDashboard.putBoolean("bottom limits", elevator.getBottomLimits());
     SmartDashboard.putNumber("elevator encoder", elevator.getEncoder());
+    SmartDashboard.putBoolean("top limits", elevator.topLimitSwitch());
     if (elevator.getBottomLimits()) {
       elevator.resetEncoderPos();
     }
