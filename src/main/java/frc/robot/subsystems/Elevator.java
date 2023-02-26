@@ -34,8 +34,8 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.setSensorPhase(true);
     elevatorMotor.configNominalOutputForward(0, 20);
     elevatorMotor.configNominalOutputReverse(0, 20);
-    elevatorMotor.configPeakOutputForward(0.7, 20);
-    elevatorMotor.configPeakOutputReverse(-0.7, 20);//TODO: needs to be changes for comp
+    elevatorMotor.configPeakOutputForward(0.5, 20);
+    elevatorMotor.configPeakOutputReverse(-0.5, 20);//TODO: needs to be changes for comp
     elevatorMotor.configAllowableClosedloopError(0, 0, 20);
     elevatorMotor.config_kF(0, 0, 20);
     elevatorMotor.config_kP(0, 0.25, 20);
