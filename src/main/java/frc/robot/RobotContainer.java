@@ -29,6 +29,7 @@ import frc.robot.commands.Presets.SetArm;
 import frc.robot.commands.Presets.SetElevator;
 import frc.robot.commands.Presets.StartingConfig;
 import frc.robot.commands.Presets.ZeroElevator;
+import frc.robot.commands.Presets.intakeStop;
 import frc.robot.commands.Presets.Procedures.ForwardSuck;
 import frc.robot.commands.Presets.Procedures.ScoreHigh;
 import frc.robot.commands.Presets.Procedures.ScoreMid;
@@ -95,8 +96,8 @@ public class RobotContainer {
     private final Wrist m_Wrist = new Wrist();
     
     /* Commands */
-    private final Command elevatorControls = new ElevatorControls(m_Elevator, driver);
-    private final Command armControls = new ArmControls(m_Arm, driver);
+    private final Command elevatorControls = new ElevatorControls(m_Elevator, driver, m_Arm);
+    private final Command armControls = new ArmControls(m_Arm, driver, m_Elevator);
     private final Command setarm0 = new SetArm(m_Arm,0);
     private final Command setarm1 = new SetArm(m_Arm,1);
     private final Command setarm2 = new SetArm(m_Arm,2);
@@ -198,7 +199,10 @@ public class RobotContainer {
 
         
         righttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
-        lefttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
+        rightBumper.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
+        
+    //    lefttrigger.whileTrue(new InstantCommand(m_Intake::runIntakeOut));
+    //     leftBumper.whileTrue(new InstantCommand(m_Intake::runIntakeIn));
 
         // if(driver.getPOV() == 0){
         //     new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist);
@@ -217,6 +221,10 @@ public class RobotContainer {
         b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist));
 
         //alignRobot.whileTrue(align);
+    }
+
+    public boolean anythingPressed() {
+        return false;
     }
 
   

@@ -11,16 +11,19 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 
 public class ElevatorControls extends CommandBase {
   private Elevator elevator;
   private Joystick gamepad;
+  private Arm arm;
 
   /** Creates a new ElevatorControls. */
-  public ElevatorControls(Elevator e, Joystick gp) {
+  public ElevatorControls(Elevator e, Joystick gp, Arm a) {
     elevator = e;
     gamepad = gp;
+    arm = a;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator);
@@ -68,14 +71,18 @@ public class ElevatorControls extends CommandBase {
     // -207000
     if (elevator.isAtHardStop()) {
       elevator.elevate(0);
+    } else if(arm.getPos() <= Constants.ArmConstants.pos1-200) {
+      elevator.elevate(0);
     } else if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0) {
       elevator.elevate(0);
     } else if (elevator.topLimitSwitch() && gamepad.getRawAxis(3) < 0.05) {
       elevator.elevate(0);
     } else if (Math.abs(gamepad.getRawAxis(3)) < 0.05) {
       elevator.holdPosition();
-    } else {
+    } 
+    else {
       elevator.elevate(gamepad.getRawAxis(3)/2);
+      elevator.setHoldPos();
     }
   }
 

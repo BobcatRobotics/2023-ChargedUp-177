@@ -22,6 +22,7 @@ public class SetElevator extends CommandBase {
     timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(e);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -64,7 +65,7 @@ public class SetElevator extends CommandBase {
     //   return true;
     // }
     // return false;
-    if (timer.hasElapsed(2)) {
+    if (timer.hasElapsed(1)) {
       timer.stop();
       timer.reset();
       return true;

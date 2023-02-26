@@ -13,14 +13,17 @@ import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Elevator;
 
 public class ArmControls extends CommandBase {
   private Arm arm;
   private Joystick gamepad;
+  private Elevator elevator;
 
-  public ArmControls(Arm a, Joystick gp) {
+  public ArmControls(Arm a, Joystick gp, Elevator e) {
     arm = a;
     gamepad = gp;
+    elevator = e;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(a);
   }
@@ -68,9 +71,10 @@ public class ArmControls extends CommandBase {
     // }
     if (arm.isAtStowedLimit() && gamepad.getRawAxis(1) < 0.0) {
       arm.setSpeed(0);
-    } else if (Math.abs(gamepad.getRawAxis(1)) < 0.05) {
-      arm.holdPosition();
-    } else if (arm.isAtHardStop()) {
+    }//else if (elevator.getEncoderPos() >= Constants.ElevatorConstants.pos1 && arm.getPos() <= Constants.ArmConstants.pos1 && gamepad.getRawAxis(1) > 0){
+      //arm.setSpeed(0); 
+    //}
+    else if (arm.isAtHardStop()) {
       arm.setSpeed(0);
     } else if (gamepad.getRawAxis(1) < 0.0) {
       arm.setSpeed(gamepad.getRawAxis(1)/7);

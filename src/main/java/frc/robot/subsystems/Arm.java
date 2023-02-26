@@ -18,6 +18,8 @@ public class Arm extends SubsystemBase {
     private WPI_TalonFX armMotor;
     //private TalonFXSensorCollection absoluteEncoder;
     private DigitalInput armLimit;
+
+    // private double holdPosValue;
     
     public Arm() {
         armMotor = new WPI_TalonFX(Constants.ArmConstants.armMotorPort);
@@ -33,20 +35,26 @@ public class Arm extends SubsystemBase {
         armMotor.configPeakOutputReverse(-0.5, 20);
         armMotor.configAllowableClosedloopError(0, 0, 20);
         armMotor.config_kF(0, 0, 20);
-        armMotor.config_kP(0, 0.15, 20);
+        armMotor.config_kP(0, 0.275, 20);
         armMotor.config_kI(0, 0, 20);
-        armMotor.config_kD(0, 0.5, 20);
+        armMotor.config_kD(0, 0, 20);
         armMotor.setInverted(true);
         armMotor.setNeutralMode(NeutralMode.Brake);
+
+        // holdPosValue = armMotor.getSelectedSensorPosition();
     }
 
     public void setSpeed(double speed) {
         armMotor.set(ControlMode.PercentOutput, speed);
     }
 
-    public void holdPosition() {
-        armMotor.set(ControlMode.Position, armMotor.getSelectedSensorPosition());
-    }
+    // public void holdPosition() {
+    //     armMotor.set(ControlMode.Position, holdPosValue);
+    // }
+
+    // public void setHoldPos() {
+    //     holdPosValue = armMotor.getSelectedSensorPosition();
+    // }
 
     public void setState(int state) {
         if (state == 0) {

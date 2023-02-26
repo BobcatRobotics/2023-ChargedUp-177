@@ -21,6 +21,8 @@ public class Elevator extends SubsystemBase {
   private DigitalInput topLimit;
   private DigitalInput bottomLimit;
 
+  private double holdPosValue;
+
   /** Creates a new Elevator. */
   public Elevator() {
     elevatorMotor = new WPI_TalonFX(ElevatorConstants.elevatorMotorPort);
@@ -32,15 +34,17 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.setSensorPhase(true);
     elevatorMotor.configNominalOutputForward(0, 20);
     elevatorMotor.configNominalOutputReverse(0, 20);
-    elevatorMotor.configPeakOutputForward(0.5, 20);
-    elevatorMotor.configPeakOutputReverse(-0.5, 20);
+    elevatorMotor.configPeakOutputForward(0.7, 20);
+    elevatorMotor.configPeakOutputReverse(-0.7, 20);//TODO: needs to be changes for comp
     elevatorMotor.configAllowableClosedloopError(0, 0, 20);
     elevatorMotor.config_kF(0, 0, 20);
-    elevatorMotor.config_kP(0, 0.15, 20);
+    elevatorMotor.config_kP(0, 0.25, 20);
     elevatorMotor.config_kI(0, 0, 20);
-    elevatorMotor.config_kD(0, 0.5, 20);
+    elevatorMotor.config_kD(0, 0, 20);
     elevatorMotor.setInverted(false); // used to be true but we flipped motor direction 2/25/23
     elevatorMotor.setNeutralMode(NeutralMode.Brake);
+
+    holdPosValue = elevatorMotor.getSelectedSensorPosition();
   }
 
   public void elevate(double speed) {
@@ -48,7 +52,15 @@ public class Elevator extends SubsystemBase {
   }
 
   public void holdPosition() {
-    elevatorMotor.set(ControlMode.Position, elevatorMotor.getSelectedSensorPosition());
+    elevatorMotor.set(ControlMode.Position, holdPosValue);
+  }
+
+  public void holdPosition(double pos) {
+    elevatorMotor.set(ControlMode.Position, pos);
+  }
+
+  public void setHoldPos() {
+    holdPosValue = elevatorMotor.getSelectedSensorPosition();
   }
 
   public void resetEncoderPos() {
@@ -78,10 +90,16 @@ public class Elevator extends SubsystemBase {
   public void setState(int state) {
     if (state == 0) {
       elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos0);
+      holdPosValue = ElevatorConstants.pos0;
+      holdPosition();
     } else if (state == 1) {
       elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos1);
+      holdPosValue = ElevatorConstants.pos1;
+      holdPosition();
     } else if (state == 2) {
       elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos2);
+      holdPosValue = ElevatorConstants.pos2;
+      holdPosition();
     }
   }
 
@@ -101,6 +119,11 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (getBottomLimits()){
+      resetEncoderPos();
+      holdPosValue = 0;
+      elevatorMotor.set(ControlMode.PercentOutput, 0);
+    }
     // This method will be called once per scheduler run
   }
 }

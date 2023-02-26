@@ -19,7 +19,7 @@ public class RunIntake extends CommandBase {
   double time;
   Joystick gp;
   int in = 5;
-  int out = 6;
+  int out = 7;
   public RunIntake(Intake i, boolean runIn, double time){
     this.i = i;
     this.runIn = runIn;

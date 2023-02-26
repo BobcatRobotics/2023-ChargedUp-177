@@ -51,7 +51,6 @@ public class SetArm extends CommandBase {
     if(arm.isAtBottomLimit()){
       arm.resetEncoder();
     }
-    arm.holdPosition();
   }
 
   // Returns true when the command should end.
@@ -61,7 +60,7 @@ public class SetArm extends CommandBase {
     //   return true;
     // }
     // return false;
-    if (timer.hasElapsed(2)) {
+    if (timer.hasElapsed(1)) {
       timer.stop();
       timer.reset();
       return true;
