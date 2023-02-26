@@ -16,9 +16,9 @@ import frc.robot.subsystems.Arm;
 
 public class ArmControls extends CommandBase {
   private Arm arm;
-  private CommandXboxController gamepad;
+  private Joystick gamepad;
 
-  public ArmControls(Arm a, CommandXboxController gp) {
+  public ArmControls(Arm a, Joystick gp) {
     arm = a;
     gamepad = gp;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -66,16 +66,16 @@ public class ArmControls extends CommandBase {
     //     }
     //   }
     // }
-    if (arm.isAtStowedLimit() && gamepad.getRightY()< 0.0) {
+    if (arm.isAtStowedLimit() && gamepad.getRawAxis(1) < 0.0) {
       arm.setSpeed(0);
-    } else if (Math.abs(gamepad.getRightY()) < 0.05) {
+    } else if (Math.abs(gamepad.getRawAxis(1)) < 0.05) {
       arm.holdPosition();
     } else if (arm.isAtHardStop()) {
       arm.setSpeed(0);
-    } else if (gamepad.getRightY() < 0.0) {
-      arm.setSpeed(gamepad.getRightY()/7);
+    } else if (gamepad.getRawAxis(1) < 0.0) {
+      arm.setSpeed(gamepad.getRawAxis(1)/7);
     } else {
-      arm.setSpeed(gamepad.getRightY()/4);
+      arm.setSpeed(gamepad.getRawAxis(1)/4);
     }
     SmartDashboard.putNumber("arm encoder pos", arm.getPos());
     SmartDashboard.putBoolean("arm stowed", arm.isAtStowedLimit());

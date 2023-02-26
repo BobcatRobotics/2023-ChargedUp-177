@@ -21,7 +21,6 @@ import frc.robot.subsystems.Wrist;
 public class ScoreHigh extends SequentialCommandGroup {
     // elevator high, arm out, wrist down, intake out
       public ScoreHigh(Elevator e, Arm a, Intake i, Wrist w) {
-  
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 

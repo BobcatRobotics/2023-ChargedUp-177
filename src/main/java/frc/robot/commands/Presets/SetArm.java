@@ -5,6 +5,7 @@
 package frc.robot.commands.Presets;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
@@ -18,6 +19,7 @@ public class SetArm extends CommandBase {
     arm = a;
     timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(a);
   }
 
   // Called when the command is initially scheduled.
@@ -45,6 +47,7 @@ public class SetArm extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    SmartDashboard.putBoolean("arm interrupted", interrupted);
     if(arm.isAtBottomLimit()){
       arm.resetEncoder();
     }
@@ -60,6 +63,7 @@ public class SetArm extends CommandBase {
     // return false;
     if (timer.hasElapsed(2)) {
       timer.stop();
+      timer.reset();
       return true;
     }
     return false;

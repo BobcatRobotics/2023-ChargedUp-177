@@ -15,10 +15,10 @@ import frc.robot.subsystems.Elevator;
 
 public class ElevatorControls extends CommandBase {
   private Elevator elevator;
-  private CommandXboxController gamepad;
+  private Joystick gamepad;
 
   /** Creates a new ElevatorControls. */
-  public ElevatorControls(Elevator e, CommandXboxController gp) {
+  public ElevatorControls(Elevator e, Joystick gp) {
     elevator = e;
     gamepad = gp;
 
@@ -68,14 +68,14 @@ public class ElevatorControls extends CommandBase {
     // -207000
     if (elevator.isAtHardStop()) {
       elevator.elevate(0);
-    } else if (elevator.getBottomLimits() && gamepad.getLeftY() > 0.0) {
+    } else if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0) {
       elevator.elevate(0);
-    } else if (elevator.isAtTopLimit() && gamepad.getLeftY() < 0.05) {
+    } else if (elevator.topLimitSwitch() && gamepad.getRawAxis(3) < 0.05) {
       elevator.elevate(0);
-    } else if (Math.abs(gamepad.getLeftY()) < 0.05) {
+    } else if (Math.abs(gamepad.getRawAxis(3)) < 0.05) {
       elevator.holdPosition();
     } else {
-      elevator.elevate(gamepad.getLeftY()/2);
+      elevator.elevate(gamepad.getRawAxis(3)/2);
     }
   }
 

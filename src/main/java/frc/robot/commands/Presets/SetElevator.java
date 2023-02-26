@@ -5,6 +5,7 @@
 package frc.robot.commands.Presets;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
@@ -20,6 +21,7 @@ public class SetElevator extends CommandBase {
     state = state_g;
     timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(e);
   }
 
   // Called when the command is initially scheduled.
@@ -48,6 +50,7 @@ public class SetElevator extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    SmartDashboard.putBoolean("elevator interrupted", interrupted);
     if (elevator.getBottomLimits() && state == 0){
       elevator.resetEncoderPos();
     }
@@ -63,6 +66,7 @@ public class SetElevator extends CommandBase {
     // return false;
     if (timer.hasElapsed(2)) {
       timer.stop();
+      timer.reset();
       return true;
     }
     return false;
