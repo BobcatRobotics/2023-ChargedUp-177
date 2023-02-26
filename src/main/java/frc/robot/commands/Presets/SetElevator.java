@@ -65,7 +65,7 @@ public class SetElevator extends CommandBase {
     //   return true;
     // }
     // return false;
-    if (timer.hasElapsed(1)) {
+    if (timer.hasElapsed(1.5)) {
       timer.stop();
       timer.reset();
       return true;
