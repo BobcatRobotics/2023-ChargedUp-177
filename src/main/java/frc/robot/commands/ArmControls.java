@@ -5,8 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
@@ -14,9 +16,9 @@ import frc.robot.subsystems.Arm;
 
 public class ArmControls extends CommandBase {
   private Arm arm;
-  private Joystick gamepad;
+  private CommandXboxController gamepad;
 
-  public ArmControls(Arm a, Joystick gp) {
+  public ArmControls(Arm a, CommandXboxController gp) {
     arm = a;
     gamepad = gp;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -64,16 +66,16 @@ public class ArmControls extends CommandBase {
     //     }
     //   }
     // }
-    if (arm.isAtStowedLimit() && gamepad.getRawAxis(1) < 0) {
+    if (arm.isAtStowedLimit() && gamepad.getRightY()< 0.0) {
       arm.setSpeed(0);
-    } else if (Math.abs(gamepad.getRawAxis(1)) < 0.05) {
+    } else if (Math.abs(gamepad.getRightY()) < 0.05) {
       arm.holdPosition();
     } else if (arm.isAtHardStop()) {
       arm.setSpeed(0);
-    } else if (gamepad.getRawAxis(1) < 0) {
-      arm.setSpeed(gamepad.getRawAxis(1)/7);
+    } else if (gamepad.getRightY() < 0.0) {
+      arm.setSpeed(gamepad.getRightY()/7);
     } else {
-      arm.setSpeed(gamepad.getRawAxis(1)/4);
+      arm.setSpeed(gamepad.getRightY()/4);
     }
     SmartDashboard.putNumber("arm encoder pos", arm.getPos());
     SmartDashboard.putBoolean("arm stowed", arm.isAtStowedLimit());

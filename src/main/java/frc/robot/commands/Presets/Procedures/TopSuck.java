@@ -22,9 +22,9 @@ public class TopSuck extends SequentialCommandGroup {
   public TopSuck(Elevator e, Arm a, Intake i, Wrist W) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    //always set the wrist to false for everything 
     addCommands(
-        new SetArm(a,1),
-      Commands.parallel(new SetElevator(e,2),new SetArm(a,2), new SetWrist(W, true))
+      Commands.parallel(new SetElevator(e,1),new SetArm(a,2), new SetWrist(W, false))
     );
   }
 }

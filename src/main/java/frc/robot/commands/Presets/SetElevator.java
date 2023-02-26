@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Presets;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
@@ -12,16 +13,20 @@ import frc.robot.subsystems.Elevator;
 public class SetElevator extends CommandBase {
   Elevator elevator;
   int state;
+  Timer timer;
   /** Creates a new SetElevator. */
   public SetElevator(Elevator e, int state_g) {
     elevator = e;
     state = state_g;
+    timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -52,7 +57,12 @@ public class SetElevator extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(elevator.getState() == state){
+    // if(elevator.getState() == state){
+    //   return true;
+    // }
+    // return false;
+    if (timer.hasElapsed(2)) {
+      timer.stop();
       return true;
     }
     return false;

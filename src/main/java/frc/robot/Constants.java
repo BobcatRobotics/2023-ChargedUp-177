@@ -216,9 +216,11 @@ public final class Constants {
         public static final int armMotorPort = 10; 
 
         // TODO: Change!
-        public static final int pos0 = 0;
-        public static final int pos1 = 0;
-        public static final int pos2 = 0;
+        public static final int pos0 = 0; // done
+        public static final int pos1 = 16710; // done
+        public static final int pos2 = 25658; // done
+
+        public static final int bottomPickup = 43664;
 
         public static final double bottomLimit = 0.0;
         public static final double constrictedBottomLimit = 4096;
@@ -236,9 +238,9 @@ public final class Constants {
         public static final int topLimitPort = 1;
         public static final int bottomLimitPort = 0;
 
-        public static final int pos0 = 0;
-        public static final int pos1 = -100000;
-        public static final int pos2 = -200000;
+        public static final int pos0 = 0; // done
+        public static final int pos1 = -126256; // dpne
+        public static final int pos2 = -236710; // done
 
         public static final double topLimit = -207000;
 

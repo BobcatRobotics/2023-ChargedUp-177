@@ -32,8 +32,8 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.setSensorPhase(true);
     elevatorMotor.configNominalOutputForward(0, 20);
     elevatorMotor.configNominalOutputReverse(0, 20);
-    elevatorMotor.configPeakOutputForward(1, 20);
-    elevatorMotor.configPeakOutputReverse(-1, 20);
+    elevatorMotor.configPeakOutputForward(0.5, 20);
+    elevatorMotor.configPeakOutputReverse(-0.5, 20);
     elevatorMotor.configAllowableClosedloopError(0, 0, 20);
     elevatorMotor.config_kF(0, 0, 20);
     elevatorMotor.config_kP(0, 0.15, 20);
@@ -80,7 +80,7 @@ public class Elevator extends SubsystemBase {
       elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos0);
     } else if (state == 1) {
       elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos1);
-    } else {
+    } else if (state == 2) {
       elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos2);
     }
   }

@@ -29,8 +29,8 @@ public class Arm extends SubsystemBase {
         armMotor.setSensorPhase(true);
         armMotor.configNominalOutputForward(0, 20);
         armMotor.configNominalOutputReverse(0, 20);
-        armMotor.configPeakOutputForward(1, 20);
-        armMotor.configPeakOutputReverse(-1, 20);
+        armMotor.configPeakOutputForward(0.5, 20);
+        armMotor.configPeakOutputReverse(-0.5, 20);
         armMotor.configAllowableClosedloopError(0, 0, 20);
         armMotor.config_kF(0, 0, 20);
         armMotor.config_kP(0, 0.15, 20);
@@ -53,8 +53,10 @@ public class Arm extends SubsystemBase {
             armMotor.set(TalonFXControlMode.Position, ArmConstants.pos0);
         } else if (state == 1) {
             armMotor.set(TalonFXControlMode.Position, ArmConstants.pos1);
-        } else {
+        } else  if (state == 2) {
             armMotor.set(TalonFXControlMode.Position, ArmConstants.pos2);
+        } else if (state == 3) {
+            armMotor.set(TalonFXControlMode.Position, ArmConstants.bottomPickup);
         }
     }
 
@@ -89,10 +91,18 @@ public class Arm extends SubsystemBase {
     // }
     
     public boolean isAtHardStop() {
-        return armMotor.getStatorCurrent() >= 30.0;
+        return armMotor.getStatorCurrent() >= 35.0;
     }
 
     public void resetEncoder() {
         armMotor.setSelectedSensorPosition(0);
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        if (isAtStowedLimit()) {
+            resetEncoder();
+        }
     }
 }

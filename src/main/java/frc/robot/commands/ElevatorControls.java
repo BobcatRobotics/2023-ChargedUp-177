@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
@@ -14,10 +15,10 @@ import frc.robot.subsystems.Elevator;
 
 public class ElevatorControls extends CommandBase {
   private Elevator elevator;
-  private Joystick gamepad;
+  private CommandXboxController gamepad;
 
   /** Creates a new ElevatorControls. */
-  public ElevatorControls(Elevator e, Joystick gp) {
+  public ElevatorControls(Elevator e, CommandXboxController gp) {
     elevator = e;
     gamepad = gp;
 
@@ -67,14 +68,14 @@ public class ElevatorControls extends CommandBase {
     // -207000
     if (elevator.isAtHardStop()) {
       elevator.elevate(0);
-    } else if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0) {
+    } else if (elevator.getBottomLimits() && gamepad.getLeftY() > 0.0) {
       elevator.elevate(0);
-    } else if (elevator.isAtTopLimit() && gamepad.getRawAxis(3) < 0) {
+    } else if (elevator.isAtTopLimit() && gamepad.getLeftY() < 0.05) {
       elevator.elevate(0);
-    } else if (Math.abs(gamepad.getRawAxis(3)) < 0.05) {
+    } else if (Math.abs(gamepad.getLeftY()) < 0.05) {
       elevator.holdPosition();
     } else {
-      elevator.elevate(gamepad.getRawAxis(3)/2);
+      elevator.elevate(gamepad.getLeftY()/2);
     }
   }
 

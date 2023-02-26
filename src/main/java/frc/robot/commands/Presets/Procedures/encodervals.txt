@@ -1,0 +1,24 @@
+bottom encoder value for the elevator = 0
+stowed for arm = 0
+
+botom pickup  arm = 43664
+
+middle cone elevator = -126256
+middle cone pickup arm = 16710
+wrist down 
+
+arm high cone  = 25658
+elevator high cone = -236710
+wrist down
+
+arm max extention = 29762
+arm min extention = 16710
+wrist down
+
+middle cube elevator = -126256
+middle cube pickup arm = 16710
+wrist down 
+
+arm high cube  = 25658
+elevator high cube = -236710
+wrist down

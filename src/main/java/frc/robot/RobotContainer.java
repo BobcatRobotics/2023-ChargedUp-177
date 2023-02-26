@@ -15,8 +15,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.AlignToTarget;
 import frc.robot.commands.Autos.BalanceChargeStation;
@@ -49,7 +50,7 @@ public class RobotContainer {
     //private Constants.ButtonHashtable bh = new Constants.ButtonHashtable();
 
     /* Controllers */
-    private final Joystick driver = new Joystick(2);
+    private final CommandXboxController driver = new CommandXboxController(2);
     private final Joystick rotate = new Joystick(0);
     private final Joystick strafe = new Joystick(1);
 
@@ -61,7 +62,7 @@ public class RobotContainer {
     /* Driver Buttons */
 
 
-    private final JoystickButton resetToAbsolute = new JoystickButton(driver, 3);
+    private final Trigger xButton = driver.x();
     //private final JoystickButton alignRobot = new JoystickButton(driver, 2);
     //private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
     
@@ -69,15 +70,15 @@ public class RobotContainer {
     private final JoystickButton ruffy0 = new JoystickButton(rotate, 1);
     private final JoystickButton ruffy1 = new JoystickButton(strafe, 1);
 
-    private final JoystickButton alignRobot = new JoystickButton(driver, 1);
+   // private final JoystickButton alignRobot = new JoystickButton(driver, 1);
 
 
-    private final JoystickButton leftBumper = new JoystickButton(driver, 5); //left bumper
-    private final JoystickButton rightBumper = new JoystickButton(driver, 6);//right bumper
-    private final JoystickButton a = new JoystickButton(driver, 2);
-    private final JoystickButton b = new JoystickButton(driver, 3);
-    private final JoystickButton righttrigger = new JoystickButton(driver, 8);
-    private final JoystickButton lefttrigger = new JoystickButton(driver, 7);
+    private final Trigger leftBumper = driver.leftBumper(); //left bumper
+    private final Trigger rightBumper = driver.rightBumper();//right bumper
+    private final Trigger a = driver.a();
+    private final Trigger b = driver.b();
+    private final Trigger righttrigger = driver.rightTrigger();
+    private final Trigger lefttrigger = driver.leftTrigger();
     /* Subsystems */
 
 
@@ -185,8 +186,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
 
-        resetToAbsolute.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
-        alignRobot.whileTrue(align);
+        //resetToAbsolute.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
+        //alignRobot.whileTrue(align);
         //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         ruffy0.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         ruffy1.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
@@ -195,20 +196,23 @@ public class RobotContainer {
         righttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
         lefttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
 
-        if(driver.getPOV() == 0){
-            new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist);
-        }
-        else if(driver.getPOV() == 180){
-            new StartingConfig(m_Elevator, m_Arm);
-        }
-        else if(driver.getPOV() == 270){
-            new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist);
-        }
+        // if(driver.getPOV() == 0){
+        //     new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist);
+        // }
+        driver.povUp().onTrue(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist));
+        // if(driver.getPOV() == 180){
+        //     new StartingConfig(m_Elevator, m_Arm);
+        // }
+        driver.povDown().onTrue(new StartingConfig(m_Elevator, m_Arm));
+        // if(driver.getPOV() == 270){
+        //     new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist);
+        // }
+        driver.povLeft().onTrue(new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist));
 
         a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Intake, m_Wrist));
         b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist));
 
-        alignRobot.whileTrue(align);
+        //alignRobot.whileTrue(align);
     }
 
   

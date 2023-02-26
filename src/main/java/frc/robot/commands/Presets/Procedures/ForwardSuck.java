@@ -23,8 +23,7 @@ public class ForwardSuck extends SequentialCommandGroup {
   
   public ForwardSuck(Elevator e, Arm a, Intake i, Wrist w) {
     addCommands(
-      new SetArm(a,1),
-      Commands.parallel(new SetElevator(e,0),new SetArm(a,2), new SetWrist(w,false))
+      Commands.parallel(new SetElevator(e,0),new SetArm(a,3), new SetWrist(w,true))
     );
   }
 }
