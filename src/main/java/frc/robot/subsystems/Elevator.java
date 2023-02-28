@@ -2,12 +2,15 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
@@ -20,6 +23,7 @@ public class Elevator extends SubsystemBase {
 
   private DigitalInput topLimit;
   private DigitalInput bottomLimit;
+  
 
   private double holdPosValue;
 
@@ -43,6 +47,15 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.config_kD(0, 0, 20);
     elevatorMotor.setInverted(false); // used to be true but we flipped motor direction 2/25/23
     elevatorMotor.setNeutralMode(NeutralMode.Brake);
+    elevatorMotor.configNeutralDeadband(0.001, 20);
+    elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
+    elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 20);
+
+
+    // motion magic trapezoid configuration
+    //elevatorMotor.configAllowableClosedloopError()
+    elevatorMotor.configMotionCruiseVelocity(1000, 20); //needs to be tuned to robot
+    elevatorMotor.configMotionAcceleration(500, 20);
 
     holdPosValue = elevatorMotor.getSelectedSensorPosition();
   }
@@ -50,7 +63,12 @@ public class Elevator extends SubsystemBase {
   public void elevate(double speed) {
     elevatorMotor.set(ControlMode.PercentOutput, speed);
   }
-
+  public double getSpeed(){
+    return elevatorMotor.getSelectedSensorVelocity();
+  } 
+  public boolean getStopped(){
+    return getSpeed() == 0;
+  }
   public void holdPosition() {
     elevatorMotor.set(ControlMode.Position, holdPosValue);
   }
@@ -89,15 +107,15 @@ public class Elevator extends SubsystemBase {
 
   public void setState(int state) {
     if (state == 0) {
-      elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos0);
+      elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos0);
       holdPosValue = ElevatorConstants.pos0;
       holdPosition();
     } else if (state == 1) {
-      elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos1);
+      elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos1);
       holdPosValue = ElevatorConstants.pos1;
       holdPosition();
     } else if (state == 2) {
-      elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos2);
+      elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos2);
       holdPosValue = ElevatorConstants.pos2;
       holdPosition();
     }
@@ -113,8 +131,12 @@ public class Elevator extends SubsystemBase {
     return elevatorMotor.getSelectedSensorPosition();
   }
 
-  public boolean isAtHardStop() {
+  public boolean isAtCurrentLimit() {
     return elevatorMotor.getStatorCurrent() >= 35.0;
+  }
+
+  public void resetEncoderPosTop() {
+    elevatorMotor.setSelectedSensorPosition(-236710);
   }
 
   @Override

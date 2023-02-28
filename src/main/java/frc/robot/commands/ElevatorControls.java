@@ -67,20 +67,25 @@ public class ElevatorControls extends CommandBase {
     SmartDashboard.putBoolean("top limits", elevator.topLimitSwitch());
     if (elevator.getBottomLimits()) {
       elevator.resetEncoderPos();
+    } else if (elevator.topLimitSwitch()) {
+      elevator.resetEncoderPosTop();
     }
-    // -207000
-    if (elevator.isAtHardStop()) {
+
+    if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0.05) {
       elevator.elevate(0);
-    } else if(arm.getPos() <= Constants.ArmConstants.pos1-200) {
-      elevator.elevate(0);
-    } else if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0) {
-      elevator.elevate(0);
+      return;
     } else if (elevator.topLimitSwitch() && gamepad.getRawAxis(3) < 0.05) {
       elevator.elevate(0);
+      return;
+    }
+    // -207000
+    if (elevator.isAtCurrentLimit()) {
+      elevator.elevate(0);
+    } else if(arm.getPos() <= Constants.ArmConstants.minNonCollidingExtention) {
+      elevator.holdPosition();
     } else if (Math.abs(gamepad.getRawAxis(3)) < 0.05) {
       elevator.holdPosition();
-    } 
-    else {
+    } else {
       elevator.elevate(gamepad.getRawAxis(3)/2);
       elevator.setHoldPos();
     }
