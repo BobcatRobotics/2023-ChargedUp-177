@@ -7,6 +7,7 @@ package frc.robot.commands.Presets;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
 public class SetArm extends CommandBase {
@@ -14,10 +15,10 @@ public class SetArm extends CommandBase {
   Arm arm;
   int state;
   Timer timer;
+  int pos;
   public SetArm(Arm a, int state_g) {
     state = state_g;
     arm = a;
-    timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(a);
   }
@@ -25,7 +26,7 @@ public class SetArm extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.start();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,13 +57,23 @@ public class SetArm extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (state == 0) {
+      pos = Constants.ArmConstants.pos0;
+    } else if (state == 1) {
+      pos = Constants.ArmConstants.pos1;
+    } else if (state == 2) {
+      pos = Constants.ArmConstants.pos2;
+    } else if (state == 3) {
+      pos = Constants.ArmConstants.bottomPickup;
+    }
     // if(arm.getState() == state){
     //   return true;
     // }
     // return false;
-    if (timer.hasElapsed(1)) {
-      timer.stop();
-      timer.reset();
+    if (arm.getPos() >= pos && arm.getPos() <= pos+200) {
+
+      // SmartDashboard.putBoolean("elevator timer finished", timer.hasElapsed(5));
+
       return true;
     }
     return false;

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
@@ -10,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
@@ -40,6 +42,12 @@ public class Arm extends SubsystemBase {
         armMotor.config_kD(0, 0, 20);
         armMotor.setInverted(true);
         armMotor.setNeutralMode(NeutralMode.Brake);
+        armMotor.configNeutralDeadband(0.001, 20);
+        armMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
+        armMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 20);
+        armMotor.configMotionCruiseVelocity(30000, 20); //needs to be tuned to robot
+        armMotor.configMotionAcceleration(24000, 20);
+        armMotor.configAllowableClosedloopError(0, 200, 20);
 
         // holdPosValue = armMotor.getSelectedSensorPosition();
     }
@@ -58,16 +66,22 @@ public class Arm extends SubsystemBase {
 
     public void setState(int state) {
         if (state == 0) {
-            armMotor.set(TalonFXControlMode.Position, ArmConstants.pos0);
+            armMotor.set(ControlMode.MotionMagic, ArmConstants.pos0);
+            SmartDashboard.putString("arm error", "State: " + state + ", Error: " + getArmPIDError());
         } else if (state == 1) {
-            armMotor.set(TalonFXControlMode.Position, ArmConstants.pos1);
+            armMotor.set(ControlMode.MotionMagic, ArmConstants.pos1);
+            SmartDashboard.putString("arm error", "State: " + state + ", Error: " + getArmPIDError());
         } else  if (state == 2) {
-            armMotor.set(TalonFXControlMode.Position, ArmConstants.pos2);
+            armMotor.set(ControlMode.MotionMagic, ArmConstants.pos2);
+            SmartDashboard.putString("arm error", "State: " + state + ", Error: " + getArmPIDError());
         } else if (state == 3) {
-            armMotor.set(TalonFXControlMode.Position, ArmConstants.bottomPickup);
+            armMotor.set(ControlMode.MotionMagic, ArmConstants.bottomPickup);
+            SmartDashboard.putString("arm error", "State: " + state + ", Error: " + getArmPIDError());
         }
     }
-
+    public double getArmPIDError(){
+        return armMotor.getClosedLoopError();
+    }
     public boolean isAtStowedLimit() {
         return !armLimit.get();
     }
@@ -92,6 +106,10 @@ public class Arm extends SubsystemBase {
 
     public boolean isAtConstrictedBottomLimit() {
         return armMotor.getSelectedSensorPosition() <= Constants.ArmConstants.constrictedBottomLimit;
+    }
+
+    public boolean isAtSetpoint() {
+        return armMotor.isMotionProfileFinished();
     }
 
     // public double absoluteEncoderVal() {

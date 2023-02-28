@@ -220,7 +220,7 @@ public final class Constants {
         public static final int pos1 = 16710; // done
         public static final int pos2 = 25658; // done
         public static final int minNonCollidingExtention = pos1-400;
-        public static final int bottomPickup = 43664;
+        public static final int bottomPickup = 43664 - 300;
 
         public static final double bottomLimit = 0.0;
         public static final double constrictedBottomLimit = 4096;
@@ -242,7 +242,7 @@ public final class Constants {
         public static final int pos1 = -126256; // dpne
         public static final int pos2 = -236710; // done
 
-        public static final double topLimit = -207000;
+        public static final double topLimit = -236710;
 
         public static int elevatorState = 0;
     }

@@ -73,14 +73,12 @@ public class ArmControls extends CommandBase {
       arm.setSpeed(0);
     } else if (arm.isAtStowedLimit() && gamepad.getRawAxis(1) < 0.0) {
       arm.setSpeed(0);
-    } else if(arm.getPos() <= Constants.ArmConstants.minNonCollidingExtention && gamepad.getRawAxis(1) < 0 && elevator.getEncoderPos() > 750){
+    } else if(arm.getPos() <= Constants.ArmConstants.minNonCollidingExtention && gamepad.getRawAxis(1) < 0 && elevator.getEncoderPos() < -750){
       arm.setSpeed(0); 
-    }else if(arm.getPos() < Constants.ArmConstants.bottomPickup && gamepad.getRawAxis(1) > 0){
+    }else if(arm.getPos() >= Constants.ArmConstants.bottomPickup && gamepad.getRawAxis(1) > 0){
       arm.setSpeed(0);
-    } else if (gamepad.getRawAxis(1) < 0.0) {
-      arm.setSpeed(gamepad.getRawAxis(1)/7);
     } else {
-      arm.setSpeed(gamepad.getRawAxis(1)/4);
+      arm.setSpeed(gamepad.getRawAxis(1)/2);
     }
 
     //else if (elevator.getEncoderPos() >= Constants.ElevatorConstants.pos1 && arm.getPos() <= Constants.ArmConstants.pos1 && gamepad.getRawAxis(1) > 0){

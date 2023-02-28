@@ -50,6 +50,7 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.configNeutralDeadband(0.001, 20);
     elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
     elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 20);
+    elevatorMotor.configAllowableClosedloopError(0, 400, 20);
 
 
     // motion magic trapezoid configuration
@@ -77,12 +78,20 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.set(ControlMode.Position, pos);
   }
 
+  public double getPIDError(){
+    return elevatorMotor.getClosedLoopError();
+  }
+
   public void setHoldPos() {
     holdPosValue = elevatorMotor.getSelectedSensorPosition();
   }
 
   public void resetEncoderPos() {
     elevatorMotor.setSelectedSensorPosition(0);
+  }
+
+  public boolean isAtSetpoint() {
+    return elevatorMotor.isMotionProfileFinished();
   }
 
   // public boolean getTopLimits() {
@@ -110,14 +119,17 @@ public class Elevator extends SubsystemBase {
       elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos0);
       holdPosValue = ElevatorConstants.pos0;
       holdPosition();
+      SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     } else if (state == 1) {
       elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos1);
       holdPosValue = ElevatorConstants.pos1;
       holdPosition();
+      SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     } else if (state == 2) {
       elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos2);
       holdPosValue = ElevatorConstants.pos2;
       holdPosition();
+      SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     }
   }
 

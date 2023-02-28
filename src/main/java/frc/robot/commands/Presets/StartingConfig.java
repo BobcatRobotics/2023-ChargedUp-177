@@ -21,7 +21,7 @@ public class StartingConfig extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SequentialCommandGroup(
-        new SetElevator(e,0),    
+       new SetElevator(e,0),
         new SetArm(a,0),
         new SetWrist(w, true))
   

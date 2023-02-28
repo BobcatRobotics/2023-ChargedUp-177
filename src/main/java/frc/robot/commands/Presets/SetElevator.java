@@ -15,11 +15,11 @@ public class SetElevator extends CommandBase {
   Elevator elevator;
   int state;
   Timer timer;
+  int pos;
   /** Creates a new SetElevator. */
   public SetElevator(Elevator e, int state_g) {
     elevator = e;
     state = state_g;
-    timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(e);
     
@@ -28,7 +28,7 @@ public class SetElevator extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.start();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -65,9 +65,17 @@ public class SetElevator extends CommandBase {
     //   return true;
     // }
     // return false;
-    if (timer.hasElapsed(1)) {
-      timer.stop();
-      timer.reset();
+
+    if (state == 0) {
+      pos = Constants.ElevatorConstants.pos0;
+    } else if (state == 1) {
+      pos = Constants.ElevatorConstants.pos1;
+    } else if (state == 2) {
+      pos = Constants.ElevatorConstants.pos2;
+    }
+
+    if (elevator.getEncoderPos() <= pos && elevator.getEncoderPos() >= pos-400) {
+      SmartDashboard.putBoolean("setElevator finished", true);
       return true;
     }
     return false;
