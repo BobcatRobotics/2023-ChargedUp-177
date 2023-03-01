@@ -81,6 +81,7 @@ public class RobotContainer {
    private final JoystickButton b = new JoystickButton(driver, 3);
    private final JoystickButton righttrigger = new JoystickButton(driver, 8);
    private final JoystickButton lefttrigger = new JoystickButton(driver, 7);
+   private final JoystickButton back = new JoystickButton(driver, 9);
    private final POVButton DUp = new POVButton(driver, 0);
    private final POVButton DLeft = new POVButton(driver, 270);
    private final POVButton DDown = new POVButton(driver, 180);
@@ -201,6 +202,7 @@ public class RobotContainer {
         righttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
         rightBumper.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
         
+        
     //    lefttrigger.whileTrue(new InstantCommand(m_Intake::runIntakeOut));
     //     leftBumper.whileTrue(new InstantCommand(m_Intake::runIntakeIn));
 
@@ -219,6 +221,8 @@ public class RobotContainer {
 
         a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
         b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
+
+        back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
         //alignRobot.whileTrue(align);
     }
