@@ -34,6 +34,21 @@ public class SetElevator extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (state == 0) {
+      pos = Constants.ElevatorConstants.pos0;
+    } else if (state == 1) {
+      pos = Constants.ElevatorConstants.pos1;
+    } else if (state == 2) {
+      pos = Constants.ElevatorConstants.pos2;
+    }
+    
+    if (elevator.getBottomLimits() && state == 0) {
+      elevator.elevate(0);
+      return;
+    } else if (elevator.topLimitSwitch() && state == 3) {
+      elevator.elevate(0);
+      return;
+    }
 
     if(state == 0){
       elevator.setState(0);
@@ -51,11 +66,18 @@ public class SetElevator extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putBoolean("elevator interrupted", interrupted);
-    if (elevator.getBottomLimits() && state == 0){
+    SmartDashboard.putBoolean("setElevator ended", true);
+    if (elevator.getBottomLimits()){
       elevator.resetEncoderPos();
+      elevator.elevate(0);
+    // } else if (elevator.topLimitSwitch()) {
+    //   elevator.resetEncoderPosTop();
+    //   elevator.elevate(0);
+    } else {
+      elevator.elevate(0);
     }
-    elevator.holdPosition();
+    //elevator.setHoldPos();
+    //elevator.holdPosition();
   }
 
   // Returns true when the command should end.
@@ -66,15 +88,7 @@ public class SetElevator extends CommandBase {
     // }
     // return false;
 
-    if (state == 0) {
-      pos = Constants.ElevatorConstants.pos0;
-    } else if (state == 1) {
-      pos = Constants.ElevatorConstants.pos1;
-    } else if (state == 2) {
-      pos = Constants.ElevatorConstants.pos2;
-    }
-
-    if (elevator.getEncoderPos() <= pos && elevator.getEncoderPos() >= pos-400) {
+    if (elevator.getEncoderPos() <= pos+400 && elevator.getEncoderPos() >= pos) {
       SmartDashboard.putBoolean("setElevator finished", true);
       return true;
     }

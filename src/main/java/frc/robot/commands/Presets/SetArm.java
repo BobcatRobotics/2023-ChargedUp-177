@@ -32,6 +32,10 @@ public class SetArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (arm.isAtStowedLimit() && state == 0) {
+      arm.setSpeed(0);
+    }
+    
     if (state == 0){
       arm.setState(0);
     }
@@ -70,7 +74,7 @@ public class SetArm extends CommandBase {
     //   return true;
     // }
     // return false;
-    if (arm.getPos() >= pos && arm.getPos() <= pos+200) {
+    if (arm.getPos() >= pos-200 && arm.getPos() <= pos) {
 
       // SmartDashboard.putBoolean("elevator timer finished", timer.hasElapsed(5));
 

@@ -38,8 +38,8 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.setSensorPhase(true);
     elevatorMotor.configNominalOutputForward(0, 20);
     elevatorMotor.configNominalOutputReverse(0, 20);
-    elevatorMotor.configPeakOutputForward(0.5, 20);
-    elevatorMotor.configPeakOutputReverse(-0.5, 20);//TODO: needs to be changes for comp
+    elevatorMotor.configPeakOutputForward(0.75, 20);
+    elevatorMotor.configPeakOutputReverse(-0.75, 20);//TODO: needs to be changes for comp
     elevatorMotor.configAllowableClosedloopError(0, 0, 20);
     elevatorMotor.config_kF(0, 0, 20);
     elevatorMotor.config_kP(0, 0.25, 20);
@@ -55,8 +55,8 @@ public class Elevator extends SubsystemBase {
 
     // motion magic trapezoid configuration
     //elevatorMotor.configAllowableClosedloopError()
-    elevatorMotor.configMotionCruiseVelocity(1000, 20); //needs to be tuned to robot
-    elevatorMotor.configMotionAcceleration(500, 20);
+    elevatorMotor.configMotionCruiseVelocity(2000, 20); //needs to be tuned to robot
+    elevatorMotor.configMotionAcceleration(1000, 20);
 
     holdPosValue = elevatorMotor.getSelectedSensorPosition();
   }
@@ -103,11 +103,6 @@ public class Elevator extends SubsystemBase {
   }
   public double getEncoderPos() {
     return elevatorMotor.getSelectedSensorPosition();
-  }
-
-  // TODO: as you go up, elevator encoder values get more negative
-  public boolean isAtTopLimit() {
-    return elevatorMotor.getSelectedSensorPosition() <= Constants.ElevatorConstants.topLimit;
   }
 
   public boolean topLimitSwitch() {

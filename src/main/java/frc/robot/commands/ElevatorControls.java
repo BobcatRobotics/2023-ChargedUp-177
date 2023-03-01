@@ -31,7 +31,9 @@ public class ElevatorControls extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -67,9 +69,10 @@ public class ElevatorControls extends CommandBase {
     SmartDashboard.putBoolean("top limits", elevator.topLimitSwitch());
     if (elevator.getBottomLimits()) {
       elevator.resetEncoderPos();
-    } else if (elevator.topLimitSwitch()) {
-      elevator.resetEncoderPosTop();
     }
+    // } else if (elevator.topLimitSwitch()) {
+    //   elevator.resetEncoderPosTop();
+    // }
 
     if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0.05) {
       elevator.elevate(0);
@@ -77,7 +80,7 @@ public class ElevatorControls extends CommandBase {
     } else if (elevator.topLimitSwitch() && gamepad.getRawAxis(3) < 0.05) {
       elevator.elevate(0);
       return;
-    } else if (elevator.isAtTopLimit()){
+    } else if (elevator.topLimitSwitch()){
       elevator.elevate(0);
       return;
     }

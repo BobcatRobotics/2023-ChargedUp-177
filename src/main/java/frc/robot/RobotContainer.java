@@ -207,25 +207,27 @@ public class RobotContainer {
         // if(driver.getPOV() == 0){
         //     new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist);
         // }
-        DUp.onTrue(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist));
+        DUp.onTrue(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
         // if(driver.getPOV() == 180){
         //     new StartingConfig(m_Elevator, m_Arm);
         // }
-        DDown.onTrue(new StartingConfig(m_Elevator, m_Arm, m_Wrist));
+        DDown.onTrue(new StartingConfig(m_Elevator, m_Arm, m_Wrist).until(this::anythingPressed));
         // if(driver.getPOV() == 270){
         //     new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist);
         // }
-        DLeft.onTrue(new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist));
+        DLeft.onTrue(new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
 
-        a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Intake, m_Wrist));
-        b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist));
+        a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
+        b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
 
         //alignRobot.whileTrue(align);
     }
 
     public boolean anythingPressed() {
-        return false;
+        return Math.abs(driver.getRawAxis(1)) >= 0.1 || Math.abs(driver.getRawAxis(3)) >= 0.1; 
     }
+
+
 
   
     
