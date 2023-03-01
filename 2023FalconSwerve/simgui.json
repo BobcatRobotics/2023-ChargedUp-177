@@ -1,0 +1,15 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Field2d": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/Field2d": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  }
+}
