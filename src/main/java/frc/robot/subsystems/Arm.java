@@ -79,6 +79,10 @@ public class Arm extends SubsystemBase {
             SmartDashboard.putString("arm error", "State: " + state + ", Error: " + getArmPIDError());
         }
     }
+    public void setPos(int pos) {
+        armMotor.set(ControlMode.MotionMagic, pos);
+        SmartDashboard.putString("arm error", "State: " + pos + ", Error: " + getArmPIDError());
+    }
     public double getArmPIDError(){
         return armMotor.getClosedLoopError();
     }

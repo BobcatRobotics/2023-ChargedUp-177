@@ -4,8 +4,10 @@
 
 package frc.robot.commands.Presets;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
@@ -21,11 +23,12 @@ public class StartingConfig extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SequentialCommandGroup(
-         
-        new SetElevator(e,0),
-        new SetWrist(w, true),
+        new ParallelCommandGroup( 
+          new SetElevator(e,0),
+          new SetWrist(w, true),
+          new InstantCommand(() -> a.setPos(Constants.ArmConstants.minNonCollidingExtention))
+        ),
         new SetArm(a,0)
-        
         )
   
 
