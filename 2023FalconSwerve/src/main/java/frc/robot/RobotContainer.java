@@ -76,6 +76,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     HashMap<String, Command> eventMap = new HashMap<>();
+    //eventMap.put("wait", new WaitCommand(10));
 
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       m_robotDrive::getPoseMeters, 
