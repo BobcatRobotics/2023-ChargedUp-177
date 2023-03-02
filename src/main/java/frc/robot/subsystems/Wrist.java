@@ -38,6 +38,9 @@ public class Wrist extends SubsystemBase {
   public void wristSolenoidOFF(){
     solenoid.set(false);
   }
+  public boolean getWristSolenoid(){
+    return solenoid.get();
+  }
 
   // public void turnWrist(double speed){
   //   speed = MathUtils.throttlePercent(speed);

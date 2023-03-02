@@ -5,26 +5,36 @@
 package frc.robot.commands.Presets.Procedures;
 
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.SetArm;
 import frc.robot.commands.Presets.SetElevator;
 import frc.robot.commands.Presets.SetWrist;
+import frc.robot.commands.Presets.ZeroElevator;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Wrist;
 
-public class ScoreMid extends SequentialCommandGroup {
-    // elevator mid, arm out, wrist down, intake out
-    public ScoreMid(Elevator e, Arm a,Intake i, Wrist w) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+
+public class ForwardSuck extends SequentialCommandGroup {
+  // elevator down, arm up, wrist down
+  
+  public ForwardSuck(Elevator e, Arm a, Intake i, Wrist w) {
+    if(e.getEncoderPos() >= Constants.ElevatorConstants.pos1){
+      addCommands(
+        new ParallelCommandGroup(
+        new SetArm(a, 0),
+        new SetWrist(w, true)
+        ),
+        new SetElevator(e, 0)
+      );
+    }else{
     addCommands(
-      new SequentialCommandGroup(
-      new SetArm(a,1),
-      Commands.parallel(new SetElevator(e,1),new SetArm(a,1), new SetWrist(w, false))
-     )
+      Commands.parallel(new SetElevator(e,0),new SetArm(a,3), new SetWrist(w,true))
     );
+    }
   }
 }
