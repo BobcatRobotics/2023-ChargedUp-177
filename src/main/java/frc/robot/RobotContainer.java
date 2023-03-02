@@ -222,7 +222,7 @@ public class RobotContainer {
         a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
         b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
 
-        back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
+        //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
         //alignRobot.whileTrue(align);
     }

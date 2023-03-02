@@ -5,6 +5,7 @@
 package frc.robot.commands.Presets.Procedures;
 
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -26,8 +27,8 @@ public class ForwardSuck extends SequentialCommandGroup {
     if(e.getEncoderPos() >= Constants.ElevatorConstants.pos1){
       addCommands(
         new ParallelCommandGroup(
-        new SetArm(a, 0),
-        new SetWrist(w, true)
+          new InstantCommand(() -> a.setPos(Constants.ArmConstants.minNonCollidingExtention)),
+          new SetWrist(w, true)
         ),
         new SetElevator(e, 0)
       );

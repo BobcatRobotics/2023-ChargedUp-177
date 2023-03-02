@@ -20,6 +20,7 @@ public class RunIntake extends CommandBase {
   Joystick gp;
   int in = 5;
   int out = 7;
+  int back = 9;
   public RunIntake(Intake i, boolean runIn, double time){
     this.i = i;
     this.runIn = runIn;
@@ -44,7 +45,9 @@ public class RunIntake extends CommandBase {
       i.runIntakeIn();
     } else if(gp.getRawButton(out)){
       i.runIntakeOut();
-    }else{
+    }else if(gp.getRawButton(back))
+      i.runIntakeOutFull();
+    {
       i.stop();
     }
   }
@@ -61,6 +64,8 @@ public class RunIntake extends CommandBase {
     if(gp.getRawButton(in)){
       return false;
     }else if (gp.getRawButton(out)){
+      return false;
+    }else if(gp.getRawButton(back)){
       return false;
     }else{
       return true;
