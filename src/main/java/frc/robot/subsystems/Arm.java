@@ -90,10 +90,6 @@ public class Arm extends SubsystemBase {
         return !armLimit.get();
     }
 
-    public boolean isAtStowedLimit() {
-        return !armLimit.get();
-    }
-
     public int getState() {
         double pos = armMotor.getSelectedSensorPosition();
         if (pos <= 256) pos = 0;

@@ -229,8 +229,6 @@ public final class Constants {
 
         //public static final int armlimitport = 2;
 
-        public static final int stowedLimitSwitch = 2;
-
         public static int armState = 0;
     }
 
