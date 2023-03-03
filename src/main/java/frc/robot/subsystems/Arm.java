@@ -120,8 +120,8 @@ public class Arm extends SubsystemBase {
     //     return absoluteEncoder.getIntegratedSensorAbsolutePosition();
     // }
     
-    public boolean isAtHardStop() {
-        return armMotor.getStatorCurrent() >= 35.0;
+    public boolean isAtCurrentLimit() {
+        return armMotor.getStatorCurrent() >= 50.0;
     }
 
     public void resetEncoder() {

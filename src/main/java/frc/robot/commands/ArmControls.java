@@ -69,7 +69,7 @@ public class ArmControls extends CommandBase {
     //     }
     //   }
     // }
-    if (arm.isAtHardStop()) {
+    if (arm.isAtCurrentLimit()) {
       arm.setSpeed(0);
     } else if (arm.isAtStowedLimit() && gamepad.getRawAxis(1) < 0.0) {
       arm.setSpeed(0);

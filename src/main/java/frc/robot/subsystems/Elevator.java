@@ -38,8 +38,8 @@ public class Elevator extends SubsystemBase {
     elevatorMotor.setSensorPhase(true);
     elevatorMotor.configNominalOutputForward(0, 20);
     elevatorMotor.configNominalOutputReverse(0, 20);
-    elevatorMotor.configPeakOutputForward(0.9, 20);
-    elevatorMotor.configPeakOutputReverse(-0.9, 20);//TODO: needs to be changes for comp
+    elevatorMotor.configPeakOutputForward(1, 20);
+    elevatorMotor.configPeakOutputReverse(-1, 20);//TODO: needs to be changes for comp
     elevatorMotor.configAllowableClosedloopError(0, 0, 20);
     elevatorMotor.config_kF(0, 0, 20);
     elevatorMotor.config_kP(0, 0.25, 20);
@@ -139,7 +139,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean isAtCurrentLimit() {
-    return elevatorMotor.getStatorCurrent() >= 40.0;
+    return elevatorMotor.getStatorCurrent() >= 50.0;
   }
 
   public void resetEncoderPosTop() {
