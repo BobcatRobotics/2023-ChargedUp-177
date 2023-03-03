@@ -109,6 +109,10 @@ public class Elevator extends SubsystemBase {
     return !topLimit.get();
   }
 
+  public boolean topLimitSwitch() {
+    return !topLimit.get();
+  }
+
   public void setState(int state) {
     if (state == 0) {
       elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos0);

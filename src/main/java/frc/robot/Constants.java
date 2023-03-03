@@ -214,6 +214,7 @@ public final class Constants {
 
     public static final class ArmConstants {
         public static final int armMotorPort = 10; 
+        public static final int stowedLimitSwitch = 2;
 
         // TODO: Change!
         public static final int pos0 = 0; // done
