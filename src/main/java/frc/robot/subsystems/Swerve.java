@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
-import frc.robot.commands.Autos.DriveFollowPath;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -34,7 +33,6 @@ public class Swerve extends SubsystemBase {
 
     public double rot;
     public PhotonVision photonCam;
-    public static DriveFollowPath path1;
 
 
     public Swerve() {
@@ -165,16 +163,6 @@ public class Swerve extends SubsystemBase {
         mSwerveMods[1].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
         mSwerveMods[2].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
         mSwerveMods[3].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(45))), true);
-    }
-
-    // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
-    public static Command followTrajectoryCommand(PathPlannerTrajectory ppt, boolean resetOdometry) {
-        path1 = new DriveFollowPath(ppt, resetOdometry);
-        //path1.initialize();
-
-        FollowPathWithEvents command = new FollowPathWithEvents(path1, path1.getTraj().getMarkers(), Constants.AutoConstants.eventMap);
-        
-        return command;
     }
 
     

@@ -49,16 +49,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.3611718692631705,
-        "y": 4.5400123027734205
+        "x": 6.488866311065955,
+        "y": 4.613343927542556
       },
       "prevControl": {
-        "x": 5.8387855164335924,
-        "y": 5.005411053476136
+        "x": 6.180548771353953,
+        "y": 5.161463998141672
       },
       "nextControl": {
-        "x": 6.834700577106263,
-        "y": 4.118141272149574
+        "x": 6.797183850777957,
+        "y": 4.06522385694344
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -66,20 +66,22 @@
       "isLocked": false,
       "isStopPoint": true,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "chargeStation"
+        ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
-        "waitTime": 2.0
+        "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 5.658324776365193,
-        "y": 2.697413167338184
+        "x": 5.4953986831050585,
+        "y": 2.7177620167206156
       },
       "prevControl": {
-        "x": 6.190209062882581,
-        "y": 3.2103015864799502
+        "x": 5.872231231641951,
+        "y": 3.1402712378074327
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -88,10 +90,8 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "chargeStation"
-        ],
-        "executionBehavior": "sequential",
+        "names": [],
+        "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
