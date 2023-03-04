@@ -43,7 +43,7 @@ import frc.robot.commands.Presets.Procedures.TopSuck;
 import frc.robot.subsystems.*;
 
 import frc.robot.autos.PathPlannerTest;
-import frc.robot.autos.RedHighCone6PickupBalance;
+//import frc.robot.autos.RedHighCone6PickupBalance;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
@@ -117,7 +117,7 @@ public class RobotContainer {
 
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
-    private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
+    //private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
     private final PathPlannerTest pathPlannerTest = new PathPlannerTest();
     private static SwerveAutoBuilder swerveAutoBuilder;
 
@@ -245,12 +245,13 @@ public class RobotContainer {
   
     
     public static Command buildAuto(List<PathPlannerTrajectory> trajs) {
+        //s_Swerve.resetOdometry(trajs.get(0).getInitialHolonomicPose());
         swerveAutoBuilder = new SwerveAutoBuilder(
             s_Swerve::getPose,
             s_Swerve::resetOdometry,
             Constants.Swerve.swerveKinematics,
-            new PIDConstants(0.5, 0, 0),
-            new PIDConstants(0.5, 0, 0),
+            new PIDConstants(Constants.Swerve.driveKP, Constants.Swerve.driveKI, Constants.Swerve.driveKD),
+            new PIDConstants(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD),
             s_Swerve::setModuleStates,
             Constants.AutoConstants.eventMap,
             true,
@@ -272,6 +273,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
        // s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
-        return new MountAndBalance(s_Swerve); //autoChooser.getSelected();
+       // return new MountAndBalance(s_Swerve); //autoChooser.getSelected();
+       return autoChooser.getSelected();
     }
 }

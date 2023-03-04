@@ -21,7 +21,7 @@ public final class Constants {
     public static final int wristMotorID = 0;
     public static final int pHubID = 1;
     public static final int compressorID = 1;
-    public static final double stickDeadband = 0;
+    public static final double stickDeadband = 0.05;
     public static final int Jake = 194; //Jake M is 194 cm tall
 
     public static final class Swerve {
@@ -80,16 +80,16 @@ public final class Constants {
         public static final double angleKF = chosenModule.angleKF;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 2.0087; //TODO: This must be tuned to specific robot
+        public static final double driveKP = 0.45; //TODO: This must be tuned to specific robot
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;
 
         /* Drive Motor Characterization Values 
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-        public static final double driveKS = (0.24128 / 12); // TUNED
-        public static final double driveKV = (1.988 / 12);
-        public static final double driveKA = (1.0449 / 12);
+        public static final double driveKS = (0.1724 / 12); // TUNED
+        public static final double driveKV = (2.0434 / 12);
+        public static final double driveKA = (0.72651 / 12);
 
         /* Swerve Profiling Values */
         /** Meters per Second */
@@ -151,14 +151,14 @@ public final class Constants {
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 1;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+        public static final double kMaxSpeedMetersPerSecond = 4;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
+        public static final double kPXController = 2.0;
+        public static final double kPYController = 2.0;
+        public static final double kPThetaController = 3.0;
 
         public static HashMap<String, Command> eventMap = new HashMap<>();
     

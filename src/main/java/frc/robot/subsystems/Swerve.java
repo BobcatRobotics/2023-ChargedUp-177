@@ -179,9 +179,9 @@ public class Swerve extends SubsystemBase {
 
     
 
-    public void resetOdometryAutos() {
-        path1.initialize();
-        }
+    // public void resetOdometryAutos() {
+    //     path1.initialize();
+    // }
 
     /** @param break true for break, false for coast */
     public void setBrakeMode(boolean brake){
