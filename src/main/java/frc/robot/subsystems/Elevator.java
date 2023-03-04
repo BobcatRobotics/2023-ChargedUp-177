@@ -55,8 +55,8 @@ public class Elevator extends SubsystemBase {
 
     // motion magic trapezoid configuration
     //elevatorMotor.configAllowableClosedloopError()
-    elevatorMotor.configMotionCruiseVelocity(8000, 20); //needs to be tuned to robot
-    elevatorMotor.configMotionAcceleration(4000, 20);
+    elevatorMotor.configMotionCruiseVelocity(64000, 20); //needs to be tuned to robot
+    elevatorMotor.configMotionAcceleration(55000, 20);
 
     holdPosValue = elevatorMotor.getSelectedSensorPosition();
   }
@@ -139,7 +139,8 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean isAtCurrentLimit() {
-    return elevatorMotor.getStatorCurrent() >= 50.0;
+    return elevatorMotor.getStatorCurrent() >= 80.0;
+    //return false;
   }
 
   public void resetEncoderPosTop() {

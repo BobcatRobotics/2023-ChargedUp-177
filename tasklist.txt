@@ -1,0 +1,8 @@
+1. Manually merge path planner code
+2. Test presets and ramp up motionmagic on elevator & basically full functional
+3. Characterize drivetrain
+4. Test paths with using a wait command at each spot
+5. Add in presets to commands at each point
+6. Run intake for time
+7. Change intake for time to intake till current limit if possible
+8. aligning using limelight

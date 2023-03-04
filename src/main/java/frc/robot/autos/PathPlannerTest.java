@@ -17,10 +17,7 @@ public class PathPlannerTest extends SequentialCommandGroup {
         List<PathPlannerTrajectory> pptList = PathPlanner.loadPathGroup("New Path", 1, 1);
         
         addCommands(
-            Swerve.followTrajectoryCommand(pptList.get(0), true),
-            new SetToX(RobotContainer.s_Swerve),
-            new WaitCommand(2),
-            Swerve.followTrajectoryCommand(pptList.get(1), false)
+            RobotContainer.buildAuto(pptList)
         );
     }
 }

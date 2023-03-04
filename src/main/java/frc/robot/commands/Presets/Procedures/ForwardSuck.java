@@ -24,10 +24,10 @@ public class ForwardSuck extends SequentialCommandGroup {
   // elevator down, arm up, wrist down
   
   public ForwardSuck(Elevator e, Arm a, Intake i, Wrist w) {
-    if(e.getEncoderPos() >= Constants.ElevatorConstants.pos1){
+    if(e.getEncoderPos() <= Constants.ElevatorConstants.pos1){
       addCommands(
         new ParallelCommandGroup(
-          new InstantCommand(() -> a.setPos(Constants.ArmConstants.minNonCollidingExtention)),
+          new InstantCommand(() -> a.setPos(Constants.ArmConstants.minNonCollidingExtention + 200)),
           new SetWrist(w, true)
         ),
         new SetElevator(e, 0)

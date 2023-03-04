@@ -67,6 +67,8 @@ public class Robot extends TimedRobot {
     }
     
     SmartDashboard.putString("Deployed code:", branch + " " + commit);
+
+    m_robotContainer.setUpAutos();
   }
 
   /**

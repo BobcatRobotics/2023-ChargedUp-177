@@ -2,6 +2,12 @@ package frc.robot;
 
 
 
+import java.util.List;
+
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -113,9 +119,19 @@ public class RobotContainer {
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
     private final PathPlannerTest pathPlannerTest = new PathPlannerTest();
+    private static SwerveAutoBuilder swerveAutoBuilder;
 
     /* SendableChooser */
     SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<>();
+
+    public void setUpAutos() {
+        // Sendable Chooser Setup
+        //autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
+        autoChooser.setDefaultOption("PathPlanner Test", pathPlannerTest);
+        //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
+        SmartDashboard.putData(autoChooser);
+        //Constants.AutoConstants.eventMap.put("chargeStation", align);
+    }
 
     // returns the angle of the joystick in degrees
     public double getJoystickAngle(){
@@ -159,13 +175,6 @@ public class RobotContainer {
                 () -> false //() -> robotCentric.getAsBoolean() //always field centric
             )
         );
-
-        // Sendable Chooser Setup
-        //autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
-        autoChooser.setDefaultOption("PathPlanner Test w/ X-Stance", pathPlannerTest);
-        //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
-        SmartDashboard.putData(autoChooser);
-        Constants.AutoConstants.eventMap.put("chargeStation", align);
 
         m_Arm.setDefaultCommand(armControls);
         m_Elevator.setDefaultCommand(elevatorControls);
@@ -235,8 +244,21 @@ public class RobotContainer {
 
   
     
-    // for presets
-    // different for cones and cubes?
+    public static Command buildAuto(List<PathPlannerTrajectory> trajs) {
+        swerveAutoBuilder = new SwerveAutoBuilder(
+            s_Swerve::getPose,
+            s_Swerve::resetOdometry,
+            Constants.Swerve.swerveKinematics,
+            new PIDConstants(0.5, 0, 0),
+            new PIDConstants(0.5, 0, 0),
+            s_Swerve::setModuleStates,
+            Constants.AutoConstants.eventMap,
+            true,
+            s_Swerve
+        );
+
+        return swerveAutoBuilder.fullAuto(trajs);
+    }
     
 
 

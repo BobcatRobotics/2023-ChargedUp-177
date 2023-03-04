@@ -45,9 +45,9 @@ public class RunIntake extends CommandBase {
       i.runIntakeIn();
     } else if(gp.getRawButton(out)){
       i.runIntakeOut();
-    }else if(gp.getRawButton(back))
+    }else if(gp.getRawButton(back)) {
       i.runIntakeOutFull();
-    {
+    } else {
       i.stop();
     }
   }
@@ -68,7 +68,8 @@ public class RunIntake extends CommandBase {
     }else if(gp.getRawButton(back)){
       return false;
     }else{
-      return true;
+      //return true;
+      return false;
     }
   }
 }
