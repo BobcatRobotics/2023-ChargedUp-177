@@ -24,16 +24,16 @@ public class Intake extends SubsystemBase {
   }
   
   public void runIntakeIn(){
-    if (isAtHardStop()) {
-      return;
-    }
+    
     motor.set(ControlMode.PercentOutput, -0.9);
   }
   public void runIntakeOut(){
-    if (isAtHardStop()) { 
-      return;
-    }
-    motor.set(ControlMode.PercentOutput, 0.6);
+    
+    motor.set(ControlMode.PercentOutput, 0.4);
+  } 
+  public void runIntakeOutFull(){
+    
+    motor.set(ControlMode.PercentOutput, 1);
   }
 
   public boolean isAtHardStop() {

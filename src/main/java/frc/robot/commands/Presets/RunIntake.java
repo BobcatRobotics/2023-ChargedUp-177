@@ -7,6 +7,7 @@ package frc.robot.commands.Presets;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -18,7 +19,8 @@ public class RunIntake extends CommandBase {
   double time;
   Joystick gp;
   int in = 5;
-  int out = 6;
+  int out = 7;
+  int back = 9;
   public RunIntake(Intake i, boolean runIn, double time){
     this.i = i;
     this.runIn = runIn;
@@ -39,17 +41,16 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   if(gp.getRawButton(in)){
+    if(gp.getRawButton(in)){
       i.runIntakeIn();
     } else if(gp.getRawButton(out)){
       i.runIntakeOut();
-    }else{
+    }else if(gp.getRawButton(back))
+      i.runIntakeOutFull();
+    {
       i.stop();
     }
-    }
-  
-
-  
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -63,6 +64,8 @@ public class RunIntake extends CommandBase {
     if(gp.getRawButton(in)){
       return false;
     }else if (gp.getRawButton(out)){
+      return false;
+    }else if(gp.getRawButton(back)){
       return false;
     }else{
       return true;

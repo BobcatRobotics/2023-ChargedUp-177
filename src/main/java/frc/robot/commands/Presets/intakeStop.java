@@ -5,22 +5,15 @@
 package frc.robot.commands.Presets;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Intake;
 
-public class RetractArm extends CommandBase {
-  //TODO: Write this command
-  
-  // if the elevator is at the bottom, retract the arm
-  // otherwise, do nothing
-  Arm a;
-  Elevator e ;
-
-
-  
-   public RetractArm(Elevator e, Arm a) {
-   this.e = e;
-   this.a = a; 
+public class intakeStop extends CommandBase {
+  /** Creates a new intakeStop. */
+  Intake i;
+  public intakeStop(Intake i) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.i = i;
+    addRequirements(i);
   }
 
   // Called when the command is initially scheduled.
@@ -30,21 +23,16 @@ public class RetractArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(e.getState() == 0 && a.getState() != 0){
-      a.setState(0);
-    }
-
+    i.stop();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    a.resetEncoder();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return a.isAtBottomLimit();
+    return false;
   }
 }

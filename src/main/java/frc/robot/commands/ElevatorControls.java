@@ -7,19 +7,23 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 
 public class ElevatorControls extends CommandBase {
   private Elevator elevator;
   private Joystick gamepad;
+  private Arm arm;
 
   /** Creates a new ElevatorControls. */
-  public ElevatorControls(Elevator e, Joystick gp) {
+  public ElevatorControls(Elevator e, Joystick gp, Arm a) {
     elevator = e;
     gamepad = gp;
+    arm = a;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator);
@@ -27,7 +31,9 @@ public class ElevatorControls extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -61,18 +67,36 @@ public class ElevatorControls extends CommandBase {
     SmartDashboard.putBoolean("bottom limits", elevator.getBottomLimits());
     SmartDashboard.putBoolean("top limits", elevator.topLimitSwitch());
     SmartDashboard.putNumber("elevator encoder", elevator.getEncoder());
+    SmartDashboard.putBoolean("top limits", elevator.topLimitSwitch());
     if (elevator.getBottomLimits()) {
       elevator.resetEncoderPos();
     }
-    // -207000
-    if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0) {
+    // } else if (elevator.topLimitSwitch()) {
+    //   elevator.resetEncoderPosTop();
+    // }
+
+    if (elevator.getBottomLimits() && gamepad.getRawAxis(3) > 0.05) {
       elevator.elevate(0);
-    } else if (elevator.topLimitSwitch() && gamepad.getRawAxis(3) < 0) {
+      return;
+    } else if (elevator.topLimitSwitch() && gamepad.getRawAxis(3) < 0.05) {
+      elevator.elevate(0);
+      return;
+    } else if (elevator.topLimitSwitch()){
+      elevator.elevate(0);
+      return;
+    }
+    // -207000
+    if (elevator.isAtCurrentLimit()) {
+      elevator.elevate(0);
+    } else if(arm.getPos() <= Constants.ArmConstants.minNonCollidingExtention) {
+      //elevator.holdPosition();
       elevator.elevate(0);
     } else if (Math.abs(gamepad.getRawAxis(3)) < 0.05) {
-      elevator.holdPosition();
+      //elevator.holdPosition();
+      elevator.elevate(0);
     } else {
-      elevator.elevate(gamepad.getRawAxis(3)/2);
+      elevator.elevate(gamepad.getRawAxis(3));
+      elevator.setHoldPos();
     }
   }
 

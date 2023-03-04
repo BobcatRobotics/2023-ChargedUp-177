@@ -15,15 +15,25 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.AlignToTarget;
 import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.commands.Autos.MountAndBalance;
 import frc.robot.commands.Presets.RetractArm;
 import frc.robot.commands.Presets.RunIntake;
+import frc.robot.commands.Presets.SetArm;
+import frc.robot.commands.Presets.SetElevator;
+import frc.robot.commands.Presets.StartingConfig;
 import frc.robot.commands.Presets.ZeroElevator;
+import frc.robot.commands.Presets.intakeStop;
+import frc.robot.commands.Presets.Procedures.ForwardSuck;
+import frc.robot.commands.Presets.Procedures.ScoreHigh;
+import frc.robot.commands.Presets.Procedures.ScoreMid;
+import frc.robot.commands.Presets.Procedures.TopSuck;
 import frc.robot.subsystems.*;
 
 import frc.robot.autos.PathPlannerTest;
@@ -54,7 +64,7 @@ public class RobotContainer {
     /* Driver Buttons */
 
 
-    private final JoystickButton resetToAbsolute = new JoystickButton(driver, 3);
+    private final JoystickButton xButton = new JoystickButton(driver, 5);
     //private final JoystickButton alignRobot = new JoystickButton(driver, 2);
     //private final JoystickButton zeroGyro = new JoystickButton(driver, 4);
     
@@ -62,13 +72,19 @@ public class RobotContainer {
     private final JoystickButton ruffy0 = new JoystickButton(rotate, 1);
     private final JoystickButton ruffy1 = new JoystickButton(strafe, 1);
 
-    private final JoystickButton alignRobot = new JoystickButton(driver, 1);
+   // private final JoystickButton alignRobot = new JoystickButton(driver, 1);
 
 
-    private final JoystickButton leftBumper = new JoystickButton(driver, 5); //left bumper
-    private final JoystickButton rightBumper = new JoystickButton(driver, 6);//right bumper
-    private final JoystickButton a = new JoystickButton(driver, 2);
-    private final JoystickButton b = new JoystickButton(driver, 3);
+   private final JoystickButton leftBumper = new JoystickButton(driver, 5); //left bumper
+   private final JoystickButton rightBumper = new JoystickButton(driver, 6);//right bumper
+   private final JoystickButton a = new JoystickButton(driver, 2);
+   private final JoystickButton b = new JoystickButton(driver, 3);
+   private final JoystickButton righttrigger = new JoystickButton(driver, 8);
+   private final JoystickButton lefttrigger = new JoystickButton(driver, 7);
+   private final JoystickButton back = new JoystickButton(driver, 9);
+   private final POVButton DUp = new POVButton(driver, 0);
+   private final POVButton DLeft = new POVButton(driver, 270);
+   private final POVButton DDown = new POVButton(driver, 180);
     /* Subsystems */
 
 
@@ -81,8 +97,18 @@ public class RobotContainer {
     private final Wrist m_Wrist = new Wrist();
     
     /* Commands */
-    private final Command elevatorControls = new ElevatorControls(m_Elevator, driver);
-    private final Command armControls = new ArmControls(m_Arm, driver);
+    private final Command elevatorControls = new ElevatorControls(m_Elevator, driver, m_Arm);
+    private final Command armControls = new ArmControls(m_Arm, driver, m_Elevator);
+    private final Command setarm0 = new SetArm(m_Arm,0);
+    private final Command setarm1 = new SetArm(m_Arm,1);
+    private final Command setarm2 = new SetArm(m_Arm,2);
+    private final Command setelevator0 = new SetElevator(m_Elevator,0);
+    private final Command setelevator2 = new SetElevator(m_Elevator,2);
+    
+    
+    
+
+
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
@@ -135,8 +161,8 @@ public class RobotContainer {
         );
 
         // Sendable Chooser Setup
-        autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
-        autoChooser.addOption("PathPlanner Test w/ X-Stance", pathPlannerTest);
+        //autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
+        autoChooser.setDefaultOption("PathPlanner Test w/ X-Stance", pathPlannerTest);
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         SmartDashboard.putData(autoChooser);
         Constants.AutoConstants.eventMap.put("chargeStation", align);
@@ -166,18 +192,46 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
 
-        resetToAbsolute.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
-        alignRobot.whileTrue(align);
+        //resetToAbsolute.onTrue(new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()));
+        //alignRobot.whileTrue(align);
         //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         ruffy0.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         ruffy1.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
         
-        a.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
-        b.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
+        righttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
+        rightBumper.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
+        
+        
+    //    lefttrigger.whileTrue(new InstantCommand(m_Intake::runIntakeOut));
+    //     leftBumper.whileTrue(new InstantCommand(m_Intake::runIntakeIn));
 
-        alignRobot.whileTrue(align);
+        // if(driver.getPOV() == 0){
+        //     new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist);
+        // }
+        DUp.onTrue(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
+        // if(driver.getPOV() == 180){
+        //     new StartingConfig(m_Elevator, m_Arm);
+        // }
+        DDown.onTrue(new StartingConfig(m_Elevator, m_Arm, m_Wrist).until(this::anythingPressed));
+        // if(driver.getPOV() == 270){
+        //     new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist);
+        // }
+        DLeft.onTrue(new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
+
+        a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
+        b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
+
+        //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
+
+        //alignRobot.whileTrue(align);
     }
+
+    public boolean anythingPressed() {
+        return Math.abs(driver.getRawAxis(1)) >= 0.1 || Math.abs(driver.getRawAxis(3)) >= 0.1; 
+    }
+
+
 
   
     
