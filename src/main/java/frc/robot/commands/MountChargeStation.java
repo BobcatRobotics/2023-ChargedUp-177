@@ -27,17 +27,25 @@ public class MountChargeStation extends CommandBase {
     swerve = drivetrain;
     addRequirements(drivetrain);
     this.isRed = isRed;
-     stage1Threshold = 10;
-     stage2Threshold = 16;
-     stage = 1;
+    stage1Threshold = 10;
+    //stage2Threshold = 16; - akash says max tilt is 15 degrees
+    stage2Threshold = 14;
+    stage = 1;
     finished = false;
-    xSpeed = -1.75;
+    // xSpeed = -1.75; - tread worn out currently
+    xSpeed = -2.25;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    stage1Threshold = 10;
+    //stage2Threshold = 16; - akash says max tilt is 15 degrees
+    stage2Threshold = 14;
+    stage = 1;
     finished = false;
+    // xSpeed = -1.75; - tread worn out currently
+    xSpeed = -2.25;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -4,6 +4,8 @@ package frc.robot;
 
 import java.util.List;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
@@ -45,8 +47,6 @@ import frc.robot.commands.Presets.Procedures.ScoreHigh;
 import frc.robot.commands.Presets.Procedures.ScoreMid;
 import frc.robot.commands.Presets.Procedures.TopSuck;
 import frc.robot.subsystems.*;
-import frc.robot.commands.IntakeOut;
-
 import frc.robot.autos.PathPlannerTest;
 //import frc.robot.autos.RedHighCone6PickupBalance;
 import frc.robot.subsystems.Limelight;
@@ -129,18 +129,21 @@ public class RobotContainer {
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     //private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
-    private PathPlannerTest pathPlannerTest;
+    //private PathPlannerTest pathPlannerTest;
     private static SwerveAutoBuilder swerveAutoBuilder;
 
     /* SendableChooser */
-    SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<>();
+    SendableChooser<List<PathPlannerTrajectory>> autoChooser = new SendableChooser<>();
 
     public void setUpAutos() {
         // Sendable Chooser Setup
         //autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
         setUpEventMap();
-        pathPlannerTest = new PathPlannerTest();
-        autoChooser.setDefaultOption("PathPlanner Test", pathPlannerTest);
+        //pathPlannerTest = new PathPlannerTest();
+        autoChooser.setDefaultOption("Score1LeftBalance", PathPlanner.loadPathGroup("Score1LeftBalance", new PathConstraints(4, 3)));
+        autoChooser.addOption("LeftBalance", PathPlanner.loadPathGroup("LeftBalance", new PathConstraints(4, 3)));
+        autoChooser.addOption("RightBalance", PathPlanner.loadPathGroup("RightBalance", new PathConstraints(4, 3)));
+        autoChooser.addOption("CenterBalance", PathPlanner.loadPathGroup("CenterBalance", new PathConstraints(4, 3)));
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
@@ -155,6 +158,7 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("startingConfig", new StartingConfig(m_Elevator, m_Arm, m_Wrist));
         Constants.AutoConstants.eventMap.put("flickWrist", new InstantCommand(m_Wrist::wristSolenoidON));
         Constants.AutoConstants.eventMap.put("intakeOut", new IntakeOut(m_Intake));//new ParallelRaceGroup(new IntakeOut(), new WaitCommand(5)));
+        Constants.AutoConstants.eventMap.put("driveBack", new DriveBack(s_Swerve)); // TODO: Actually is driving forward, my bad
     }
 
     public void printHashMap() {
@@ -311,6 +315,6 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
        // s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
        // return new MountAndBalance(s_Swerve); //autoChooser.getSelected();
-       return autoChooser.getSelected();
+       return buildAuto(autoChooser.getSelected());
     }
 }
