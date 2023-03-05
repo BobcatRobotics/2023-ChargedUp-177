@@ -16,7 +16,7 @@ import frc.robot.subsystems.Swerve;
 
 public class PathPlannerTest extends SequentialCommandGroup {
     public PathPlannerTest() {
-        List<PathPlannerTrajectory> pptList = PathPlanner.loadPathGroup("NewPath", new PathConstraints(4, 3));
+        List<PathPlannerTrajectory> pptList = PathPlanner.loadPathGroup("Score1LeftBalance", new PathConstraints(4, 3));
         
         addCommands(
             RobotContainer.buildAuto(pptList)

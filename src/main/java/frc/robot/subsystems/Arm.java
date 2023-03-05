@@ -55,6 +55,12 @@ public class Arm extends SubsystemBase {
     public void setSpeed(double speed) {
         armMotor.set(ControlMode.PercentOutput, speed);
     }
+    public void runArmOutSlow() {
+        armMotor.set(ControlMode.PercentOutput, 0.2);
+    }
+    public void stop() {
+        armMotor.set(0);
+    }
 
     // public void holdPosition() {
     //     armMotor.set(ControlMode.Position, holdPosValue);

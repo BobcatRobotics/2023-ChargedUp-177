@@ -156,8 +156,8 @@ public final class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI*0.9;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI*0.9;
     
-        public static final double kPXController = 2.3;
-        public static final double kPYController = 2.3;
+        public static final double kPXController = 2.0;
+        public static final double kPYController = 2.0;
         public static final double kPThetaController = 3.3;
 
         public static HashMap<String, Command> eventMap = new HashMap<>();
@@ -168,7 +168,7 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
     public class BalancingConstants{
-        public static final double kP = 0.3;//TODO: tune
+        public static final double kP = 0.25;//TODO: tune
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kToleranceDegrees = 2.5;//acceptable absolute error in degrees

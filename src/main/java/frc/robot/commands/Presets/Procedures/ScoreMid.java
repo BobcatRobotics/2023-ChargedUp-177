@@ -17,7 +17,7 @@ import frc.robot.subsystems.Wrist;
 
 public class ScoreMid extends SequentialCommandGroup {
     // elevator mid, arm out, wrist down, intake out
-    public ScoreMid(Elevator e, Arm a,Intake i, Wrist w) {
+    public ScoreMid(Elevator e, Arm a, Wrist w) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

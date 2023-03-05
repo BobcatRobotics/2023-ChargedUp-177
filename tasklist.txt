@@ -6,3 +6,21 @@
 6. Run intake for time
 7. Change intake for time to intake till current limit if possible
 8. aligning using limelight
+
+zero
+- arm out a little & actuate wrist in parallel
+- run in until limit switch or 3 seconds, then zero if not limit switch pressed
+score
+- align
+- go to high preset
+- scooch forward
+- outtake the intake
+- backup a little
+- stowed preset
+pick up piece
+- intake down
+- run intake in
+- drive forward (deadreackon, add current spike if time)
+- keep running in slightly the whole time
+- intake up
+balance

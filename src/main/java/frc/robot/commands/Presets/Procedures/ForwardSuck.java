@@ -23,7 +23,7 @@ import frc.robot.subsystems.Wrist;
 public class ForwardSuck extends SequentialCommandGroup {
   // elevator down, arm up, wrist down
   
-  public ForwardSuck(Elevator e, Arm a, Intake i, Wrist w) {
+  public ForwardSuck(Elevator e, Arm a, Wrist w) {
     if(e.getEncoderPos() <= Constants.ElevatorConstants.pos1){
       addCommands(
         new ParallelCommandGroup(

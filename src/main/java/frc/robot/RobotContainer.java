@@ -15,8 +15,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.AlignToTarget;
+import frc.robot.commands.Autos.AlignToTargetAutos;
 import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.commands.Autos.MountAndBalance;
 import frc.robot.commands.Presets.RetractArm;
@@ -41,6 +44,7 @@ import frc.robot.commands.Presets.Procedures.ScoreHigh;
 import frc.robot.commands.Presets.Procedures.ScoreMid;
 import frc.robot.commands.Presets.Procedures.TopSuck;
 import frc.robot.subsystems.*;
+import frc.robot.commands.IntakeOut;
 
 import frc.robot.autos.PathPlannerTest;
 //import frc.robot.autos.RedHighCone6PickupBalance;
@@ -57,6 +61,7 @@ public class RobotContainer {
     //for the xbox controller buttons
     //private Constants.ButtonHashtable bh = new Constants.ButtonHashtable();
 
+    
     /* Controllers */
     private final Joystick driver = new Joystick(2);
     private final Joystick rotate = new Joystick(0);
@@ -88,6 +93,7 @@ public class RobotContainer {
    private final JoystickButton righttrigger = new JoystickButton(driver, 8);
    private final JoystickButton lefttrigger = new JoystickButton(driver, 7);
    private final JoystickButton back = new JoystickButton(driver, 9);
+   private final JoystickButton start = new JoystickButton(driver, 10);
    private final POVButton DUp = new POVButton(driver, 0);
    private final POVButton DLeft = new POVButton(driver, 270);
    private final POVButton DDown = new POVButton(driver, 180);
@@ -110,6 +116,7 @@ public class RobotContainer {
     private final Command setarm2 = new SetArm(m_Arm,2);
     private final Command setelevator0 = new SetElevator(m_Elevator,0);
     private final Command setelevator2 = new SetElevator(m_Elevator,2);
+    private final SequentialCommandGroup chargestation = new MountAndBalance(s_Swerve);
     
     
     
@@ -118,7 +125,7 @@ public class RobotContainer {
     //private final Command align = new AlignToTarget(s_Swerve, m_Limelight).withInterruptBehavior(InterruptionBehavior.kCancelIncoming).repeatedly();
     private final Command align = new AlignToTarget(s_Swerve, m_Limelight);
     //private final RedHighCone6PickupBalance redHighCone6PickupBalance = new RedHighCone6PickupBalance(s_Swerve, m_Limelight);
-    private final PathPlannerTest pathPlannerTest = new PathPlannerTest();
+    private PathPlannerTest pathPlannerTest;
     private static SwerveAutoBuilder swerveAutoBuilder;
 
     /* SendableChooser */
@@ -127,11 +134,30 @@ public class RobotContainer {
     public void setUpAutos() {
         // Sendable Chooser Setup
         //autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
+        setUpEventMap();
+        pathPlannerTest = new PathPlannerTest();
         autoChooser.setDefaultOption("PathPlanner Test", pathPlannerTest);
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
+        //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
-        //Constants.AutoConstants.eventMap.put("chargeStation", align);
     }
+
+    public void setUpEventMap() {
+        Constants.AutoConstants.eventMap.clear();
+        Constants.AutoConstants.eventMap.put("chargeStation", new MountAndBalance(s_Swerve));
+        Constants.AutoConstants.eventMap.put("align", new AlignToTargetAutos(s_Swerve, m_Limelight));
+        Constants.AutoConstants.eventMap.put("highPreset", new ScoreMid(m_Elevator, m_Arm, m_Wrist));
+        Constants.AutoConstants.eventMap.put("intakeGround", new ForwardSuck(m_Elevator, m_Arm, m_Wrist));
+        Constants.AutoConstants.eventMap.put("startingConfig", new StartingConfig(m_Elevator, m_Arm, m_Wrist));
+        Constants.AutoConstants.eventMap.put("flickWrist", new InstantCommand(m_Wrist::wristSolenoidON));
+        Constants.AutoConstants.eventMap.put("intakeOut", new IntakeOut(m_Intake));//new ParallelRaceGroup(new IntakeOut(), new WaitCommand(5)));
+    }
+
+    public void printHashMap() {
+        SmartDashboard.putString("eventMap", Constants.AutoConstants.eventMap.toString());
+    }
+
+
 
     // returns the angle of the joystick in degrees
     public double getJoystickAngle(){
@@ -160,10 +186,11 @@ public class RobotContainer {
          * command to run just during teleop, schedule it in the scheduleDefaultTeleop method and cancel
          * it in the cancelDefaultTeleop method.
          */
-
         // Configure the button bindings
+        setUpEventMap();
         configureButtonBindings();
     }
+
 
     public void scheduleDefaultTeleop() {
         s_Swerve.setDefaultCommand(
@@ -190,6 +217,7 @@ public class RobotContainer {
         s_Swerve.getDefaultCommand().cancel();
         m_Arm.getDefaultCommand().cancel();
         m_Elevator.getDefaultCommand().cancel();
+        m_Intake.getDefaultCommand().cancel();
     }
 
     /**
@@ -226,14 +254,15 @@ public class RobotContainer {
         // if(driver.getPOV() == 270){
         //     new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist);
         // }
-        DLeft.onTrue(new ScoreMid(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
+        DLeft.onTrue(new ScoreMid(m_Elevator, m_Arm, m_Wrist).until(this::anythingPressed));
 
-        a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
+        a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Wrist).until(this::anythingPressed));
         b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
 
         //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
         //alignRobot.whileTrue(align);
+        start.whileTrue(align);
     }
 
     public boolean anythingPressed() {

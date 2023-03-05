@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    //m_robotContainer.printHashMap();
     timer = new Timer();
 
     File deployDir = Filesystem.getDeployDirectory();
@@ -110,7 +111,7 @@ public class Robot extends TimedRobot {
     }catch(NullPointerException e){
 
     }
-
+    m_robotContainer.resetToAbsolute();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -120,15 +121,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    if(firstExecute){
-      firstExecute =false;
-      timer.start();
-    }
-    if (m_autonomousCommand.isFinished() && i==0) {
-      timer.stop();
-      i++;
-    }
-    SmartDashboard.putNumber("Time Path Ran For", timer.get());
+    
   }
 
   @Override
