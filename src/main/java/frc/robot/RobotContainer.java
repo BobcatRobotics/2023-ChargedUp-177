@@ -90,6 +90,8 @@ public class RobotContainer {
    private final JoystickButton rightBumper = new JoystickButton(driver, 6);//right bumper
    private final JoystickButton a = new JoystickButton(driver, 2);
    private final JoystickButton b = new JoystickButton(driver, 3);
+   private final JoystickButton x = new JoystickButton(driver, 1); // purple
+   private final JoystickButton y = new JoystickButton(driver, 4); // yellow
    private final JoystickButton righttrigger = new JoystickButton(driver, 8);
    private final JoystickButton lefttrigger = new JoystickButton(driver, 7);
    private final JoystickButton back = new JoystickButton(driver, 9);
@@ -107,6 +109,7 @@ public class RobotContainer {
     private final Intake m_Intake = new Intake();
     private final Arm m_Arm = new Arm();
     private final Wrist m_Wrist = new Wrist();
+    private final BlinkinLEDs m_LEDs = new BlinkinLEDs();
     
     /* Commands */
     private final Command elevatorControls = new ElevatorControls(m_Elevator, driver, m_Arm);
@@ -258,6 +261,9 @@ public class RobotContainer {
 
         a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Wrist).until(this::anythingPressed));
         b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
+
+        x.onTrue(new InstantCommand(m_LEDs::setPurple));
+        y.onTrue(new InstantCommand(m_LEDs::setYellow));
 
         //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
