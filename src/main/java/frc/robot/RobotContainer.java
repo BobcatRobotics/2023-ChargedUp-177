@@ -8,6 +8,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -190,6 +191,7 @@ public class RobotContainer {
          * it in the cancelDefaultTeleop method.
          */
         // Configure the button bindings
+        CameraServer.startAutomaticCapture(0);
         setUpEventMap();
         configureButtonBindings();
     }
