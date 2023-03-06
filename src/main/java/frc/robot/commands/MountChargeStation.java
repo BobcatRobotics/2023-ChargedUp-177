@@ -29,11 +29,12 @@ public class MountChargeStation extends CommandBase {
     this.isRed = isRed;
     stage1Threshold = 10;
     //stage2Threshold = 16; - akash says max tilt is 15 degrees
-    stage2Threshold = 14;
+    stage2Threshold = 12;
     stage = 1;
     finished = false;
     // xSpeed = -1.75; - tread worn out currently
-    xSpeed = -2.25;
+    //xSpeed = -2.25; - worked but too slow
+    xSpeed = -2.75;
   }
 
   // Called when the command is initially scheduled.
@@ -41,11 +42,11 @@ public class MountChargeStation extends CommandBase {
   public void initialize() {
     stage1Threshold = 10;
     //stage2Threshold = 16; - akash says max tilt is 15 degrees
-    stage2Threshold = 14;
+    stage2Threshold = 12;
     stage = 1;
     finished = false;
     // xSpeed = -1.75; - tread worn out currently
-    xSpeed = -2.25;
+    xSpeed = -2.75;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -17,9 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "flickWrist",
-          "waitHalfSec",
-          "intakeOutFullSpeed"
+          "scoreCubeHigh"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",

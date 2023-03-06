@@ -14,6 +14,7 @@ public class BlinkinLEDs extends SubsystemBase {
   /** Creates a new BlinkinLEDs. */
   public BlinkinLEDs() {
     leds = new Spark(LEDConstants.ledPort);
+    setOff();
   }
 
   public void setYellow() {
@@ -22,6 +23,10 @@ public class BlinkinLEDs extends SubsystemBase {
 
   public void setPurple() {
     leds.set(0.91);
+  }
+
+  public void setOff() {
+    leds.set(0.99);
   }
 
   @Override

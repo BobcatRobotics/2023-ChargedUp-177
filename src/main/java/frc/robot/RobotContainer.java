@@ -140,10 +140,15 @@ public class RobotContainer {
         //autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
         setUpEventMap();
         //pathPlannerTest = new PathPlannerTest();
-        autoChooser.setDefaultOption("Score1LeftBalance", PathPlanner.loadPathGroup("Score1LeftBalance", new PathConstraints(4, 3)));
+        autoChooser.setDefaultOption("Score1HighCubeRightBalance", PathPlanner.loadPathGroup("Score1HighCubeRightBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("Score1LeftBalance", PathPlanner.loadPathGroup("Score1LeftBalance", new PathConstraints(4, 3)));
         autoChooser.addOption("LeftBalance", PathPlanner.loadPathGroup("LeftBalance", new PathConstraints(4, 3)));
         autoChooser.addOption("RightBalance", PathPlanner.loadPathGroup("RightBalance", new PathConstraints(4, 3)));
         autoChooser.addOption("CenterBalance", PathPlanner.loadPathGroup("CenterBalance", new PathConstraints(4, 3)));
+        autoChooser.addOption("Score1CenterBalance", PathPlanner.loadPathGroup("Score1CenterBalance", new PathConstraints(4, 3)));
+        autoChooser.addOption("Score1RightBalance", PathPlanner.loadPathGroup("Score1RightBalance", new PathConstraints(4, 3)));
+        autoChooser.addOption("Score1HighCubeLeftBalance", PathPlanner.loadPathGroup("Score1HighCubeLeftBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("Score1HighCubeCenterBalance", PathPlanner.loadPathGroup("Score1HighCubeCenterBalance", new PathConstraints(4.5, 3)));
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
@@ -153,12 +158,25 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.clear();
         Constants.AutoConstants.eventMap.put("chargeStation", new MountAndBalance(s_Swerve));
         Constants.AutoConstants.eventMap.put("align", new AlignToTargetAutos(s_Swerve, m_Limelight));
-        Constants.AutoConstants.eventMap.put("highPreset", new ScoreMid(m_Elevator, m_Arm, m_Wrist));
+        Constants.AutoConstants.eventMap.put("highPreset", new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist));
         Constants.AutoConstants.eventMap.put("intakeGround", new ForwardSuck(m_Elevator, m_Arm, m_Wrist));
         Constants.AutoConstants.eventMap.put("startingConfig", new StartingConfig(m_Elevator, m_Arm, m_Wrist));
         Constants.AutoConstants.eventMap.put("flickWrist", new InstantCommand(m_Wrist::wristSolenoidON));
         Constants.AutoConstants.eventMap.put("intakeOut", new IntakeOut(m_Intake));//new ParallelRaceGroup(new IntakeOut(), new WaitCommand(5)));
+        Constants.AutoConstants.eventMap.put("intakeOutFullSpeed", new IntakeOutFullSpeed(m_Intake));
         Constants.AutoConstants.eventMap.put("driveBack", new DriveBack(s_Swerve)); // TODO: Actually is driving forward, my bad
+        Constants.AutoConstants.eventMap.put("spinInPlace", new SpinInPlace(s_Swerve));
+        Constants.AutoConstants.eventMap.put("waitHalfSec", new WaitCommand(0.5));
+        Constants.AutoConstants.eventMap.put("scoreCubeHigh", new SequentialCommandGroup(
+            new InstantCommand(m_Wrist::wristSolenoidON),
+            new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), 
+            new WaitCommand(0.05), 
+            new InstantCommand(m_Wrist::wristSolenoidON),
+            new WaitCommand(0.25),
+            new IntakeOutFullSpeed(m_Intake), 
+            new StartingConfig(m_Elevator, m_Arm, m_Wrist),
+            new WaitCommand(0.25))
+        );
     }
 
     public void printHashMap() {
@@ -279,6 +297,10 @@ public class RobotContainer {
 
     public boolean anythingPressed() {
         return Math.abs(driver.getRawAxis(1)) >= 0.1 || Math.abs(driver.getRawAxis(3)) >= 0.1; 
+    }
+
+    public void turnOffLeds() {
+        m_LEDs.setOff();
     }
 
 
