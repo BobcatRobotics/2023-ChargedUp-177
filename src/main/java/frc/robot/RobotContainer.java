@@ -14,6 +14,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -232,7 +233,7 @@ public class RobotContainer {
 
         m_Arm.setDefaultCommand(armControls);
         m_Elevator.setDefaultCommand(elevatorControls);
-        m_Intake.setDefaultCommand(new RunIntake(m_Intake, driver));
+        m_Intake.setDefaultCommand(new RunIntake(m_Intake, driver, m_LEDs));
 
 
         // Configure the button bindings
@@ -300,7 +301,7 @@ public class RobotContainer {
     }
 
     public void turnOffLeds() {
-        m_LEDs.setOff();
+        m_LEDs.turnOff();
     }
 
 

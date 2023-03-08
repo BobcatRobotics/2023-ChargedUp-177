@@ -15,6 +15,9 @@ import frc.robot.Constants;
 import frc.robot.Util.MathUtils;
 
 public class Intake extends SubsystemBase {
+  private final double cubeThreshold = 30.0;
+  private final double coneThreshold = 20.0;
+
   private WPI_TalonFX motor; 
 
   /** Creates a new Intake. */
@@ -24,28 +27,38 @@ public class Intake extends SubsystemBase {
   }
   
   public void runIntakeIn(){
-    
     motor.set(ControlMode.PercentOutput, -0.9);
   }
+
   public void runIntakeOut(){
     motor.set(ControlMode.PercentOutput, 0.4);
   } 
+
   public void runIntakeOutFull(){
-    
     motor.set(ControlMode.PercentOutput, 1);
   }
 
-  public boolean isAtHardStop() {
+  public boolean isAtCurrentLimit() {
     return motor.getStatorCurrent() >= 20.0;
+  }
+
+  public boolean cubeSecured() {
+    return motor.getStatorCurrent() >= cubeThreshold;
+  }
+
+  public boolean coneSecured() {
+    return motor.getStatorCurrent() >= coneThreshold;
   }
 
   public void runIntakePercent(double speed){
     speed = MathUtils.throttlePercent(speed);
     motor.set(ControlMode.PercentOutput, speed);
   }
+
   public void stop(){
    motor.set(ControlMode.PercentOutput, 0); 
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

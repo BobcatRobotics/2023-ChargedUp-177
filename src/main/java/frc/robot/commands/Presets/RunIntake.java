@@ -8,6 +8,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.BlinkinLEDs;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -20,7 +21,10 @@ public class RunIntake extends CommandBase {
   double time;
   boolean isTimed = false;
   Joystick gp;
+  BlinkinLEDs leds;
+
   Timer timer;
+
   int in = 5;
   int out = 7;
   int back = 9;
@@ -32,10 +36,11 @@ public class RunIntake extends CommandBase {
     isTimed = true;
     addRequirements(i);
   }
-  public RunIntake(Intake i, Joystick gp){
+  public RunIntake(Intake i, Joystick gp, BlinkinLEDs l){
     this.i = i;
     this.in = in;
     this.gp = gp;
+    this.leds = l;
     timer = new Timer();
     addRequirements(i);
   }
@@ -52,6 +57,11 @@ public class RunIntake extends CommandBase {
     if(!isTimed) {
       if(gp.getRawButton(in)){
         i.runIntakeIn();
+        if (leds.getPurple() && i.cubeSecured()) {
+          leds.setGreen();
+        } else if (leds.getYellow() && i.coneSecured()) {
+          leds.setGreen();
+        }
       } else if(gp.getRawButton(out)){
         i.runIntakeOut();
       }else if(gp.getRawButton(back)) {
