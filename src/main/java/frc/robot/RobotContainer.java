@@ -167,6 +167,7 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("driveBack", new DriveBack(s_Swerve)); // TODO: Actually is driving forward, my bad
         Constants.AutoConstants.eventMap.put("spinInPlace", new SpinInPlace(s_Swerve));
         Constants.AutoConstants.eventMap.put("waitHalfSec", new WaitCommand(0.5));
+        Constants.AutoConstants.eventMap.put("smallDrive", new SmallDrive(s_Swerve));
         Constants.AutoConstants.eventMap.put("scoreCubeHigh", new SequentialCommandGroup(
             new InstantCommand(m_Wrist::wristSolenoidON),
             new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), 
