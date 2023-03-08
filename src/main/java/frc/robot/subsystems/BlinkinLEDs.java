@@ -41,7 +41,7 @@ public class BlinkinLEDs extends SubsystemBase {
 
   public void setGreen() {
     pdh.setSwitchableChannel(true);
-    leds.set(0.71);
+    leds.set(-0.05);
   }
 
   public void setBlack() {

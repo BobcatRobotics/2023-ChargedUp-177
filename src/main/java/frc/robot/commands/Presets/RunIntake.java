@@ -59,11 +59,9 @@ public class RunIntake extends CommandBase {
     if(!isTimed) {
       if(gp.getRawButton(in)){
         i.runIntakeIn();
-        if (leds.getPurple() && i.cubeSecured()) {
-          leds.setGreen();
-        } else if (leds.getYellow() && i.coneSecured()) {
-          leds.setGreen();
-        }
+        // if (i.cubeSecured()) {
+        //   leds.setGreen();
+        // }
       } else if(gp.getRawButton(out)){
         i.runIntakeOut();
       }else if(gp.getRawButton(back)) {

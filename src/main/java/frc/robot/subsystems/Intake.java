@@ -15,7 +15,7 @@ import frc.robot.Constants;
 import frc.robot.Util.MathUtils;
 
 public class Intake extends SubsystemBase {
-  private final double cubeThreshold = 30.0;
+  private final double cubeThreshold = 20.0;
   private final double coneThreshold = 20.0;
 
   private WPI_TalonFX motor; 
@@ -51,6 +51,10 @@ public class Intake extends SubsystemBase {
 
   public boolean coneSecured() {
     return motor.getStatorCurrent() >= coneThreshold;
+  }
+
+  public double getCurrent() {
+    return motor.getStatorCurrent();
   }
 
   public void runIntakePercent(double speed){
