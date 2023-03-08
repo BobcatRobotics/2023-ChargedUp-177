@@ -35,7 +35,7 @@ public class IntakeOutFullSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(timer.hasElapsed(1.0)){
+    if(timer.hasElapsed(0.25)){
       firstExecute = true;
       this.i.stop();
       return true;

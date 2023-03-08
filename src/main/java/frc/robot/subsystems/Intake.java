@@ -37,6 +37,9 @@ public class Intake extends SubsystemBase {
   public void runIntakeOutFull(){
     motor.set(ControlMode.PercentOutput, 1);
   }
+  public void runIntakeInSlow(){
+    motor.set(ControlMode.PercentOutput, -0.1);
+  }
 
   public boolean isAtCurrentLimit() {
     return motor.getStatorCurrent() >= 20.0;

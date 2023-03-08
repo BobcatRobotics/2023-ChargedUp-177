@@ -41,6 +41,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "smallDrive",
           "spinInPlace",
           "driveBack",
           "chargeStation"

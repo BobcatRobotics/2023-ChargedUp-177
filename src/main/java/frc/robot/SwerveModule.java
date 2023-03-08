@@ -155,10 +155,11 @@ public class SwerveModule {
     }
 
     public void resetToAbsolute(){
-        //waitForCanCoder();
+        waitForCanCoder();
 
         double absolutePosition = Conversions.degreesToFalcon(makePositiveDegrees(getCanCoder().getDegrees() - angleOffset.getDegrees()), Constants.Swerve.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
+        //angleEncoder.setPosition(absolutePosition); // TODO: test potential fix
     }
 
     private void configAngleEncoder(){        
