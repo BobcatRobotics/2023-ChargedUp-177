@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class RunIntake extends CommandBase {
@@ -49,6 +50,7 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putNumber("Intake Current", i.getCurrent());
     if(!isTimed) {
       if(gp.getRawButton(in)){
         i.runIntakeIn();
@@ -57,7 +59,7 @@ public class RunIntake extends CommandBase {
       }else if(gp.getRawButton(back)) {
         i.runIntakeOutFull();
       } else {
-        i.stop();
+        i.runIntakeInSlow(); //i.stop();
       }
     }else{
       timer.start();

@@ -29,7 +29,7 @@ public class MountChargeStation extends CommandBase {
     this.isRed = isRed;
     stage1Threshold = 10;
     //stage2Threshold = 16; - akash says max tilt is 15 degrees
-    stage2Threshold = 12;
+    stage2Threshold = 15;
     stage = 1;
     finished = false;
     // xSpeed = -1.75; - tread worn out currently
@@ -42,7 +42,7 @@ public class MountChargeStation extends CommandBase {
   public void initialize() {
     stage1Threshold = 10;
     //stage2Threshold = 16; - akash says max tilt is 15 degrees
-    stage2Threshold = 12;
+    stage2Threshold = 15;
     stage = 1;
     finished = false;
     // xSpeed = -1.75; - tread worn out currently

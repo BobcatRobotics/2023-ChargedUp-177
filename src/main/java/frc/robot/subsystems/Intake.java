@@ -34,9 +34,16 @@ public class Intake extends SubsystemBase {
     
     motor.set(ControlMode.PercentOutput, 1);
   }
+  public void runIntakeInSlow(){
+    motor.set(ControlMode.PercentOutput, -0.1);
+  }
 
   public boolean isAtHardStop() {
     return motor.getStatorCurrent() >= 20.0;
+  }
+
+  public double getCurrent() {
+    return motor.getStatorCurrent();
   }
 
   public void runIntakePercent(double speed){

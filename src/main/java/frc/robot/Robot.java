@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
 
     CommandScheduler.getInstance().cancelAll();
-    
+    m_robotContainer.turnOffLeds();
     
   }
 

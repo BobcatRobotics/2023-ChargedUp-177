@@ -170,7 +170,7 @@ public final class Constants {
     public class BalancingConstants{
         public static final double kP = 0.25;//TODO: tune
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kD = 0.025;
         public static final double kToleranceDegrees = 2.5;//acceptable absolute error in degrees
         public static final double kSetpoint = 0.0; // we want a pitch of 0 degrees
         public static final double kSensitivity = 20; // sigmoid(pid/sensitivity)*max speed = meters per second to drive    
