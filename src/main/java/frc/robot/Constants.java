@@ -1,10 +1,12 @@
 package frc.robot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -25,6 +27,12 @@ public final class Constants {
     public static final int compressorID = 1;
     public static final double stickDeadband = 0.05;
     public static final int Jake = 194; //Jake M is 194 cm tall
+
+    public static final class PoseEstimation {
+        public static final ArrayList<Pose2d> scoringPositionsRed = new ArrayList<Pose2d>();
+        
+        public static final ArrayList<Pose2d> scoringPositionsBlue = new ArrayList<Pose2d>();
+    }
 
     public static final class Swerve {
         public static final int pigeonID = 1;

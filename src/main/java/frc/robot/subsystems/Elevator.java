@@ -56,7 +56,7 @@ public class Elevator extends SubsystemBase {
     // motion magic trapezoid configuration
     //elevatorMotor.configAllowableClosedloopError()
     elevatorMotor.configMotionCruiseVelocity(64000, 20); //needs to be tuned to robot
-    elevatorMotor.configMotionAcceleration(55000, 20);
+    elevatorMotor.configMotionAcceleration(75000, 20); // TODO: test! used to 55000 @ waterbury
 
     holdPosValue = elevatorMotor.getSelectedSensorPosition();
   }

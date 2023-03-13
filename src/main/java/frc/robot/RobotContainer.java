@@ -2,16 +2,20 @@ package frc.robot;
 
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -33,7 +37,6 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.commands.Autos.AlignToTarget;
-import frc.robot.commands.Autos.AlignToTargetAutos;
 import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.commands.Autos.MountAndBalance;
 import frc.robot.commands.Presets.RetractArm;
@@ -103,9 +106,8 @@ public class RobotContainer {
    private final POVButton DDown = new POVButton(driver, 180);
     /* Subsystems */
 
-
-    public static Swerve s_Swerve = new Swerve();
     public static Limelight m_Limelight = new Limelight();
+    public static Swerve s_Swerve = new Swerve(m_Limelight);
 
     private final Elevator m_Elevator = new Elevator();
     private final Intake m_Intake = new Intake();
@@ -162,7 +164,6 @@ public class RobotContainer {
     public void setUpEventMap() {
         Constants.AutoConstants.eventMap.clear();
         Constants.AutoConstants.eventMap.put("chargeStation", new MountAndBalance(s_Swerve));
-        Constants.AutoConstants.eventMap.put("align", new AlignToTargetAutos(s_Swerve, m_Limelight));
         Constants.AutoConstants.eventMap.put("highPreset", new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist));
         Constants.AutoConstants.eventMap.put("intakeGround", new ForwardSuck(m_Elevator, m_Arm, m_Wrist));
         Constants.AutoConstants.eventMap.put("startingConfig", new StartingConfig(m_Elevator, m_Arm, m_Wrist));
@@ -183,8 +184,6 @@ public class RobotContainer {
             new StartingConfig(m_Elevator, m_Arm, m_Wrist),
             new WaitCommand(0.25))
         );
-        // Constants.AutoConstants.eventMap.put("zeroGyro", new InstantCommand(() -> s_Swerve.zeroGyro()));
-        // Constants.AutoConstants.eventMap.put("reverseZeroGyro", new InstantCommand(() -> s_Swerve.reverseZeroGyro()));
     }
 
     public void setUpGyroResets() { // TODO: Work in progress but no need yet cuz right now all autos end facing forwards, could delete if unnecessary
@@ -337,11 +336,15 @@ public class RobotContainer {
         //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
         //alignRobot.whileTrue(align);
-        start.whileTrue(align);
+        start.onTrue(buildAuto(generateTrajToScoringNode()).until(this::baseDriverControlsMoved));
     }
 
     public boolean anythingPressed() {
         return Math.abs(driver.getRawAxis(1)) >= 0.1 || Math.abs(driver.getRawAxis(3)) >= 0.1; 
+    }
+
+    public boolean baseDriverControlsMoved() {
+        return Math.abs(rotate.getRawAxis(Joystick.AxisType.kX.value)) >= 0.1 || Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)) >= 0.1 || Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)) >= 0.1;
     }
 
     public void turnOffLeds() {
@@ -367,6 +370,16 @@ public class RobotContainer {
         );
 
         return swerveAutoBuilder.fullAuto(trajs);
+    }
+
+    public List<PathPlannerTrajectory> generateTrajToScoringNode() {
+        PathPlannerTrajectory traj = PathPlanner.generatePath(
+            new PathConstraints(2, 2),
+            new PathPoint(s_Swerve.getPose().getTranslation(), new Rotation2d(Math.atan2(s_Swerve.getPose().getX(), s_Swerve.getPose().getY())), s_Swerve.getYaw()),
+            new PathPoint(s_Swerve.getClosestScoringPosition().getTranslation(), new Rotation2d(), new Rotation2d())         
+        );
+
+        return Arrays.asList(traj);
     }
     
 

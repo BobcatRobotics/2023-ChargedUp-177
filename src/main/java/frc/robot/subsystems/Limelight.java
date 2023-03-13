@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -16,6 +17,10 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry tx = null;
   private NetworkTableEntry ty = null;
   private NetworkTableEntry ta = null;
+  private NetworkTableEntry tl = null;
+  private NetworkTableEntry cl = null;
+  private NetworkTableEntry botpose = null;
+  private NetworkTableEntry campose = null;
 
   /** Creates a new Limelight. */
   public Limelight() {
@@ -29,6 +34,10 @@ public class Limelight extends SubsystemBase {
       tx = table.getEntry("tx");
       ty = table.getEntry("ty");
       ta = table.getEntry("ta");
+      tl = table.getEntry("tl");
+      cl = table.getEntry("cl");
+      botpose = table.getEntry("botpose_wpiblue");
+      campose = table.getEntry("camerapose_robotspace");
       
     } catch (Exception e) {
       SmartDashboard.putBoolean("couldn't get nt entries", true);
@@ -46,6 +55,10 @@ public class Limelight extends SubsystemBase {
       tx = table.getEntry("tx");
       ty = table.getEntry("ty");
       ta = table.getEntry("ta");
+      tl = table.getEntry("tl");
+      cl = table.getEntry("cl");
+      botpose = table.getEntry("botpose_wpiblue");
+      campose = table.getEntry("camerapose_robotspace");
     } catch (Exception e) {
       return;
     }
@@ -67,6 +80,38 @@ public class Limelight extends SubsystemBase {
       hits = (getEntry("tv").getDouble(0.0) == 1.0);
     }
     return hits;
+  }
+
+  public Double[] botPose() {
+    Double[] botPose = null;
+    if (isInitialized()) {
+      botPose = botpose.getDoubleArray(new Double[6]);
+    }
+    return botPose;
+  }
+
+  public Double[] camPose() {
+    Double[] camPose = null;
+    if (isInitialized()) {
+      camPose = campose.getDoubleArray(new Double[6]);
+    }
+    return camPose;
+  }
+
+  public double tl() {
+    double tl = 0.0;
+    if (isInitialized()) {
+      tl = getEntry("tl").getDouble(0.0);
+    }
+    return tl;
+  }
+
+  public double cl() {
+    double cl = 0.0;
+    if (isInitialized()) {
+      cl = getEntry("cl").getDouble(0.0);
+    }
+    return cl;
   }
 
   public double x() {
