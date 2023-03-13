@@ -150,6 +150,9 @@ public class RobotContainer {
         autoChooser.addOption("Score1DirtyBalance", PathPlanner.loadPathGroup("Score1RightBalance", new PathConstraints(4, 3)));
         autoChooser.addOption("Score1HighCubeCleanBalance", PathPlanner.loadPathGroup("Score1HighCubeLeftBalance", new PathConstraints(4.5, 3)));
         autoChooser.addOption("Score1HighCubeCenterBalance", PathPlanner.loadPathGroup("Score1HighCubeCenterBalance", new PathConstraints(4.5, 3)));
+        // autoChooser.addOption("Score1HighCubeCleanNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeCleanNoBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("Score1HighCubeDirtyNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("NoMoveScore1High", PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0)));
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
@@ -171,7 +174,7 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("smallDrive", new SmallDrive(s_Swerve));
         Constants.AutoConstants.eventMap.put("scoreCubeHigh", new SequentialCommandGroup(
             new InstantCommand(m_Wrist::wristSolenoidON),
-            new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), 
+            new ParallelRaceGroup(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2.125)), 
             new WaitCommand(0.05), 
             new InstantCommand(m_Wrist::wristSolenoidON),
             new WaitCommand(0.25),

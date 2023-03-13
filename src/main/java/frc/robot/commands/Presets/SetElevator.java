@@ -45,7 +45,7 @@ public class SetElevator extends CommandBase {
     if (elevator.getBottomLimits() && state == 0) {
       elevator.elevate(0);
       return;
-    } else if (elevator.topLimitSwitch() && state == 3) {
+    } else if (elevator.topLimitSwitch() && state == 3) { // TODO: wtf!
       elevator.elevate(0);
       return;
     }
@@ -88,7 +88,7 @@ public class SetElevator extends CommandBase {
     // }
     // return false;
 
-    if (elevator.getEncoderPos() <= pos+400 && elevator.getEncoderPos() >= pos) {
+    if (elevator.getEncoderPos() >= pos-200 && elevator.getEncoderPos() <= pos+200) {
       SmartDashboard.putBoolean("setElevator finished", true);
       return true;
     }

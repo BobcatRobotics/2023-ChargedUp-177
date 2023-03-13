@@ -108,7 +108,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 1;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(173.23);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(357.8906);
             
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
@@ -168,7 +168,7 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
     public class BalancingConstants{
-        public static final double kP = 0.25;//TODO: tune
+        public static final double kP = 0.225;//TODO: tune
         public static final double kI = 0;
         public static final double kD = 0.025;
         public static final double kToleranceDegrees = 2.5;//acceptable absolute error in degrees

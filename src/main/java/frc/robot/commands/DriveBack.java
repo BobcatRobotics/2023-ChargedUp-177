@@ -44,7 +44,7 @@ public class DriveBack extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (timer.hasElapsed(3)) {
+    if (timer.hasElapsed(2.75)) {
       timer.stop();
       return true;
     }

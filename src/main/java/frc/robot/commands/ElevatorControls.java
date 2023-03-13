@@ -96,7 +96,7 @@ public class ElevatorControls extends CommandBase {
       elevator.elevate(0);
     } else {
       elevator.elevate(gamepad.getRawAxis(3));
-      elevator.setHoldPos();
+      // elevator.setHoldPos();
     }
   }
 

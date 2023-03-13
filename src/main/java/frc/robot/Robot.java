@@ -94,6 +94,7 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.turnOffLeds();
+    m_robotContainer.resetToAbsolute();
     
   }
 

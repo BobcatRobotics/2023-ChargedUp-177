@@ -9,24 +9,22 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Swerve;
 
-public class SpinInPlace extends CommandBase {
-  /** Creates a new SpinInPlace. */
+public class DriveBackInverse extends CommandBase {
   private Swerve swerve;
-  private boolean firstRun;
   private Timer timer;
+  private double xSpeed = -2.25;
 
-  public SpinInPlace(Swerve s) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  /** Creates a new DriveBackInverse. */
+  public DriveBackInverse(Swerve s) {
     swerve = s;
-    firstRun = true;
     timer = new Timer();
     addRequirements(s);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    firstRun = true;
     timer.reset();
     timer.start();
   }
@@ -34,22 +32,22 @@ public class SpinInPlace extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (firstRun) {
-      swerve.drive(new Translation2d(), 2*Math.PI, false, false);
-      firstRun = false;
-    }
+    swerve.drive(new Translation2d(xSpeed, 0), 0, false, true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     swerve.drive(new Translation2d(), 0, false, true);
-    timer.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !firstRun && timer.hasElapsed(0.6);
+    if (timer.hasElapsed(2.75)) {
+      timer.stop();
+      return true;
+    }
+    return false;
   }
 }

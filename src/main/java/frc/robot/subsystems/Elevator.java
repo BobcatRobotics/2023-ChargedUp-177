@@ -70,21 +70,21 @@ public class Elevator extends SubsystemBase {
   public boolean getStopped(){
     return getSpeed() == 0;
   }
-  public void holdPosition() {
-    elevatorMotor.set(ControlMode.Position, holdPosValue);
-  }
+  // public void holdPosition() {
+  //   elevatorMotor.set(ControlMode.Position, holdPosValue);
+  // }
 
-  public void holdPosition(double pos) {
-    elevatorMotor.set(ControlMode.Position, pos);
-  }
+  // public void holdPosition(double pos) {
+  //   elevatorMotor.set(ControlMode.Position, pos);
+  // }
 
   public double getPIDError(){
     return elevatorMotor.getClosedLoopError();
   }
 
-  public void setHoldPos() {
-    holdPosValue = elevatorMotor.getSelectedSensorPosition();
-  }
+  // public void setHoldPos() {
+  //   holdPosValue = elevatorMotor.getSelectedSensorPosition();
+  // }
 
   public void resetEncoderPos() {
     elevatorMotor.setSelectedSensorPosition(0);
@@ -112,18 +112,18 @@ public class Elevator extends SubsystemBase {
   public void setState(int state) {
     if (state == 0) {
       elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos0);
-      holdPosValue = ElevatorConstants.pos0;
-      holdPosition();
+      // holdPosValue = ElevatorConstants.pos0;
+      // holdPosition();
       SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     } else if (state == 1) {
       elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos1);
-      holdPosValue = ElevatorConstants.pos1;
-      holdPosition();
+      // holdPosValue = ElevatorConstants.pos1;
+      // holdPosition();
       SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     } else if (state == 2) {
       elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos2);
-      holdPosValue = ElevatorConstants.pos2;
-      holdPosition();
+      // holdPosValue = ElevatorConstants.pos2;
+      // holdPosition();
       SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     }
   }
