@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.HashMap;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 import java.util.Hashtable;
+import java.util.List;
 
 public final class Constants {
     public static final int intakeMotorID = 11; //TODO: assign correct values
@@ -161,6 +163,8 @@ public final class Constants {
         public static final double kPThetaController = 3.3;
 
         public static HashMap<String, Command> eventMap = new HashMap<>();
+
+        public static HashMap<List<PathPlannerTrajectory>, Command> gyroResets = new HashMap<>();
     
         /* Constraint for the motion profilied robot angle controller */
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
