@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
+  private NetworkTable table;
+
   private boolean initialized = false;
   private NetworkTableEntry tTarget = null;
   private NetworkTableEntry tx = null;
@@ -27,7 +29,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public void initializeLimeLight() {
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    table = NetworkTableInstance.getDefault().getTable("limelight");
     turnOnLED();
     try {
       tTarget = table.getEntry("tv");
@@ -49,7 +51,7 @@ public class Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    table = NetworkTableInstance.getDefault().getTable("limelight");
     try {
       tTarget = table.getEntry("tv");
       tx = table.getEntry("tx");

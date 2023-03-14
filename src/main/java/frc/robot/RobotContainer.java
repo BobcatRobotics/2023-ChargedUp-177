@@ -39,6 +39,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.Autos.AlignToTarget;
 import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.commands.Autos.MountAndBalance;
+import frc.robot.commands.Presets.IntakeInConstantly;
 import frc.robot.commands.Presets.RetractArm;
 import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.SetArm;
@@ -48,6 +49,7 @@ import frc.robot.commands.Presets.ZeroElevator;
 import frc.robot.commands.Presets.intakeStop;
 import frc.robot.commands.Presets.Procedures.ForwardSuck;
 import frc.robot.commands.Presets.Procedures.ScoreHigh;
+import frc.robot.commands.Presets.Procedures.ScoreHighAutos;
 import frc.robot.commands.Presets.Procedures.ScoreMid;
 import frc.robot.commands.Presets.Procedures.TopSuck;
 import frc.robot.subsystems.*;
@@ -142,7 +144,6 @@ public class RobotContainer {
         // Sendable Chooser Setup
         //autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
         setUpEventMap();
-        setUpGyroResets();
         //pathPlannerTest = new PathPlannerTest();
         autoChooser.setDefaultOption("Score1HighCubeDirtyBalance", PathPlanner.loadPathGroup("Score1HighCubeRightBalance", new PathConstraints(4.5, 3)));
         autoChooser.addOption("Score1CleanBalance", PathPlanner.loadPathGroup("Score1LeftBalance", new PathConstraints(4, 3)));
@@ -156,6 +157,9 @@ public class RobotContainer {
         // autoChooser.addOption("Score1HighCubeCleanNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeCleanNoBalance", new PathConstraints(4.5, 3)));
         autoChooser.addOption("Score1HighCubeDirtyNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3)));
         autoChooser.addOption("NoMoveScore1High", PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0)));
+        // TO BE TESTED:
+        autoChooser.addOption("CenterBalancePathPlannerTest", PathPlanner.loadPathGroup("CenterBalancePathPlannerTest", new PathConstraints(2, 3)));
+        autoChooser.addOption("BalanceWithPathPlannerTest", PathPlanner.loadPathGroup("BalanceWithPathPlannerTest", new PathConstraints(4, 3)));
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
@@ -165,7 +169,10 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.clear();
         Constants.AutoConstants.eventMap.put("chargeStation", new MountAndBalance(s_Swerve));
         Constants.AutoConstants.eventMap.put("highPreset", new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist));
-        Constants.AutoConstants.eventMap.put("intakeGround", new ForwardSuck(m_Elevator, m_Arm, m_Wrist));
+        Constants.AutoConstants.eventMap.put("intakeGround", new SequentialCommandGroup(
+            new ForwardSuck(m_Elevator, m_Arm, m_Wrist),
+            new IntakeInConstantly(m_Intake)
+        ));
         Constants.AutoConstants.eventMap.put("startingConfig", new StartingConfig(m_Elevator, m_Arm, m_Wrist));
         Constants.AutoConstants.eventMap.put("flickWrist", new InstantCommand(m_Wrist::wristSolenoidON));
         Constants.AutoConstants.eventMap.put("intakeOut", new IntakeOut(m_Intake));//new ParallelRaceGroup(new IntakeOut(), new WaitCommand(5)));
@@ -176,46 +183,13 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("smallDrive", new SmallDrive(s_Swerve));
         Constants.AutoConstants.eventMap.put("scoreCubeHigh", new SequentialCommandGroup(
             new InstantCommand(m_Wrist::wristSolenoidON),
-            new ParallelRaceGroup(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2.125)), 
-            new WaitCommand(0.05), 
-            new InstantCommand(m_Wrist::wristSolenoidON),
-            new WaitCommand(0.25),
+            new ParallelRaceGroup(new ScoreHighAutos(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2.125)),
             new IntakeOutFullSpeed(m_Intake), 
-            new StartingConfig(m_Elevator, m_Arm, m_Wrist),
-            new WaitCommand(0.25))
+            new StartingConfig(m_Elevator, m_Arm, m_Wrist))
         );
-    }
-
-    public void setUpGyroResets() { // TODO: Work in progress but no need yet cuz right now all autos end facing forwards, could delete if unnecessary
-        Constants.AutoConstants.gyroResets.clear();
-        Constants.AutoConstants.gyroResets.put(
-            PathPlanner.loadPathGroup("Score1HighCubeRightBalance", new PathConstraints(4.5, 3)), 
-            new InstantCommand(() -> s_Swerve.zeroGyro()
-        ));
-        Constants.AutoConstants.gyroResets.put(
-            PathPlanner.loadPathGroup("Score1LeftBalance", new PathConstraints(4, 3)), 
-            new InstantCommand(() -> s_Swerve.zeroGyro()
-        ));
-        Constants.AutoConstants.gyroResets.put(
-            PathPlanner.loadPathGroup("LeftBalance", new PathConstraints(4, 3)), 
-            new InstantCommand(() -> s_Swerve.zeroGyro()
-        ));
-        Constants.AutoConstants.gyroResets.put(
-            PathPlanner.loadPathGroup("RightBalance", new PathConstraints(4, 3)), 
-            new InstantCommand(() -> s_Swerve.zeroGyro()
-        ));
-        Constants.AutoConstants.gyroResets.put(
-            PathPlanner.loadPathGroup("CenterBalance", new PathConstraints(4, 3)), 
-            new InstantCommand(() -> s_Swerve.zeroGyro()
-        ));
-        Constants.AutoConstants.gyroResets.put(
-            PathPlanner.loadPathGroup("Score1CenterBalance", new PathConstraints(4, 3)), 
-            new InstantCommand(() -> s_Swerve.zeroGyro()
-        ));
-        Constants.AutoConstants.gyroResets.put(
-            PathPlanner.loadPathGroup("Score1CenterBalance", new PathConstraints(4, 3)), 
-            new InstantCommand(() -> s_Swerve.zeroGyro()
-        ));
+        Constants.AutoConstants.eventMap.put("balance", new BalanceChargeStation(s_Swerve, true));
+        Constants.AutoConstants.eventMap.put("zeroGyro", new InstantCommand(() -> s_Swerve.zeroGyro()));
+        Constants.AutoConstants.eventMap.put("reverseZeroGyro", new InstantCommand(() -> s_Swerve.reverseZeroGyro()));
     }
 
     public void resetGyro() {
@@ -263,7 +237,7 @@ public class RobotContainer {
 
 
     public void scheduleDefaultTeleop() {
-        resetGyro(); // NEW CHANGE TO ZERO GYRO ON TELEOP
+        //resetGyro(); // NEW CHANGE TO ZERO GYRO ON TELEOP
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
