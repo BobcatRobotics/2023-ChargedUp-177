@@ -41,6 +41,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.Autos.AlignToTarget;
 import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.commands.Autos.MountAndBalance;
+import frc.robot.commands.Autos.MountAndBalanceInverse;
 import frc.robot.commands.Presets.IntakeInConstantly;
 import frc.robot.commands.Presets.RetractArm;
 import frc.robot.commands.Presets.RunIntake;
@@ -149,25 +150,27 @@ public class RobotContainer {
         // Sendable Chooser Setup
         //autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
         setUpEventMap();
-        //pathPlannerTest = new PathPlannerTest();
-        autoChooser.setDefaultOption("Score1HighCubeDirtyBalance", PathPlanner.loadPathGroup("Score1HighCubeRightBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("Score1CleanBalance", PathPlanner.loadPathGroup("Score1LeftBalance", new PathConstraints(4, 3)));
+        autoChooser.setDefaultOption("Score1HighCubeNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("NoMoveScore1High", PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0)));
         autoChooser.addOption("CleanBalance", PathPlanner.loadPathGroup("LeftBalance", new PathConstraints(4, 3)));
         autoChooser.addOption("DirtyBalance", PathPlanner.loadPathGroup("RightBalance", new PathConstraints(4, 3)));
         autoChooser.addOption("CenterBalance", PathPlanner.loadPathGroup("CenterBalance", new PathConstraints(4, 3)));
+        autoChooser.addOption("Score1CleanBalance", PathPlanner.loadPathGroup("Score1LeftBalance", new PathConstraints(4, 3)));
         autoChooser.addOption("Score1CenterBalance", PathPlanner.loadPathGroup("Score1CenterBalance", new PathConstraints(4, 3)));
         autoChooser.addOption("Score1DirtyBalance", PathPlanner.loadPathGroup("Score1RightBalance", new PathConstraints(4, 3)));
         autoChooser.addOption("Score1HighCubeCleanBalance", PathPlanner.loadPathGroup("Score1HighCubeLeftBalance", new PathConstraints(4.5, 3)));
         autoChooser.addOption("Score1HighCubeCenterBalance", PathPlanner.loadPathGroup("Score1HighCubeCenterBalance", new PathConstraints(4.5, 3)));
-        // autoChooser.addOption("Score1HighCubeCleanNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeCleanNoBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("Score1HighCubeDirtyNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("NoMoveScore1High", PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0)));
+        autoChooser.addOption("Score1HighCubeDirtyBalance", PathPlanner.loadPathGroup("Score1HighCubeRightBalance", new PathConstraints(4.5, 3)));
         // TO BE TESTED:
+        autoChooser.addOption("NoTurnScore1HighCenterBalance", PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3)));
+        autoChooser.addOption("Score1HighCubeCleanPickupBalance", PathPlanner.loadPathGroup("Score1HighCubePickupLeftBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("Score1HighCubeDirtyPickupBalance", PathPlanner.loadPathGroup("Score1HighCubePickupRightBalance", new PathConstraints(4.5, 3)));
         autoChooser.addOption("CenterBalancePathPlannerTest", PathPlanner.loadPathGroup("CenterBalancePathPlannerTest", new PathConstraints(2, 3)));
         autoChooser.addOption("BalanceWithPathPlannerTest", PathPlanner.loadPathGroup("BalanceWithPathPlannerTest", new PathConstraints(4, 3)));
         // autoChooser.addOption("testAlign", generateTrajToScoringNode());
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
+        // autoChooser.addOption("Score1HighCubeCleanNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeCleanNoBalance", new PathConstraints(4.5, 3)));
         SmartDashboard.putData(autoChooser);
     }
 
@@ -198,6 +201,8 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("balance", new BalanceChargeStation(s_Swerve, true));
         Constants.AutoConstants.eventMap.put("zeroGyro", new InstantCommand(() -> s_Swerve.zeroGyro()));
         Constants.AutoConstants.eventMap.put("reverseZeroGyro", new InstantCommand(() -> s_Swerve.reverseZeroGyro()));
+        Constants.AutoConstants.eventMap.put("driveBackInverse", new DriveBackInverse(s_Swerve));
+        Constants.AutoConstants.eventMap.put("chargeStationInverse", new MountAndBalanceInverse(s_Swerve));
     }
 
     public void resetGyro() {

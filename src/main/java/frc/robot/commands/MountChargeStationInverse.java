@@ -13,8 +13,8 @@ public class MountChargeStationInverse extends CommandBase {
 
   private Swerve swerve;
   private double pitch;
-  private double stage1Threshold = 10;
-  private double stage2Threshold = 16;
+  private double stage1Threshold = -10;
+  private double stage2Threshold = -16;
   private int stage = 1;
   private boolean isRed;
   private boolean finished = false;
