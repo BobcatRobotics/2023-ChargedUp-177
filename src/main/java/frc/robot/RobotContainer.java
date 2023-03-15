@@ -71,6 +71,7 @@ public class RobotContainer {
     //private Constants.ButtonHashtable bh = new Constants.ButtonHashtable();
     private double autoEndExpectedYaw;
     private double autoEndYaw;
+    private double autoStartYaw;
     
     /* Controllers */
     private final Joystick driver = new Joystick(2);
@@ -199,7 +200,21 @@ public class RobotContainer {
     }
 
     public void resetGyro() {
-        s_Swerve.resetGyro(autoEndExpectedYaw + (autoEndExpectedYaw - autoEndYaw));
+        if (roundTo180Or0(Math.abs(autoEndYaw - autoStartYaw)) == 0) {
+            s_Swerve.resetGyro(autoEndYaw - autoEndExpectedYaw);
+        } else {
+            s_Swerve.resetGyro(autoEndExpectedYaw - autoEndYaw);
+        }
+        
+    }
+
+    public int roundTo180Or0(double angle) {
+        if (Math.abs(angle - 0) < Math.abs(angle - 180)) {
+            return 0;
+        } else {
+            return 180;
+        }
+
     }
 
     public void resetGyroReverse() {
@@ -213,6 +228,7 @@ public class RobotContainer {
     public void logAutoEndExpectedYaw() {
         List<PathPlannerTrajectory> ppt = getAutoChooserResult();
         PathPlannerTrajectory last = ppt.get(ppt.size() - 1);
+        autoStartYaw = ppt.get(0).getInitialHolonomicPose().getRotation().getDegrees();
         autoEndExpectedYaw = last.sample(last.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
     }
 
