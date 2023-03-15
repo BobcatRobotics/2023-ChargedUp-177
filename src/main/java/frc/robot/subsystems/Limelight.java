@@ -39,7 +39,6 @@ public class Limelight extends SubsystemBase {
       tl = table.getEntry("tl");
       cl = table.getEntry("cl");
       botpose = table.getEntry("botpose_wpiblue");
-      campose = table.getEntry("camerapose_robotspace");
       
     } catch (Exception e) {
       SmartDashboard.putBoolean("couldn't get nt entries", true);
@@ -60,7 +59,6 @@ public class Limelight extends SubsystemBase {
       tl = table.getEntry("tl");
       cl = table.getEntry("cl");
       botpose = table.getEntry("botpose_wpiblue");
-      campose = table.getEntry("camerapose_robotspace");
     } catch (Exception e) {
       return;
     }
@@ -90,14 +88,6 @@ public class Limelight extends SubsystemBase {
       botPose = botpose.getDoubleArray(new Double[6]);
     }
     return botPose;
-  }
-
-  public Double[] camPose() {
-    Double[] camPose = null;
-    if (isInitialized()) {
-      camPose = campose.getDoubleArray(new Double[6]);
-    }
-    return camPose;
   }
 
   public double tl() {

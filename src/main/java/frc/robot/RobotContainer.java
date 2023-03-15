@@ -16,10 +16,12 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -160,6 +162,7 @@ public class RobotContainer {
         // TO BE TESTED:
         autoChooser.addOption("CenterBalancePathPlannerTest", PathPlanner.loadPathGroup("CenterBalancePathPlannerTest", new PathConstraints(2, 3)));
         autoChooser.addOption("BalanceWithPathPlannerTest", PathPlanner.loadPathGroup("BalanceWithPathPlannerTest", new PathConstraints(4, 3)));
+        // autoChooser.addOption("testAlign", generateTrajToScoringNode());
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
@@ -183,7 +186,9 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("smallDrive", new SmallDrive(s_Swerve));
         Constants.AutoConstants.eventMap.put("scoreCubeHigh", new SequentialCommandGroup(
             new InstantCommand(m_Wrist::wristSolenoidON),
-            new ParallelRaceGroup(new ScoreHighAutos(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2.125)),
+            new ParallelRaceGroup(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2.125)),
+            new InstantCommand(m_Wrist::wristSolenoidON),
+            new WaitCommand(0.2),
             new IntakeOutFullSpeed(m_Intake), 
             new StartingConfig(m_Elevator, m_Arm, m_Wrist))
         );
@@ -194,6 +199,22 @@ public class RobotContainer {
 
     public void resetGyro() {
         s_Swerve.zeroGyro();
+    }
+
+    public void resetGyroReverse() {
+        s_Swerve.reverseZeroGyro();
+    }
+
+    public void logAutoInitYaw() {
+        s_Swerve.saveAutoInitYaw();
+    }
+
+    public void logAutoEndYaw() {
+        s_Swerve.saveAutoEndYaw();
+    }
+
+    public void resetGyroOnTeleopInit() {
+        s_Swerve.resetGyro(s_Swerve.autoYawOffset());
     }
 
     public void printHashMap() {
@@ -310,7 +331,7 @@ public class RobotContainer {
         //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
         //alignRobot.whileTrue(align);
-        start.onTrue(buildAuto(generateTrajToScoringNode()).until(this::baseDriverControlsMoved));
+        start.whileTrue(buildAuto(generateTrajToScoringNode()));
     }
 
     public boolean anythingPressed() {
@@ -324,9 +345,6 @@ public class RobotContainer {
     public void turnOffLeds() {
         m_LEDs.turnOff();
     }
-
-
-
   
     
     public static Command buildAuto(List<PathPlannerTrajectory> trajs) {
@@ -347,9 +365,10 @@ public class RobotContainer {
     }
 
     public List<PathPlannerTrajectory> generateTrajToScoringNode() {
+        // Math.atan2(s_Swerve.getPose().getX(), s_Swerve.getPose().getY())
         PathPlannerTrajectory traj = PathPlanner.generatePath(
-            new PathConstraints(2, 2),
-            new PathPoint(s_Swerve.getPose().getTranslation(), new Rotation2d(Math.atan2(s_Swerve.getPose().getX(), s_Swerve.getPose().getY())), s_Swerve.getYaw()),
+            new PathConstraints(1, 1),
+            new PathPoint(s_Swerve.getPose().getTranslation(), new Rotation2d(), s_Swerve.getYaw()),
             new PathPoint(s_Swerve.getClosestScoringPosition().getTranslation(), new Rotation2d(), new Rotation2d())         
         );
 

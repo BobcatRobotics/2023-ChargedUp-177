@@ -35,6 +35,8 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     public Limelight limelight;
+    private double autoInitYaw;
+    private double autoEndYaw;
 
     public double rot;
 
@@ -63,6 +65,31 @@ public class Swerve extends SubsystemBase {
         //     System.out.println("CANcoder on Module " + mod.moduleNumber + " took " + mod.CANcoderInitTime + " ms to be ready.");
         // }
         this.limelight = limelight;
+    }
+
+    public void saveAutoInitYaw() {
+        autoInitYaw = getYaw().getDegrees();
+    }
+
+    public void saveAutoEndYaw() {
+        autoEndYaw = getYaw().getDegrees();
+    }
+
+    public double autoYawOffset() {
+        // if (autoEndYaw + 180 > 360) {
+        //     return autoEndYaw - 180;
+        // } else {
+        //     return autoEndYaw + 180;
+        // }
+        return autoEndYaw;
+    }
+
+    public void resetGyroOnTeleopScoringPos() {
+        resetGyro(autoInitYaw);
+    }
+
+    public void resetGyroOnTeleopNotScoringPos() {
+        resetGyro(autoInitYaw);
     }
 
     public double getPitch(){
@@ -158,6 +185,10 @@ public class Swerve extends SubsystemBase {
 
     public void zeroGyro(){
         gyro.setYaw(0);
+    }
+
+    public void resetGyro(double newYaw) {
+        gyro.setYaw(newYaw);
     }
 
     public void reverseZeroGyro() {

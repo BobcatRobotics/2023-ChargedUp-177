@@ -86,7 +86,12 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     poseEstimator.update(this.rotationSupplier.get(), this.modulePositionSupplier.get());
-    Pose3d visionPose = new Pose3d(limelight.botPose()[0], limelight.botPose()[1], limelight.botPose()[2], new Rotation3d(limelight.botPose()[3], limelight.botPose()[4], limelight.botPose()[5]));
+    Pose3d visionPose = null;
+    try {
+      visionPose = new Pose3d(limelight.botPose()[0], limelight.botPose()[1], limelight.botPose()[2], new Rotation3d(limelight.botPose()[3], limelight.botPose()[4], limelight.botPose()[5]));
+    } catch (Exception e) {
+
+    }
 
     if (visionPose != null) {
       sawTag = true;
@@ -132,14 +137,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   }
 
   public Pose2d closestScoringPosition(Alliance alliance) {
-    switch(alliance) {
-      case Red:
-        return getCurrentPose().nearest(Constants.PoseEstimation.scoringPositionsRed);
-      case Blue:
-        return getCurrentPose().nearest(Constants.PoseEstimation.scoringPositionsBlue);
-      default:
-        return getCurrentPose();
-    }
+    return getCurrentPose().nearest(Constants.PoseEstimation.scoringPositions);
 
   }
 }
