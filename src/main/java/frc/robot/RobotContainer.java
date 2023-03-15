@@ -69,7 +69,8 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer {
     //for the xbox controller buttons
     //private Constants.ButtonHashtable bh = new Constants.ButtonHashtable();
-
+    private double autoEndExpectedYaw;
+    private double autoEndYaw;
     
     /* Controllers */
     private final Joystick driver = new Joystick(2);
@@ -198,7 +199,7 @@ public class RobotContainer {
     }
 
     public void resetGyro() {
-        s_Swerve.zeroGyro();
+        s_Swerve.resetGyro(autoEndExpectedYaw + (autoEndExpectedYaw - autoEndYaw));
     }
 
     public void resetGyroReverse() {
@@ -209,12 +210,14 @@ public class RobotContainer {
         return new DriveToPoseCommand(s_Swerve, s_Swerve::getPose, pose, useAlianceColor);
     }
 
-    public void logAutoInitYaw() {
-        s_Swerve.saveAutoInitYaw();
+    public void logAutoEndExpectedYaw() {
+        List<PathPlannerTrajectory> ppt = getAutoChooserResult();
+        PathPlannerTrajectory last = ppt.get(ppt.size() - 1);
+        autoEndExpectedYaw = last.sample(last.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees();
     }
 
     public void logAutoEndYaw() {
-        s_Swerve.saveAutoEndYaw();
+        autoEndYaw = s_Swerve.getYaw().getDegrees();
     }
 
     public void resetGyroOnTeleopInit() {
@@ -380,7 +383,7 @@ public class RobotContainer {
     }
     
 
-    public List<PathPlannerTrajectory> getAutoChooserString() {
+    public List<PathPlannerTrajectory> getAutoChooserResult() {
         return autoChooser.getSelected();
     }
 
