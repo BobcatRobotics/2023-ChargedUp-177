@@ -38,14 +38,14 @@ public class DriveToPoseCommand extends CommandBase {
 
   private final Swerve swerve;
   private final Supplier<Pose2d> poseProvider;
-  private final Pose2d goalPose;
+  private final Supplier<Pose2d> goalPoseSupplier;
   private final boolean useAllianceColor;
 
-  public DriveToPoseCommand(Swerve swerve, Supplier<Pose2d> poseProvider, Pose2d goalPose, boolean useAllianceColor) {
+  public DriveToPoseCommand(Swerve swerve, Supplier<Pose2d> goalPoseSupplier, Supplier<Pose2d> poseProvider, boolean useAllianceColor) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerve = swerve;
+    this.goalPoseSupplier = goalPoseSupplier;
     this.poseProvider = poseProvider;
-    this.goalPose = goalPose;
     this.useAllianceColor = useAllianceColor;
 
     xController = new ProfiledPIDController(Constants.AutoConstants.kPXController, 0, 0, DEFAULT_XY_CONSTRAINTS);
@@ -65,7 +65,7 @@ public class DriveToPoseCommand extends CommandBase {
   @Override
   public void initialize() {
     resetPIDControllers();
-    Pose2d pose = goalPose;
+    Pose2d pose = goalPoseSupplier.get();
     if (useAllianceColor && DriverStation.getAlliance() == DriverStation.Alliance.Red) {
       Translation2d transformedTranslation = new Translation2d(pose.getX(), 8.0137 - pose.getY());
       Rotation2d transformedHeading = pose.getRotation().times(-1);

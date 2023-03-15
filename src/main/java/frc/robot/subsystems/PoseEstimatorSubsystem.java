@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
-  private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
+  private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, 1.5);
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
 
   private final Supplier<Rotation2d> rotationSupplier;

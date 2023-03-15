@@ -135,7 +135,7 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     // m_robotContainer.resetGyroOnTeleopInit();
     m_robotContainer.logAutoEndYaw();
-    m_robotContainer.resetGyro(); 
+    //m_robotContainer.resetGyro(); 
     if (m_autonomousCommand != null) {
       System.out.println("Canceling auto command");
       m_autonomousCommand.cancel();

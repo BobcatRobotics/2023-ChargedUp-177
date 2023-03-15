@@ -55,6 +55,7 @@ import frc.robot.commands.Presets.Procedures.ScoreHighAutos;
 import frc.robot.commands.Presets.Procedures.ScoreMid;
 import frc.robot.commands.Presets.Procedures.TopSuck;
 import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 import frc.robot.autos.PathPlannerTest;
 //import frc.robot.autos.RedHighCone6PickupBalance;
 import frc.robot.subsystems.Limelight;
@@ -218,8 +219,8 @@ public class RobotContainer {
         s_Swerve.reverseZeroGyro();
     }
 
-    public Command driveToPose(Pose2d pose, boolean useAlianceColor) {
-        return new DriveToPoseCommand(s_Swerve, s_Swerve::getPose, pose, useAlianceColor);
+    public Command driveToPose(boolean useAlianceColor) {
+        return new DriveToPoseCommand(s_Swerve, s_Swerve::getClosestScoringPosition, s_Swerve::getPose, useAlianceColor);
     }
 
     public void logAutoEndExpectedYaw() {
@@ -351,7 +352,7 @@ public class RobotContainer {
         //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
         //alignRobot.whileTrue(align);
-        start.whileTrue(driveToPose(s_Swerve.getClosestScoringPosition(), true));
+        start.whileTrue(driveToPose(true));
     }
 
     public boolean anythingPressed() {
