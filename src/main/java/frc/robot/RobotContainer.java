@@ -155,6 +155,8 @@ public class RobotContainer {
         autoChooser.addOption("Score1HighCubeDirtyNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3)));
         autoChooser.addOption("NoMoveScore1High", PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0)));
         autoChooser.addOption("NoTurnScore1HighCenterBalance", PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3)));
+        autoChooser.addOption("Score1HighCubeCleanPickupBalance", PathPlanner.loadPathGroup("Score1HighCubePickupLeftBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("Score1HighCubeDirtyPickupBalance", PathPlanner.loadPathGroup("Score1HighCubePickupRightBalance", new PathConstraints(4.5, 3)));
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
@@ -165,7 +167,10 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("chargeStation", new MountAndBalance(s_Swerve));
         Constants.AutoConstants.eventMap.put("align", new AlignToTargetAutos(s_Swerve, m_Limelight));
         Constants.AutoConstants.eventMap.put("highPreset", new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist));
-        Constants.AutoConstants.eventMap.put("intakeGround", new ForwardSuck(m_Elevator, m_Arm, m_Wrist));
+        Constants.AutoConstants.eventMap.put("intakeGround", new SequentialCommandGroup(
+            new ForwardSuck(m_Elevator, m_Arm, m_Wrist),
+            new IntakeInConstantly(m_Intake)
+        ));
         Constants.AutoConstants.eventMap.put("startingConfig", new StartingConfig(m_Elevator, m_Arm, m_Wrist));
         Constants.AutoConstants.eventMap.put("flickWrist", new InstantCommand(m_Wrist::wristSolenoidON));
         Constants.AutoConstants.eventMap.put("intakeOut", new IntakeOut(m_Intake));//new ParallelRaceGroup(new IntakeOut(), new WaitCommand(5)));
