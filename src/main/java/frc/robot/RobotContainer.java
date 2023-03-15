@@ -202,10 +202,7 @@ public class RobotContainer {
     public void resetGyro() {
         if (roundTo180Or0(Math.abs(autoEndYaw - autoStartYaw)) == 0) {
             s_Swerve.resetGyro(autoEndYaw - autoEndExpectedYaw);
-        } else {
-            s_Swerve.resetGyro(autoEndExpectedYaw - autoEndYaw);
         }
-        
     }
 
     public int roundTo180Or0(double angle) {
