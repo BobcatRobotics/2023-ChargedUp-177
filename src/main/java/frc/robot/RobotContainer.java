@@ -205,6 +205,10 @@ public class RobotContainer {
         s_Swerve.reverseZeroGyro();
     }
 
+    public Command driveToPose(Pose2d pose, boolean useAlianceColor) {
+        return new DriveToPoseCommand(s_Swerve, s_Swerve::getPose, pose, useAlianceColor);
+    }
+
     public void logAutoInitYaw() {
         s_Swerve.saveAutoInitYaw();
     }
@@ -331,7 +335,7 @@ public class RobotContainer {
         //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
         //alignRobot.whileTrue(align);
-        start.whileTrue(buildAuto(generateTrajToScoringNode()));
+        start.whileTrue(driveToPose(s_Swerve.getClosestScoringPosition(), true));
     }
 
     public boolean anythingPressed() {
