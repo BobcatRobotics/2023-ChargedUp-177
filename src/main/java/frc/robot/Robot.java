@@ -136,7 +136,9 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     if (
-      m_robotContainer.getAutoChooserResult().equals(PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0)))
+      m_robotContainer.getAutoChooserResult().equals(PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0))) || 
+      m_robotContainer.getAutoChooserResult().equals(PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3))) ||
+      m_robotContainer.getAutoChooserResult().equals(PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3)))
     ) {
       m_robotContainer.reverseZeroGyro();
     } else {
