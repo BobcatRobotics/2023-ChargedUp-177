@@ -188,6 +188,14 @@ public class RobotContainer {
         SmartDashboard.putString("eventMap", Constants.AutoConstants.eventMap.toString());
     }
 
+    public void zeroGyro() {
+        s_Swerve.zeroGyro();
+    }
+
+    public void reverseZeroGyro() {
+        s_Swerve.reverseZeroGyro();
+    }
+
 
 
     // returns the angle of the joystick in degrees
@@ -343,5 +351,9 @@ public class RobotContainer {
        // s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
        // return new MountAndBalance(s_Swerve); //autoChooser.getSelected();
        return buildAuto(autoChooser.getSelected());
+    }
+
+    public List<PathPlannerTrajectory> getAutoChooserResult() {
+        return autoChooser.getSelected();
     }
 }

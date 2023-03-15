@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -106,6 +109,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     //RobotContainer.s_Swerve.resetOdometryAutos();
+    
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     try{
     m_robotContainer.cancelDefaultTeleop();
@@ -131,6 +135,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    if (
+      m_robotContainer.getAutoChooserResult().equals(PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0)))
+    ) {
+      m_robotContainer.reverseZeroGyro();
+    } else {
+      m_robotContainer.zeroGyro();
+    }
     if (m_autonomousCommand != null) {
       System.out.println("Canceling auto command");
       m_autonomousCommand.cancel();
