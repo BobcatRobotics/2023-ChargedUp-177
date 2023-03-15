@@ -55,8 +55,8 @@ public class Elevator extends SubsystemBase {
 
     // motion magic trapezoid configuration
     //elevatorMotor.configAllowableClosedloopError()
-    elevatorMotor.configMotionCruiseVelocity(44000, 20); //needs to be tuned to robot
-    elevatorMotor.configMotionAcceleration(88000, 20); // TODO: test! used to 55000 @ waterbury
+    elevatorMotor.configMotionCruiseVelocity(64000, 20); //needs to be tuned to robot
+    elevatorMotor.configMotionAcceleration(55000, 20);
 
     holdPosValue = elevatorMotor.getSelectedSensorPosition();
   }
@@ -111,17 +111,17 @@ public class Elevator extends SubsystemBase {
 
   public void setState(int state) {
     if (state == 0) {
-      elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos0);
+      elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos0);
       // holdPosValue = ElevatorConstants.pos0;
       // holdPosition();
       SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     } else if (state == 1) {
-      elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos1);
+      elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos1);
       // holdPosValue = ElevatorConstants.pos1;
       // holdPosition();
       SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     } else if (state == 2) {
-      elevatorMotor.set(ControlMode.Position, ElevatorConstants.pos2);
+      elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos2);
       // holdPosValue = ElevatorConstants.pos2;
       // holdPosition();
       SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());

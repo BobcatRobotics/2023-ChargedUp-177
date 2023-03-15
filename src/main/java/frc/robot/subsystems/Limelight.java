@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -12,33 +11,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
-  private NetworkTable table;
-
   private boolean initialized = false;
   private NetworkTableEntry tTarget = null;
   private NetworkTableEntry tx = null;
   private NetworkTableEntry ty = null;
   private NetworkTableEntry ta = null;
-  private NetworkTableEntry tl = null;
-  private NetworkTableEntry cl = null;
-  private NetworkTableEntry botpose = null;
-  private NetworkTableEntry campose = null;
 
   /** Creates a new Limelight. */
   public Limelight() {
   }
 
   public void initializeLimeLight() {
-    table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     turnOnLED();
     try {
       tTarget = table.getEntry("tv");
       tx = table.getEntry("tx");
       ty = table.getEntry("ty");
       ta = table.getEntry("ta");
-      tl = table.getEntry("tl");
-      cl = table.getEntry("cl");
-      botpose = table.getEntry("botpose_wpiblue");
       
     } catch (Exception e) {
       SmartDashboard.putBoolean("couldn't get nt entries", true);
@@ -50,15 +40,12 @@ public class Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     try {
       tTarget = table.getEntry("tv");
       tx = table.getEntry("tx");
       ty = table.getEntry("ty");
       ta = table.getEntry("ta");
-      tl = table.getEntry("tl");
-      cl = table.getEntry("cl");
-      botpose = table.getEntry("botpose_wpiblue");
     } catch (Exception e) {
       return;
     }
@@ -80,30 +67,6 @@ public class Limelight extends SubsystemBase {
       hits = (getEntry("tv").getDouble(0.0) == 1.0);
     }
     return hits;
-  }
-
-  public Double[] botPose() {
-    Double[] botPose = null;
-    if (isInitialized()) {
-      botPose = botpose.getDoubleArray(new Double[6]);
-    }
-    return botPose;
-  }
-
-  public double tl() {
-    double tl = 0.0;
-    if (isInitialized()) {
-      tl = getEntry("tl").getDouble(0.0);
-    }
-    return tl;
-  }
-
-  public double cl() {
-    double cl = 0.0;
-    if (isInitialized()) {
-      cl = getEntry("cl").getDouble(0.0);
-    }
-    return cl;
   }
 
   public double x() {

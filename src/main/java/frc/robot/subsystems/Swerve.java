@@ -23,28 +23,24 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import java.sql.Driver;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
-    public PoseEstimatorSubsystem poseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-    public Limelight limelight;
-    private double autoInitYaw;
-    private double autoEndYaw;
 
     public double rot;
+    public PhotonVision photonCam;
 
 
-    public Swerve(Limelight limelight) {
+    public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.CANivore);
         gyro.configFactoryDefault();
         zeroGyro();
+        photonCam = new PhotonVision();
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -58,38 +54,10 @@ public class Swerve extends SubsystemBase {
         resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
-        poseEstimator = new PoseEstimatorSubsystem(this::getYaw, this::getModulePositions, limelight);
-        poseEstimator.setAlliance(DriverStation.getAlliance());
 
         // for(SwerveModule mod : mSwerveMods){
         //     System.out.println("CANcoder on Module " + mod.moduleNumber + " took " + mod.CANcoderInitTime + " ms to be ready.");
         // }
-        this.limelight = limelight;
-    }
-
-    public void saveAutoInitYaw() {
-        autoInitYaw = getYaw().getDegrees();
-    }
-
-    public void saveAutoEndYaw() {
-        autoEndYaw = getYaw().getDegrees();
-    }
-
-    public double autoYawOffset() {
-        // if (autoEndYaw + 180 > 360) {
-        //     return autoEndYaw - 180;
-        // } else {
-        //     return autoEndYaw + 180;
-        // }
-        return autoEndYaw;
-    }
-
-    public void resetGyroOnTeleopScoringPos() {
-        resetGyro(autoInitYaw);
-    }
-
-    public void resetGyroOnTeleopNotScoringPos() {
-        resetGyro(autoInitYaw);
     }
 
     public double getPitch(){
@@ -151,13 +119,11 @@ public class Swerve extends SubsystemBase {
     }    
 
     public Pose2d getPose() {
-        //return swerveOdometry.getPoseMeters();
-        return poseEstimator.getCurrentPose();
+        return swerveOdometry.getPoseMeters();
     }
 
     public void resetOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
-        poseEstimator.setCurrentPose(pose);
     }
 
     public SwerveModuleState[] getModuleStates(){
@@ -187,14 +153,6 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(0);
     }
 
-    public void resetGyro(double newYaw) {
-        gyro.setYaw(newYaw);
-    }
-
-    public void reverseZeroGyro() {
-        gyro.setYaw(180);
-    }
-
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
@@ -206,10 +164,6 @@ public class Swerve extends SubsystemBase {
         mSwerveMods[1].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
         mSwerveMods[2].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(315))), true);
         mSwerveMods[3].setDesiredState(new SwerveModuleState(1, new Rotation2d(Math.toRadians(45))), true);
-    }
-
-    public Pose2d getClosestScoringPosition() {
-        return poseEstimator.closestScoringPosition(DriverStation.getAlliance());
     }
 
     
@@ -242,9 +196,5 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("swerveOdometry Pose X Meters", swerveOdometry.getPoseMeters().getX());
         SmartDashboard.putNumber("swerveOdometry Pose Y Meters", swerveOdometry.getPoseMeters().getY());
         SmartDashboard.putNumber("swerveOdometry Pose Rotation Degrees", swerveOdometry.getPoseMeters().getRotation().getDegrees());
-
-        SmartDashboard.putNumber("poseEstimator X Meters", poseEstimator.getCurrentPose().getX());
-        SmartDashboard.putNumber("poseEstimator Y Meters", poseEstimator.getCurrentPose().getY());
-        SmartDashboard.putNumber("poseEstimator Rotation Degrees", poseEstimator.getCurrentPose().getRotation().getDegrees());
     }
 }

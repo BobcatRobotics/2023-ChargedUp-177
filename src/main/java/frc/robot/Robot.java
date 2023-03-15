@@ -107,7 +107,6 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     //RobotContainer.s_Swerve.resetOdometryAutos();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_robotContainer.logAutoEndExpectedYaw();
     try{
     m_robotContainer.cancelDefaultTeleop();
     }catch(NullPointerException e){
@@ -128,14 +127,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // m_robotContainer.logAutoEndYaw();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    // m_robotContainer.resetGyroOnTeleopInit();
-    m_robotContainer.logAutoEndYaw();
-    //m_robotContainer.resetGyro(); 
     if (m_autonomousCommand != null) {
       System.out.println("Canceling auto command");
       m_autonomousCommand.cancel();

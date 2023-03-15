@@ -1,12 +1,9 @@
 package frc.robot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.pathplanner.lib.PathPlannerTrajectory;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -17,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 import java.util.Hashtable;
-import java.util.List;
 
 public final class Constants {
     public static final int intakeMotorID = 11; //TODO: assign correct values
@@ -27,31 +23,6 @@ public final class Constants {
     public static final int compressorID = 1;
     public static final double stickDeadband = 0.05;
     public static final int Jake = 194; //Jake M is 194 cm tall
-
-    public static final class PoseEstimation {
-        public static ArrayList<Pose2d> scoringPositions = new ArrayList<Pose2d>() {{
-            // add(
-            //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 0), 2.18, new Rotation2d()),
-            //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 1), 2.18,  new Rotation2d()),
-            //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 2), 2.18,  new Rotation2d()),
-            //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 3), 2.18,  new Rotation2d()),
-            //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 4), 2.18,  new Rotation2d()),
-            //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 5), 2.18,  new Rotation2d()),
-            //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 6), 2.18,  new Rotation2d()),
-            //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 7), 2.18,  new Rotation2d()),
-            //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 8), 2.18,  new Rotation2d())                
-            // );
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 - 22.0 * 0), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 - 22.0 * 1), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 - 22.0 * 2), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 - 22.0 * 3), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 - 22.0 * 4), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 - 22.0 * 5), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 - 22.0 * 6), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 - 22.0 * 7), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 - 22.0 * 8), new Rotation2d()));
-        }};
-    }
 
     public static final class Swerve {
         public static final int pigeonID = 1;
@@ -137,7 +108,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 1;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(173.144);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(357.8906);
             
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
@@ -190,8 +161,6 @@ public final class Constants {
         public static final double kPThetaController = 3.3;
 
         public static HashMap<String, Command> eventMap = new HashMap<>();
-
-        public static HashMap<List<PathPlannerTrajectory>, Command> gyroResets = new HashMap<>();
     
         /* Constraint for the motion profilied robot angle controller */
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
