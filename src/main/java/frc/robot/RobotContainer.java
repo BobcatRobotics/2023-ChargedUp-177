@@ -159,8 +159,8 @@ public class RobotContainer {
         autoChooser.addOption("NoTurnScore1HighCenterBalance", PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3)));
         autoChooser.addOption("Score1HighCubeCleanPickupBalance", PathPlanner.loadPathGroup("Score1HighCubePickupLeftBalance", new PathConstraints(4.5, 3)));
         autoChooser.addOption("Score1HighCubeDirtyPickupBalance", PathPlanner.loadPathGroup("Score1HighCubePickupRightBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("Score1HighCubeCleanPickupNoBalance", PathPlanner.loadPathGroup("Score1HighCubeLeftPickupNoBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("Score1HighCubeDirtyPickupNoBalance", PathPlanner.loadPathGroup("Score1HighCubeRightPickupNoBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("Score1HighCubeCleanPickupNoBalance", PathPlanner.loadPathGroup("Score1HighCubePickupLeftNoBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("Score1HighCubeDirtyPickupNoBalance", PathPlanner.loadPathGroup("Score1HighCubePickupRightNoBalance", new PathConstraints(4.5, 3)));
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
