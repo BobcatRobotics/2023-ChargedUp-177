@@ -97,8 +97,9 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.turnOffLeds();
-    m_robotContainer.resetToAbsolute();
-    
+    for (int i = 0; i < 10; i++) {
+      m_robotContainer.resetToAbsolute();
+    }
   }
 
   @Override
@@ -116,7 +117,9 @@ public class Robot extends TimedRobot {
     }catch(NullPointerException e){
 
     }
-    m_robotContainer.resetToAbsolute();
+    for (int i = 0; i < 10; i++) {
+      m_robotContainer.resetToAbsolute();
+    }
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -135,6 +138,11 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    if (m_autonomousCommand != null) {
+      System.out.println("Canceling auto command");
+      m_autonomousCommand.cancel();
+    }
+
     if (
       m_robotContainer.getAutoChooserResult().equals(PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0))) || 
       m_robotContainer.getAutoChooserResult().equals(PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3))) ||
@@ -144,13 +152,9 @@ public class Robot extends TimedRobot {
     } else {
       m_robotContainer.zeroGyro();
     }
-    if (m_autonomousCommand != null) {
-      System.out.println("Canceling auto command");
-      m_autonomousCommand.cancel();
-    }
 
     SmartDashboard.putNumber("PID Value", 0);
-    m_robotContainer.resetToAbsolute();
+    // m_robotContainer.resetToAbsolute();
     m_robotContainer.scheduleDefaultTeleop();
   }
 

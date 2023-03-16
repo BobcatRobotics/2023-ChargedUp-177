@@ -37,6 +37,8 @@ import frc.robot.commands.Autos.AlignToTargetAutos;
 import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.commands.Autos.MountAndBalance;
 import frc.robot.commands.Autos.MountAndBalanceInverse;
+import frc.robot.commands.Autos.AutoPresets.ScoreCubeHighAutos;
+import frc.robot.commands.Presets.IntakeInConstantly;
 import frc.robot.commands.Presets.RetractArm;
 import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.SetArm;
@@ -182,12 +184,11 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("scoreCubeHigh", new SequentialCommandGroup(
             new InstantCommand(m_Wrist::wristSolenoidON),
             new ParallelRaceGroup(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2.125)), 
-            new WaitCommand(0.05), 
             new InstantCommand(m_Wrist::wristSolenoidON),
-            new WaitCommand(0.25),
+            new WaitCommand(0.2),
             new IntakeOutFullSpeed(m_Intake), 
-            new StartingConfig(m_Elevator, m_Arm, m_Wrist),
-            new WaitCommand(0.25))
+            new StartingConfig(m_Elevator, m_Arm, m_Wrist)
+            )
         );
         Constants.AutoConstants.eventMap.put("driveBackInverse", new DriveBackInverse(s_Swerve));
         Constants.AutoConstants.eventMap.put("chargeStationInverse", new MountAndBalanceInverse(s_Swerve));
