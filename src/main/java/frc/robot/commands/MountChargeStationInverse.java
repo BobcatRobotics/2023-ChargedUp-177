@@ -14,11 +14,11 @@ public class MountChargeStationInverse extends CommandBase {
   private Swerve swerve;
   private double pitch;
   private double stage1Threshold = -10;
-  private double stage2Threshold = -16;
+  private double stage2Threshold = -15;
   private int stage = 1;
   private boolean isRed;
   private boolean finished = false;
-  private double xSpeed = -1.75;
+  private double xSpeed = 1.75;
 
   /** Creates a new MountChargeStationInverse. */
   public MountChargeStationInverse(Swerve drivetrain) {
@@ -59,7 +59,7 @@ public class MountChargeStationInverse extends CommandBase {
       if((pitch < stage1Threshold)){
         SmartDashboard.putString("ChargeStation", "stage 1: " + pitch);
         stage = 2;
-        xSpeed = -1.25;
+        xSpeed = 1.25;
     
       }
       else if(stage == 2 && (pitch > stage2Threshold)){
