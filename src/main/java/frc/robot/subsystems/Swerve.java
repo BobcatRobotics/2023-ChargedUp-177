@@ -29,14 +29,16 @@ import org.photonvision.EstimatedRobotPose;
 
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
+    public PoseEstimatorSubsystem poseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
     public double rot;
     public PhotonVision photonCam;
+    public Limelight limelight;
 
 
-    public Swerve() {
+    public Swerve(Limelight limelight) {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.CANivore);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -58,6 +60,13 @@ public class Swerve extends SubsystemBase {
         // for(SwerveModule mod : mSwerveMods){
         //     System.out.println("CANcoder on Module " + mod.moduleNumber + " took " + mod.CANcoderInitTime + " ms to be ready.");
         // }
+        this.limelight = limelight;
+
+        this.poseEstimator = new PoseEstimatorSubsystem(
+            this::getYaw, 
+            this::getModulePositions, 
+            limelight
+        );
     }
 
     public double getPitch(){

@@ -144,9 +144,9 @@ public class Robot extends TimedRobot {
     }
 
     if (
-      m_robotContainer.getAutoChooserResult().equals(PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0))) || 
-      m_robotContainer.getAutoChooserResult().equals(PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3))) ||
-      m_robotContainer.getAutoChooserResult().equals(PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3)))
+      m_robotContainer.getAutoChooserResult().equals(RobotContainer.buildAuto(PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0)))) || 
+      m_robotContainer.getAutoChooserResult().equals(RobotContainer.buildAuto(PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3)))) ||
+      m_robotContainer.getAutoChooserResult().equals(RobotContainer.buildAuto(PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3))))
     ) {
       m_robotContainer.reverseZeroGyro();
     } else {

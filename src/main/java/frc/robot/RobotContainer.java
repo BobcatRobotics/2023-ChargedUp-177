@@ -107,8 +107,8 @@ public class RobotContainer {
     /* Subsystems */
 
 
-    public static Swerve s_Swerve = new Swerve();
     public static Limelight m_Limelight = new Limelight();
+    public static Swerve s_Swerve = new Swerve(m_Limelight);
 
     private final Elevator m_Elevator = new Elevator();
     private final Intake m_Intake = new Intake();
@@ -137,30 +137,30 @@ public class RobotContainer {
     private static SwerveAutoBuilder swerveAutoBuilder;
 
     /* SendableChooser */
-    SendableChooser<List<PathPlannerTrajectory>> autoChooser = new SendableChooser<>();
+    SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     public void setUpAutos() {
         // Sendable Chooser Setup
         //autoChooser.setDefaultOption("Red High Cone 6 Pickup & Balance", redHighCone6PickupBalance);
         setUpEventMap();
         //pathPlannerTest = new PathPlannerTest();
-        autoChooser.setDefaultOption("Score1HighCubeDirtyBalance", PathPlanner.loadPathGroup("Score1HighCubeRightBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("Score1CleanBalance", PathPlanner.loadPathGroup("Score1LeftBalance", new PathConstraints(4, 3)));
-        autoChooser.addOption("CleanBalance", PathPlanner.loadPathGroup("LeftBalance", new PathConstraints(4, 3)));
-        autoChooser.addOption("DirtyBalance", PathPlanner.loadPathGroup("RightBalance", new PathConstraints(4, 3)));
+        autoChooser.setDefaultOption("Score1HighCubeDirtyBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubeRightBalance", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("Score1CleanBalance", buildAuto(PathPlanner.loadPathGroup("Score1LeftBalance", new PathConstraints(4, 3))));
+        autoChooser.addOption("CleanBalance", buildAuto(PathPlanner.loadPathGroup("LeftBalance", new PathConstraints(4, 3))));
+        autoChooser.addOption("DirtyBalance", buildAuto(PathPlanner.loadPathGroup("RightBalance", new PathConstraints(4, 3))));
         // autoChooser.addOption("CenterBalance", PathPlanner.loadPathGroup("CenterBalance", new PathConstraints(4, 3)));
         // autoChooser.addOption("Score1CenterBalance", PathPlanner.loadPathGroup("Score1CenterBalance", new PathConstraints(4, 3)));
-        autoChooser.addOption("Score1DirtyBalance", PathPlanner.loadPathGroup("Score1RightBalance", new PathConstraints(4, 3)));
-        autoChooser.addOption("Score1HighCubeCleanBalance", PathPlanner.loadPathGroup("Score1HighCubeLeftBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("Score1DirtyBalance", buildAuto(PathPlanner.loadPathGroup("Score1RightBalance", new PathConstraints(4, 3))));
+        autoChooser.addOption("Score1HighCubeCleanBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubeLeftBalance", new PathConstraints(4.5, 3))));
         // autoChooser.addOption("Score1HighCubeCenterBalance", PathPlanner.loadPathGroup("Score1HighCubeCenterBalance", new PathConstraints(4.5, 3)));
         // autoChooser.addOption("Score1HighCubeCleanNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeCleanNoBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("Score1HighCubeDirtyNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("NoMoveScore1High", PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0)));
-        autoChooser.addOption("NoTurnScore1HighCenterBalance", PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3)));
-        autoChooser.addOption("Score1HighCubeCleanPickupBalance", PathPlanner.loadPathGroup("Score1HighCubePickupLeftBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("Score1HighCubeDirtyPickupBalance", PathPlanner.loadPathGroup("Score1HighCubePickupRightBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("Score1HighCubeCleanPickupNoBalance", PathPlanner.loadPathGroup("Score1HighCubePickupLeftNoBalance", new PathConstraints(4.5, 3)));
-        autoChooser.addOption("Score1HighCubeDirtyPickupNoBalance", PathPlanner.loadPathGroup("Score1HighCubePickupRightNoBalance", new PathConstraints(4.5, 3)));
+        autoChooser.addOption("Score1HighCubeDirtyNoBalance", buildAuto(PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("NoMoveScore1High", buildAuto(PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0))));
+        autoChooser.addOption("NoTurnScore1HighCenterBalance", buildAuto(PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3))));
+        autoChooser.addOption("Score1HighCubeCleanPickupBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupLeftBalance", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("Score1HighCubeDirtyPickupBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupRightBalance", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("Score1HighCubeCleanPickupNoBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupLeftNoBalance", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("Score1HighCubeDirtyPickupNoBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupRightNoBalance", new PathConstraints(4.5, 3))));
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
@@ -362,10 +362,10 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
        // s_Swerve.resetOdometry(new Pose2d(0, 0, s_Swerve.getYaw()));
        // return new MountAndBalance(s_Swerve); //autoChooser.getSelected();
-       return buildAuto(autoChooser.getSelected());
+       return autoChooser.getSelected();
     }
 
-    public List<PathPlannerTrajectory> getAutoChooserResult() {
+    public Command getAutoChooserResult() {
         return autoChooser.getSelected();
     }
 }

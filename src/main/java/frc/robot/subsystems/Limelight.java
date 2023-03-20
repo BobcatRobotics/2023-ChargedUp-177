@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -16,6 +20,8 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry tx = null;
   private NetworkTableEntry ty = null;
   private NetworkTableEntry ta = null;
+  private NetworkTableEntry botpose = null;
+  private NetworkTableEntry targetpose = null;
 
   /** Creates a new Limelight. */
   public Limelight() {
@@ -29,6 +35,8 @@ public class Limelight extends SubsystemBase {
       tx = table.getEntry("tx");
       ty = table.getEntry("ty");
       ta = table.getEntry("ta");
+      botpose = table.getEntry("botpose");
+      targetpose = table.getEntry("targetpose_robotspace");
       
     } catch (Exception e) {
       SmartDashboard.putBoolean("couldn't get nt entries", true);
@@ -46,6 +54,8 @@ public class Limelight extends SubsystemBase {
       tx = table.getEntry("tx");
       ty = table.getEntry("ty");
       ta = table.getEntry("ta");
+      botpose = table.getEntry("botpose");
+      targetpose = table.getEntry("targetpose_robotspace");
     } catch (Exception e) {
       return;
     }
@@ -67,6 +77,23 @@ public class Limelight extends SubsystemBase {
       hits = (getEntry("tv").getDouble(0.0) == 1.0);
     }
     return hits;
+  }
+
+  public Double[] botPose() {
+    Double[] botPose = null;
+    if (isInitialized()) {
+      botPose = botpose.getDoubleArray(new Double[7]); 
+    }
+    return botPose;
+  }
+
+  public double targetDist() {
+    Double[] targetPose = null;
+    if (isInitialized()) {
+      targetPose = targetpose.getDoubleArray(new Double[3]);
+    }
+    Translation3d dist = new Translation3d(targetPose[0], targetPose[1], targetPose[2]);
+    return dist.getDistance(new Translation3d());
   }
 
   public double x() {
