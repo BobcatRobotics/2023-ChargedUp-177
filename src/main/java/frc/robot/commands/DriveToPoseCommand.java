@@ -27,9 +27,14 @@ public class DriveToPoseCommand extends CommandBase {
     Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared,
     Constants.AutoConstants.kMaxSpeedMetersPerSecond
   );
+  private static final TrapezoidProfile.Constraints DEFAULT_OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(
+    Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond,
+    Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared
+  );
 
   private final ProfiledPIDController xController;
   private final ProfiledPIDController yController;
+  private final ProfiledPIDController thetaController;
 
   private final Swerve swerve;
   private final Supplier<Pose2d> poseProvider;
@@ -45,9 +50,11 @@ public class DriveToPoseCommand extends CommandBase {
 
     xController = new ProfiledPIDController(Constants.AutoConstants.kPXController, 0, 0, DEFAULT_XY_CONSTRAINTS);
     yController = new ProfiledPIDController(Constants.AutoConstants.kPYController, 0, 0, DEFAULT_XY_CONSTRAINTS);
+    thetaController = new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, DEFAULT_OMEGA_CONSTRAINTS);
 
     xController.setTolerance(TRANSLATION_TOLERANCE);
     yController.setTolerance(TRANSLATION_TOLERANCE);
+    thetaController.setTolerance(THETA_TOLERANCE);
 
     addRequirements(swerve);
   }
@@ -64,16 +71,18 @@ public class DriveToPoseCommand extends CommandBase {
     }
     xController.setGoal(pose.getX());
     yController.setGoal(pose.getY());
+    thetaController.setGoal(pose.getRotation().getRadians());
   }
 
   public boolean atGoal() {
-    return xController.atGoal() && yController.atGoal();
+    return xController.atGoal() && yController.atGoal() && thetaController.atGoal();
   }
 
   private void resetPIDControllers() {
     Pose2d robotPose = poseProvider.get();
     xController.reset(robotPose.getX());
     yController.reset(robotPose.getY());
+    thetaController.reset(robotPose.getRotation().getRadians());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -91,8 +100,13 @@ public class DriveToPoseCommand extends CommandBase {
       ySpeed = 0;
     }
 
+    double thetaSpeed = thetaController.calculate(robotPose.getRotation().getRadians());
+    if (thetaController.atGoal()) {
+      thetaSpeed = 0;
+    }
+
     swerve.drive(
-      ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, 0, robotPose.getRotation())
+      ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, thetaSpeed, robotPose.getRotation())
     );
   }
 
