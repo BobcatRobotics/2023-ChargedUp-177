@@ -28,8 +28,8 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 
 public class Swerve extends SubsystemBase {
-    public SwerveDriveOdometry swerveOdometry;
-    public PoseEstimatorSubsystem poseEstimator;
+    //public SwerveDriveOdometry swerveOdometry;
+    public PoseEstimator poseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
@@ -55,14 +55,14 @@ public class Swerve extends SubsystemBase {
         //SmartDashboard.putBoolean("resetModsToAbsCalled", true);
         resetModulesToAbsolute();
 
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
+        //swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
 
         // for(SwerveModule mod : mSwerveMods){
         //     System.out.println("CANcoder on Module " + mod.moduleNumber + " took " + mod.CANcoderInitTime + " ms to be ready.");
         // }
         this.limelight = limelight;
 
-        this.poseEstimator = new PoseEstimatorSubsystem(
+        this.poseEstimator = new PoseEstimator(
             this::getYaw, 
             this::getModulePositions, 
             limelight
@@ -128,11 +128,13 @@ public class Swerve extends SubsystemBase {
     }    
 
     public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
+        //return swerveOdometry.getPoseMeters();
+        return poseEstimator.getCurrentPose();
     }
 
     public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
+        //swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
+        poseEstimator.setCurrentPose(pose);
     }
 
     public SwerveModuleState[] getModuleStates(){
@@ -194,7 +196,8 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
-        swerveOdometry.update(getYaw(), getModulePositions()); 
+        //swerveOdometry.update(getYaw(), getModulePositions()); 
+        poseEstimator.periodic();
 
         if (DriverStation.isDisabled()) {
             resetModulesToAbsolute();
@@ -206,8 +209,8 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
         }
         
-        SmartDashboard.putNumber("swerveOdometry Pose X Meters", swerveOdometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("swerveOdometry Pose Y Meters", swerveOdometry.getPoseMeters().getY());
-        SmartDashboard.putNumber("swerveOdometry Pose Rotation Degrees", swerveOdometry.getPoseMeters().getRotation().getDegrees());
+        SmartDashboard.putNumber("swerveOdometry Pose X Meters", poseEstimator.getCurrentPose().getX());
+        SmartDashboard.putNumber("swerveOdometry Pose Y Meters", poseEstimator.getCurrentPose().getY());
+        SmartDashboard.putNumber("swerveOdometry Pose Rotation Degrees", poseEstimator.getCurrentPose().getRotation().getDegrees());
     }
 }

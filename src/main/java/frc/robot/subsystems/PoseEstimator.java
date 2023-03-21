@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
-public class PoseEstimatorSubsystem extends SubsystemBase {
+public class PoseEstimator {
   private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, 1.5);
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
 
@@ -41,7 +41,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   private final double FIELD_WIDTH_METERS = 8.0137;
   
   /** Creates a new PoseEstimatorSubsystem. */
-  public PoseEstimatorSubsystem(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier, Limelight limelight) {
+  public PoseEstimator(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier, Limelight limelight) {
     this.rotationSupplier = rotationSupplier;
     this.modulePositionSupplier = modulePositionSupplier;
 
@@ -80,7 +80,6 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     }
   }
 
-  @Override
   public void periodic() {
     // This method will be called once per scheduler run
     poseEstimator.update(this.rotationSupplier.get(), this.modulePositionSupplier.get());
@@ -95,7 +94,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     // }
     Pose3d visionPose = null;
     try {
-      visionPose = new Pose3d(limelight.botPose()[0]-FIELD_LENGTH_METERS/2, limelight.botPose()[1]-FIELD_WIDTH_METERS/2, limelight.botPose()[2], new Rotation3d(limelight.botPose()[3], limelight.botPose()[4], limelight.botPose()[5]));
+      visionPose = new Pose3d(limelight.botPose()[0], limelight.botPose()[1], limelight.botPose()[2], new Rotation3d(limelight.botPose()[3], limelight.botPose()[4], limelight.botPose()[5]));
     } catch (Exception e) {}
 
     if (visionPose != null) {
@@ -105,7 +104,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         pose2d = flipAlliance(pose2d);
       }
       double distance = limelight.targetDist();
-      poseEstimator.addVisionMeasurement(pose2d, Timer.getFPGATimestamp() - limelight.botPose()[6]/1000.0, VecBuilder.fill(distance/2, distance/2, 100));
+      poseEstimator.addVisionMeasurement(pose2d, Timer.getFPGATimestamp() - limelight.botPose()[6]/1000.0, VecBuilder.fill(distance/2, distance/2, 0));
     }
   }
 

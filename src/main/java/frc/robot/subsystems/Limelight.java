@@ -35,7 +35,7 @@ public class Limelight extends SubsystemBase {
       tx = table.getEntry("tx");
       ty = table.getEntry("ty");
       ta = table.getEntry("ta");
-      botpose = table.getEntry("botpose");
+      botpose = table.getEntry("botpose_wpiblue");
       targetpose = table.getEntry("targetpose_robotspace");
       
     } catch (Exception e) {
@@ -54,7 +54,7 @@ public class Limelight extends SubsystemBase {
       tx = table.getEntry("tx");
       ty = table.getEntry("ty");
       ta = table.getEntry("ta");
-      botpose = table.getEntry("botpose");
+      botpose = table.getEntry("botpose_wpiblue");
       targetpose = table.getEntry("targetpose_robotspace");
     } catch (Exception e) {
       return;

@@ -317,11 +317,24 @@ public class RobotContainer {
         //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
         //alignRobot.whileTrue(align);
-        start.whileTrue(align);
+        start.whileTrue(driveToPose(true).until(this::baseDriverControlsMoved));
     }
+
+    public Command driveToPose(boolean useAlianceColor) {
+        return new DriveToPoseCommand(s_Swerve, this::getSelectedNode, s_Swerve::getPose, useAlianceColor);
+    }
+
+    public Pose2d getSelectedNode() {
+        return Constants.PoseEstimation.scoringPositions.get(1);
+    }
+
 
     public boolean anythingPressed() {
         return Math.abs(driver.getRawAxis(1)) >= 0.1 || Math.abs(driver.getRawAxis(3)) >= 0.1; 
+    }
+
+    public boolean baseDriverControlsMoved() {
+        return Math.abs(rotate.getRawAxis(Joystick.AxisType.kX.value)) >= 0.1 || Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)) >= 0.1 || Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)) >= 0.1;
     }
 
     public void turnOffLeds() {
