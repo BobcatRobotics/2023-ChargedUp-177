@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class PoseEstimator {
-  private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, 1.5);
+  private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
 
   private final Supplier<Rotation2d> rotationSupplier;
@@ -94,17 +94,22 @@ public class PoseEstimator {
     // }
     Pose3d visionPose = null;
     try {
-      visionPose = new Pose3d(limelight.botPose()[0], limelight.botPose()[1], limelight.botPose()[2], new Rotation3d(limelight.botPose()[3], limelight.botPose()[4], limelight.botPose()[5]));
-    } catch (Exception e) {}
-
-    if (visionPose != null) {
+      double[] botPose = limelight.botPose();
+      visionPose = new Pose3d(botPose[0], botPose[1], botPose[2], new Rotation3d(botPose[3], botPose[4], botPose[5]));
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+    if (visionPose != null && limelight.tv() == 1.0) {
+      System.out.println("vision pose found!");
       sawTag = true;
       Pose2d pose2d = visionPose.toPose2d();
+      pose2d = new Pose2d(pose2d.getTranslation(), rotationSupplier.get());
       if (originPosition != OriginPosition.kBlueAllianceWallRightSide) {
         pose2d = flipAlliance(pose2d);
       }
       double distance = limelight.targetDist();
-      poseEstimator.addVisionMeasurement(pose2d, Timer.getFPGATimestamp() - limelight.botPose()[6]/1000.0, VecBuilder.fill(distance/2, distance/2, 0));
+      //poseEstimator.addVisionMeasurement(pose2d, Timer.getFPGATimestamp() - limelight.botPose()[6]/1000.0);
+      setCurrentPose(pose2d);
     }
   }
 

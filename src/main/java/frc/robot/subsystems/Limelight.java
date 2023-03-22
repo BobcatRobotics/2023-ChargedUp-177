@@ -23,11 +23,7 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry botpose = null;
   private NetworkTableEntry targetpose = null;
 
-  /** Creates a new Limelight. */
   public Limelight() {
-  }
-
-  public void initializeLimeLight() {
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     turnOnLED();
     try {
@@ -40,7 +36,6 @@ public class Limelight extends SubsystemBase {
       
     } catch (Exception e) {
       SmartDashboard.putBoolean("couldn't get nt entries", true);
-      return;
     }
     initialized = true;
   }
@@ -59,7 +54,7 @@ public class Limelight extends SubsystemBase {
     } catch (Exception e) {
       return;
     }
-    
+    SmartDashboard.putString("botpose nt", botpose.toString());
   }
 
   public NetworkTableEntry getEntry(String str) {
@@ -79,18 +74,19 @@ public class Limelight extends SubsystemBase {
     return hits;
   }
 
-  public Double[] botPose() {
-    Double[] botPose = null;
+  public double[] botPose() {
+    double[] botPose = null;
+    SmartDashboard.putBoolean("Limelight Inititialized", isInitialized());
     if (isInitialized()) {
-      botPose = botpose.getDoubleArray(new Double[7]); 
+      botPose = botpose.getDoubleArray(new double[7]);
     }
     return botPose;
   }
 
   public double targetDist() {
-    Double[] targetPose = null;
+    double[] targetPose = null;
     if (isInitialized()) {
-      targetPose = targetpose.getDoubleArray(new Double[3]);
+      targetPose = targetpose.getDoubleArray(new double[3]);
     }
     Translation3d dist = new Translation3d(targetPose[0], targetPose[1], targetPose[2]);
     return dist.getDistance(new Translation3d());
@@ -118,6 +114,14 @@ public class Limelight extends SubsystemBase {
       dArea = getEntry("ta").getDouble(0.0);
     }
     return dArea;
+  }
+
+  public double tv() {
+    double tv = 0.0;
+    if (isInitialized()) {
+      tv = getEntry("tv").getDouble(0.0);
+    }
+    return tv;
   }
 
   public void turnOnLED() {
