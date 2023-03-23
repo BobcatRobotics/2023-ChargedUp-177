@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
@@ -21,9 +22,19 @@ public class BlinkinLEDs extends SubsystemBase {
     setBlack();
   }
 
+
   public void setYellow() {
     pdh.setSwitchableChannel(true);
-    leds.set(0.69);
+    if(getYellow()){
+      for(int i = 0; i < 4; i++){
+        setBlack();
+        Timer.delay(0.25);
+        leds.set(0.69);
+        Timer.delay(0.25);
+      }
+    }else{
+      leds.set(0.69);
+    }
   }
 
   public boolean getYellow() {
@@ -31,9 +42,21 @@ public class BlinkinLEDs extends SubsystemBase {
   }
 
   public void setPurple() {
+    
     pdh.setSwitchableChannel(true);
-    leds.set(0.91);
+    if(getPurple()){
+      for(int i = 0; i < 4; i++){
+        setBlack();
+        Timer.delay(0.25);
+        leds.set(0.91);
+        Timer.delay(0.25);
+      }
+    }else{
+      leds.set(0.91);
+    }
   }
+
+  
 
   public boolean getPurple() {
     return leds.get() == 0.91;
