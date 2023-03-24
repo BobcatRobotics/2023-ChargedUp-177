@@ -264,9 +264,9 @@ public final class Constants {
         public static final int topLimitPort = 1;
         public static final int bottomLimitPort = 0;
 
-        public static final int pos0 = 0; // done
-        public static final int pos1 = -69114; // dpne; old = -126256
-        public static final int pos2 = -134614; // done; old = -226710
+        public static final int pos0 = 20; // done
+        public static final int pos1 = -48154; // dpne; old = -126256
+        public static final int pos2 = -95000; // done; old = -226710
 
         // public static final double topLimit = -236710;
 
