@@ -109,6 +109,7 @@ public class RobotContainer {
 
     public static Limelight m_Limelight = new Limelight();
     public static Swerve s_Swerve = new Swerve(m_Limelight);
+    public static PoseEstimator swervePoseEstimator = new PoseEstimator(s_Swerve::getYaw, s_Swerve::getModulePositions, m_Limelight);
 
     private final Elevator m_Elevator = new Elevator();
     private final Intake m_Intake = new Intake();
@@ -156,11 +157,13 @@ public class RobotContainer {
         // autoChooser.addOption("Score1HighCubeCleanNoBalance", PathPlanner.loadPathGroup("ScoreHighCubeCleanNoBalance", new PathConstraints(4.5, 3)));
         autoChooser.addOption("1HighDirtyNoBalance", buildAuto(PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3))));
         autoChooser.addOption("NoMove1High", buildAuto(PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0))));
+        autoChooser.addOption("NoMove1HighCone", buildAuto(PathPlanner.loadPathGroup("NoMoveScore1HighCone", new PathConstraints(0, 0))));
         autoChooser.addOption("NoTurn1HighCenterBalance", buildAuto(PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3))));
         autoChooser.addOption("1.5CleanBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupLeftBalance", new PathConstraints(4.5, 3))));
         autoChooser.addOption("1.5DirtyBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupRightBalance", new PathConstraints(4.5, 3))));
         autoChooser.addOption("1.5CleanNoBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupLeftNoBalance", new PathConstraints(4.5, 3))));
         autoChooser.addOption("1.5DirtyNoBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupRightNoBalance", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("2PieceBalance", buildAuto(PathPlanner.loadPathGroup("2PieceBalance", new PathConstraints(4.5, 3))));
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
@@ -185,10 +188,26 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("smallDrive", new SmallDrive(s_Swerve));
         Constants.AutoConstants.eventMap.put("scoreCubeHigh", new SequentialCommandGroup(
             new InstantCommand(m_Wrist::wristSolenoidON),
-            new ParallelRaceGroup(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2.125)), 
+            new ParallelRaceGroup(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2)), 
             new InstantCommand(m_Wrist::wristSolenoidON),
             new WaitCommand(0.2),
             new IntakeOutFullSpeed(m_Intake), 
+            new StartingConfig(m_Elevator, m_Arm, m_Wrist)
+            )
+        );
+        Constants.AutoConstants.eventMap.put("scoreConeHigh", new SequentialCommandGroup(
+            new InstantCommand(m_Wrist::wristSolenoidON),
+            new ParallelRaceGroup(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2)), 
+            new IntakeOutFullSpeed(m_Intake), 
+            new StartingConfig(m_Elevator, m_Arm, m_Wrist)
+            )
+        );
+        Constants.AutoConstants.eventMap.put("scoreCubeMid", new SequentialCommandGroup(
+            new InstantCommand(m_Wrist::wristSolenoidON),
+            new ParallelRaceGroup(new ScoreMid(m_Elevator, m_Arm, m_Wrist), new WaitCommand(1.5)),
+            new InstantCommand(m_Wrist::wristSolenoidON),
+            new WaitCommand(0.2),
+            new IntakeOutFullSpeed(m_Intake),
             new StartingConfig(m_Elevator, m_Arm, m_Wrist)
             )
         );
@@ -320,7 +339,7 @@ public class RobotContainer {
     }
 
     public Command driveToPose(boolean useAlianceColor) {
-        return new DriveToPoseCommand(s_Swerve, this::closestGrid, s_Swerve::getPose, useAlianceColor);
+        return new DriveToPoseCommand(s_Swerve, this::closestGrid, swervePoseEstimator::getCurrentPose, useAlianceColor);
     }
 
     public Pose2d getSelectedNode() {
@@ -335,7 +354,7 @@ public class RobotContainer {
         );
         
         
-        switch (poses.indexOf(s_Swerve.getPose().nearest(poses))+1){
+        switch (poses.indexOf(swervePoseEstimator.getCurrentPose().nearest(poses))+1){
             case 1:
                 return Constants.PoseEstimation.grid1[1];
             case 2:
@@ -367,8 +386,8 @@ public class RobotContainer {
     public static Command buildAuto(List<PathPlannerTrajectory> trajs) {
         //s_Swerve.resetOdometry(trajs.get(0).getInitialHolonomicPose());
         swerveAutoBuilder = new SwerveAutoBuilder(
-            s_Swerve::getPose,
-            s_Swerve::resetOdometry,
+            swervePoseEstimator::getCurrentPose,
+            swervePoseEstimator::setCurrentPose,
             Constants.Swerve.swerveKinematics,
             new PIDConstants(Constants.AutoConstants.kPXController, 0, 0),
             new PIDConstants(Constants.AutoConstants.kPThetaController, 0, 0),

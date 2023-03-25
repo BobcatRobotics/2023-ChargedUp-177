@@ -211,9 +211,13 @@ public final class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
-        public static final double kPXController = 2.3;
-        public static final double kPYController = 2.3;
-        public static final double kPThetaController = 3.6;
+        // public static final double kPXController = 2.3;
+        // public static final double kPYController = 2.3;
+        // public static final double kPThetaController = 3.6;
+
+        public static final double kPXController = 2.0;
+        public static final double kPYController = 2.0;
+        public static final double kPThetaController = 3.3;
 
         public static HashMap<String, Command> eventMap = new HashMap<>();
     

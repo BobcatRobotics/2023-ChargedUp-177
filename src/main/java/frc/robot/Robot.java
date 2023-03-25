@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -73,6 +74,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Deployed code:", branch + " " + commit);
 
     m_robotContainer.setUpAutos();
+    PathPlannerServer.startServer(5811); // 5811 = port number. adjust this according to your needs
+
+
   }
 
   /**
@@ -146,7 +150,8 @@ public class Robot extends TimedRobot {
     if (
       m_robotContainer.getAutoChooserResult().equals(RobotContainer.buildAuto(PathPlanner.loadPathGroup("NoMoveScore1High", new PathConstraints(0, 0)))) || 
       m_robotContainer.getAutoChooserResult().equals(RobotContainer.buildAuto(PathPlanner.loadPathGroup("NoTurnScore1HighCenterBalance", new PathConstraints(4, 3)))) ||
-      m_robotContainer.getAutoChooserResult().equals(RobotContainer.buildAuto(PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3))))
+      m_robotContainer.getAutoChooserResult().equals(RobotContainer.buildAuto(PathPlanner.loadPathGroup("ScoreHighCubeDirtyNoBalance", new PathConstraints(4.5, 3)))) ||
+      m_robotContainer.getAutoChooserResult().equals(RobotContainer.buildAuto(PathPlanner.loadPathGroup("2PieceBalance", new PathConstraints(4.5, 3))))
     ) {
       m_robotContainer.reverseZeroGyro();
     } else {

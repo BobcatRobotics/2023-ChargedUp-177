@@ -147,7 +147,7 @@ public class PoseEstimator {
         pose2d = flipAlliance(pose2d);
       }
       double distance = limelight.targetDist();
-      poseEstimator.addVisionMeasurement(pose2d, Timer.getFPGATimestamp() - limelight.tl()/1000.0 - limelight.cl()/1000.0, VecBuilder.fill(distance/2, distance/2, 100));
+      //poseEstimator.addVisionMeasurement(pose2d, Timer.getFPGATimestamp() - (limelight.tl()/1000.0) - (limelight.cl()/1000.0), VecBuilder.fill(distance/2, distance/2, 100));
       //setCurrentPose(pose2d);
     }
   }
