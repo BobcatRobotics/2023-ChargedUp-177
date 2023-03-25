@@ -88,7 +88,7 @@ public class ElevatorControls extends CommandBase {
     // -207000
     if (elevator.isAtCurrentLimit()) {
       elevator.elevate(0);
-    } else if(arm.getPos() <= Constants.ArmConstants.minNonCollidingExtention) {
+    } else if(arm.getPos() <= Constants.ArmConstants.minNonCollidingExtention-200) {
       //elevator.holdPosition();
       elevator.elevate(0);
     } else if (Math.abs(gamepad.getRawAxis(3)) < 0.05) {

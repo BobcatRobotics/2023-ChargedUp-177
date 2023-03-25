@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -63,7 +64,12 @@ public class Elevator extends SubsystemBase {
   }
 
   public void elevate(double speed) {
-    elevatorMotor.set(ControlMode.PercentOutput, speed);
+    if(speed == 0){
+      elevatorMotor.set(ControlMode.PercentOutput, speed, DemandType.ArbitraryFeedForward, -0.03);
+    }else{
+      elevatorMotor.set(ControlMode.PercentOutput, speed);
+    }
+    
   }
   public double getSpeed(){
     return elevatorMotor.getSelectedSensorVelocity();
@@ -153,7 +159,7 @@ public class Elevator extends SubsystemBase {
     if (getBottomLimits()){
       resetEncoderPos();
       holdPosValue = 0;
-      elevatorMotor.set(ControlMode.PercentOutput, 0);
+      elevatorMotor.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0.06);
     }
     // This method will be called once per scheduler run
   }

@@ -67,7 +67,7 @@ public class RunIntake extends CommandBase {
       }else if(gp.getRawButton(back)) {
         i.runIntakeOutFull();
       } else {
-        // i.runIntakeInSlow(); 
+        //i.runIntakeInSlow(); 
         i.stop();
       }
     }else{

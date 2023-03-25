@@ -23,7 +23,8 @@ public class ScoreMid extends SequentialCommandGroup {
     addCommands(
       new SequentialCommandGroup(
       new SetArm(a,1),
-      Commands.parallel(new SetElevator(e,1),new SetArm(a,1), new SetWrist(w, false))
+      Commands.parallel(new SetElevator(e,1), new SetWrist(w, false)),
+      new SetArm(a,1)
      )
     );
   }

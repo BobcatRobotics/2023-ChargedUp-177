@@ -87,32 +87,32 @@ public class PoseEstimator {
    * 2 - middle grid
    * 3 - furthest from hp station
    */
-  public int closestGrid(Pose2d currPos){
+  public static int closestGrid(Pose2d currPos){
     double currX = currPos.getX();
     double currY = currPos.getY();
     
 
     // find the distance from the supplied pose to the middle of each grid
     // 1 - middle of grid furthest from HP station, 2 - middle of middle grid, 3 - middle of grid closest to HP station
-    double distTo1 = distanceFormula(currX, currY, Constants.PoseEstimation.closeHPMiddle.getX(), Constants.PoseEstimation.closeHPMiddle.getY());
-    double distTo2 = distanceFormula(currX, currY, Constants.PoseEstimation.centerMiddle.getX(), Constants.PoseEstimation.centerMiddle.getY());
-    double distTo3= distanceFormula(currX, currY, Constants.PoseEstimation.farHPMiddle.getX(), Constants.PoseEstimation.farHPMiddle.getY());
+    double distTo1 = distanceFormula(currX, currY, Constants.PoseEstimation.grid1[1].getX(), Constants.PoseEstimation.grid1[1].getY());
+    double distTo2 = distanceFormula(currX, currY, Constants.PoseEstimation.grid2[1].getX(), Constants.PoseEstimation.grid2[1].getY());
+    double distTo3= distanceFormula(currX, currY, Constants.PoseEstimation.grid3[1].getX(), Constants.PoseEstimation.grid3[1].getY());
     //               grid 1   grid 2   grid 3
     double[] vals = {distTo1, distTo2, distTo3};
     
     // find the smallest distance
     int minIndex = 4;
-    for(int i = 1; i<vals.length+1; i++){
+    for(int i = 0; i < vals.length; i++){
       if(vals[i] < minIndex){
-        minIndex = i;
+        minIndex = i + 1;
       }
     }
 
     //ofset index by 1
-    return minIndex+1;
+    return minIndex;
   }
 
-  public double distanceFormula(double x1, double y1, double x2, double y2){
+  public static double distanceFormula(double x1, double y1, double x2, double y2){
     return Math.sqrt(
       Math.pow((x2-x1), 2)  -  (Math.pow((y2-y1), 2))
       );
@@ -147,8 +147,8 @@ public class PoseEstimator {
         pose2d = flipAlliance(pose2d);
       }
       double distance = limelight.targetDist();
-      //poseEstimator.addVisionMeasurement(pose2d, Timer.getFPGATimestamp() - limelight.botPose()[6]/1000.0);
-      setCurrentPose(pose2d);
+      poseEstimator.addVisionMeasurement(pose2d, Timer.getFPGATimestamp() - limelight.tl()/1000.0 - limelight.cl()/1000.0, VecBuilder.fill(distance/2, distance/2, 100));
+      //setCurrentPose(pose2d);
     }
   }
 

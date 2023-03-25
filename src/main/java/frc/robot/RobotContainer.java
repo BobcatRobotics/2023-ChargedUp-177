@@ -284,7 +284,7 @@ public class RobotContainer {
         //alignRobot.whileTrue(align);
         //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         ruffy0.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        ruffy1.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        ruffy1.onTrue(new InstantCommand(() -> s_Swerve.configToX()));
 
         
         righttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
@@ -320,12 +320,32 @@ public class RobotContainer {
     }
 
     public Command driveToPose(boolean useAlianceColor) {
-        return new DriveToPoseCommand(s_Swerve, this::getSelectedNode, s_Swerve::getPose, useAlianceColor);
+        return new DriveToPoseCommand(s_Swerve, this::closestGrid, s_Swerve::getPose, useAlianceColor);
     }
 
     public Pose2d getSelectedNode() {
         return Constants.PoseEstimation.scoringPositions.get(1);
     }
+    
+    public Pose2d closestGrid(){
+        List<Pose2d> poses = List.of(
+            Constants.PoseEstimation.grid1[1],
+            Constants.PoseEstimation.grid2[1],
+            Constants.PoseEstimation.grid3[1]
+        );
+        
+        
+        switch (poses.indexOf(s_Swerve.getPose().nearest(poses))+1){
+            case 1:
+                return Constants.PoseEstimation.grid1[1];
+            case 2:
+                return Constants.PoseEstimation.grid2[1];
+            case 3:
+                return Constants.PoseEstimation.grid3[1];
+            default:
+                return Constants.PoseEstimation.grid2[1];
+            }
+        }
 
 
     public boolean anythingPressed() {

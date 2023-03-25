@@ -22,6 +22,8 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry ta = null;
   private NetworkTableEntry botpose = null;
   private NetworkTableEntry targetpose = null;
+  private NetworkTableEntry tl = null;
+  private NetworkTableEntry cl = null;
 
   public Limelight() {
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -33,7 +35,8 @@ public class Limelight extends SubsystemBase {
       ta = table.getEntry("ta");
       botpose = table.getEntry("botpose_wpiblue");
       targetpose = table.getEntry("targetpose_robotspace");
-      
+      tl = table.getEntry("tl");
+      cl = table.getEntry("cl");
     } catch (Exception e) {
       SmartDashboard.putBoolean("couldn't get nt entries", true);
     }
@@ -51,6 +54,8 @@ public class Limelight extends SubsystemBase {
       ta = table.getEntry("ta");
       botpose = table.getEntry("botpose_wpiblue");
       targetpose = table.getEntry("targetpose_robotspace");
+      tl = table.getEntry("tl");
+      cl = table.getEntry("cl");
     } catch (Exception e) {
       return;
     }
@@ -81,6 +86,22 @@ public class Limelight extends SubsystemBase {
       botPose = botpose.getDoubleArray(new double[7]);
     }
     return botPose;
+  }
+
+  public double tl() {
+    double tL = 0.0;
+    if (isInitialized()) {
+      tL = tl.getDouble(0.0);
+    }
+    return tL;
+  }
+
+  public double cl() {
+    double cL = 0.0;
+    if (isInitialized()) {
+      cL =cl.getDouble(0.0);
+    }
+    return cL;
   }
 
   public double targetDist() {

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 
@@ -25,13 +26,13 @@ public class BlinkinLEDs extends SubsystemBase {
 
   public void setYellow() {
     pdh.setSwitchableChannel(true);
-    if(getYellow()){
-      for(int i = 0; i < 4; i++){
-        setBlack();
-        Timer.delay(0.25);
-        leds.set(0.69);
-        Timer.delay(0.25);
-      }
+    if(leds.get() == 0.69){
+      //for(int i = 0; i < 4; i++){
+        leds.set(0.91);
+        //Timer.delay(0.25);
+        //leds.set(0.69);
+        //Timer.delay(0.25);
+      //}
     }else{
       leds.set(0.69);
     }
@@ -59,7 +60,7 @@ public class BlinkinLEDs extends SubsystemBase {
   
 
   public boolean getPurple() {
-    return leds.get() == 0.91;
+    return (leds.get() < 0.91-0.1) && (leds.get() > 0.91 + 0.1);
   }
 
   public void setGreen() {
@@ -79,5 +80,6 @@ public class BlinkinLEDs extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("led state",leds.get());
   }
 }

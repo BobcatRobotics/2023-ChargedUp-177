@@ -48,9 +48,10 @@ public class DriveToPoseCommand extends CommandBase {
     this.poseProvider = poseProvider;
     this.useAllianceColor = useAllianceColor;
 
-    xController = new ProfiledPIDController(Constants.AutoConstants.kPXController, 0, 0, DEFAULT_XY_CONSTRAINTS);
-    yController = new ProfiledPIDController(Constants.AutoConstants.kPYController, 0, 0, DEFAULT_XY_CONSTRAINTS);
-    thetaController = new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, DEFAULT_OMEGA_CONSTRAINTS);
+    xController = new ProfiledPIDController(Constants.PoseEstimation.kPXController, 0, 0, DEFAULT_XY_CONSTRAINTS);
+    yController = new ProfiledPIDController(Constants.PoseEstimation.kPYController, 0, 0, DEFAULT_XY_CONSTRAINTS);
+    thetaController = new ProfiledPIDController(Constants.PoseEstimation.kPThetaController, 0, 0, DEFAULT_OMEGA_CONSTRAINTS);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     xController.setTolerance(TRANSLATION_TOLERANCE);
     yController.setTolerance(TRANSLATION_TOLERANCE);
