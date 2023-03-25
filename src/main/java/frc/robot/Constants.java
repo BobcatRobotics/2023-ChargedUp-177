@@ -39,16 +39,19 @@ public final class Constants {
             //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 7), 2.18,  new Rotation2d()),
             //     new Pose2d(Units.inchesToMeters(20.19 + 22.0 * 8), 2.18,  new Rotation2d())                
             // );
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 0), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 1), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 2), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 3), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 4), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 5), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 6), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 7), new Rotation2d()));
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 8), new Rotation2d()));
+            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 0), new Rotation2d()));//0, furthest away from hp station
+            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 1), new Rotation2d()));//1, center of grid
+            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 2), new Rotation2d()));//2
+            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 3), new Rotation2d()));//3
+            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 4), new Rotation2d()));//4, middle column of middle grid
+            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 5), new Rotation2d()));//5
+            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 6), new Rotation2d()));//6
+            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 7), new Rotation2d()));//7, center of grid
+            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 8), new Rotation2d()));//8, closest to hp station
         }};
+        public static final Pose2d farHPMiddle = scoringPositions.get(1);
+        public static final Pose2d centerMiddle = scoringPositions.get(4);
+        public static final Pose2d closeHPMiddle = scoringPositions.get(7);
     }
 
     public static final class Swerve {

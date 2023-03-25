@@ -80,6 +80,45 @@ public class PoseEstimator {
     }
   }
 
+  /**
+   * 
+   * @return grid #
+   * 1 - closest to hp station
+   * 2 - middle grid
+   * 3 - furthest from hp station
+   */
+  public int closestGrid(Pose2d currPos){
+    double currX = currPos.getX();
+    double currY = currPos.getY();
+    
+
+    // find the distance from the supplied pose to the middle of each grid
+    // 1 - middle of grid furthest from HP station, 2 - middle of middle grid, 3 - middle of grid closest to HP station
+    double distTo1 = distanceFormula(currX, currY, Constants.PoseEstimation.closeHPMiddle.getX(), Constants.PoseEstimation.closeHPMiddle.getY());
+    double distTo2 = distanceFormula(currX, currY, Constants.PoseEstimation.centerMiddle.getX(), Constants.PoseEstimation.centerMiddle.getY());
+    double distTo3= distanceFormula(currX, currY, Constants.PoseEstimation.farHPMiddle.getX(), Constants.PoseEstimation.farHPMiddle.getY());
+    //               grid 1   grid 2   grid 3
+    double[] vals = {distTo1, distTo2, distTo3};
+    
+    // find the smallest distance
+    int minIndex = 4;
+    for(int i = 1; i<vals.length+1; i++){
+      if(vals[i] < minIndex){
+        minIndex = i;
+      }
+    }
+
+    //ofset index by 1
+    return minIndex+1;
+  }
+
+  public double distanceFormula(double x1, double y1, double x2, double y2){
+    return Math.sqrt(
+      Math.pow((x2-x1), 2)  -  (Math.pow((y2-y1), 2))
+      );
+  }
+   
+
   public void periodic() {
     // This method will be called once per scheduler run
     poseEstimator.update(this.rotationSupplier.get(), this.modulePositionSupplier.get());
