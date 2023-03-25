@@ -23,8 +23,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PoseEstimator {
+public class PoseEstimator extends SubsystemBase {
   private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
 
@@ -118,7 +119,7 @@ public class PoseEstimator {
       );
   }
    
-
+  @Override
   public void periodic() {
     // This method will be called once per scheduler run
     poseEstimator.update(this.rotationSupplier.get(), this.modulePositionSupplier.get());
@@ -147,7 +148,7 @@ public class PoseEstimator {
         pose2d = flipAlliance(pose2d);
       }
       double distance = limelight.targetDist();
-      //poseEstimator.addVisionMeasurement(pose2d, Timer.getFPGATimestamp() - (limelight.tl()/1000.0) - (limelight.cl()/1000.0), VecBuilder.fill(distance/2, distance/2, 100));
+      poseEstimator.addVisionMeasurement(pose2d, Timer.getFPGATimestamp() - (limelight.tl()/1000.0) - (limelight.cl()/1000.0), VecBuilder.fill(distance/2, distance/2, 100));
       //setCurrentPose(pose2d);
     }
   }

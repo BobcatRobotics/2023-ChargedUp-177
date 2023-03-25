@@ -138,7 +138,7 @@ public class RobotContainer {
     private static SwerveAutoBuilder swerveAutoBuilder;
 
     /* SendableChooser */
-    SendableChooser<Command> autoChooser = new SendableChooser<>();
+    SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
     public void setUpAutos() {
         // Sendable Chooser Setup
