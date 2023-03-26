@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,7 +25,8 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry targetpose = null;
   private NetworkTableEntry tl = null;
   private NetworkTableEntry cl = null;
-
+  private Alliance alliance = Alliance.Blue;
+  
   public Limelight() {
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     turnOnLED();
@@ -43,6 +45,11 @@ public class Limelight extends SubsystemBase {
     initialized = true;
   }
 
+
+  public void setAlliance(Alliance alliance) {
+    this.alliance = alliance;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -52,7 +59,13 @@ public class Limelight extends SubsystemBase {
       tx = table.getEntry("tx");
       ty = table.getEntry("ty");
       ta = table.getEntry("ta");
-      botpose = table.getEntry("botpose_wpiblue");
+      if (this.alliance == Alliance.Blue) {
+        botpose = table.getEntry("botpose_wpiblue");
+      }
+      else {
+        botpose = table.getEntry("botpose_wpired");
+      }
+
       targetpose = table.getEntry("targetpose_robotspace");
       tl = table.getEntry("tl");
       cl = table.getEntry("cl");

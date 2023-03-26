@@ -132,16 +132,16 @@
     },
     {
       "anchorPoint": {
-        "x": 2.25,
-        "y": 4.4
+        "x": 2.2523549320602916,
+        "y": 4.339283892242999
       },
       "prevControl": {
-        "x": 2.800565341556647,
-        "y": 4.420903573238458
+        "x": 2.802920273616939,
+        "y": 4.360187465481456
       },
       "nextControl": {
-        "x": 1.9351347707434756,
-        "y": 4.388045363768453
+        "x": 1.9374897028037674,
+        "y": 4.327329256011451
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -159,12 +159,12 @@
     },
     {
       "anchorPoint": {
-        "x": 2.334047985631517,
-        "y": 2.839882172655341
+        "x": 2.3208699408851814,
+        "y": 3.4029121049695097
       },
       "prevControl": {
-        "x": 2.1020653190595486,
-        "y": 3.7196693900496807
+        "x": 2.088887274313213,
+        "y": 4.282699322363849
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -173,8 +173,10 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "chargeStationInverse"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -191,6 +193,12 @@
       "position": 3.3515151515153896,
       "names": [
         "startingConfig"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "event"
       ]
     }
   ]

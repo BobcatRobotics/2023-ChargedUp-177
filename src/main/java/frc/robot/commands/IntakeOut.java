@@ -13,8 +13,15 @@ public class IntakeOut extends CommandBase {
   private Intake i;
   private Timer timer = new Timer();
   private boolean firstExecute = true;
+  private double duration = 1.0;
   public IntakeOut(Intake i) {
     this.i = i;
+    addRequirements(i);
+  }
+
+  public IntakeOut(Intake i, double duration) {
+    this.i = i;
+    this.duration = duration;
     addRequirements(i);
   }
 
@@ -35,7 +42,7 @@ public class IntakeOut extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(timer.hasElapsed(1.0)){
+    if(timer.hasElapsed(duration)){
       firstExecute = true;
       this.i.stop();
       return true;
