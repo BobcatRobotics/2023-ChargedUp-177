@@ -35,6 +35,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.Autos.AlignToTarget;
 import frc.robot.commands.Autos.AlignToTargetAutos;
 import frc.robot.commands.Autos.BalanceChargeStation;
+import frc.robot.commands.Autos.BalanceChargeStationInverse;
 import frc.robot.commands.Autos.MountAndBalance;
 import frc.robot.commands.Autos.MountAndBalanceInverse;
 import frc.robot.commands.Autos.AutoPresets.ScoreCubeHighAutos;
@@ -71,6 +72,7 @@ public class RobotContainer {
     private final Joystick driver = new Joystick(2);
     private final Joystick rotate = new Joystick(0);
     private final Joystick strafe = new Joystick(1);
+    private final Joystick buttonBoards = new Joystick(3);
 
     // /* Drive Controls */
     // private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -90,6 +92,17 @@ public class RobotContainer {
 
    // private final JoystickButton alignRobot = new JoystickButton(driver, 1);
 
+
+   // operator buttons
+//    private final JoystickButton OpTopLeft = new JoystickButton(buttonBoards, );
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
 
    private final JoystickButton leftBumper = new JoystickButton(driver, 5); //left bumper
    private final JoystickButton rightBumper = new JoystickButton(driver, 6);//right bumper
@@ -164,6 +177,7 @@ public class RobotContainer {
         autoChooser.addOption("1.5CleanNoBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupLeftNoBalance", new PathConstraints(4.5, 3))));
         autoChooser.addOption("1.5DirtyNoBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupRightNoBalance", new PathConstraints(4.5, 3))));
         autoChooser.addOption("2PieceBalance", buildAuto(PathPlanner.loadPathGroup("2PieceBalance", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("PPTestBalance", buildAuto(PathPlanner.loadPathGroup("PPTestBalance", new PathConstraints(2, 2))));
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
         SmartDashboard.putData(autoChooser);
@@ -202,17 +216,20 @@ public class RobotContainer {
             new StartingConfig(m_Elevator, m_Arm, m_Wrist)
             )
         );
+        Constants.AutoConstants.eventMap.put("setElevatorMid", new ParallelRaceGroup(new ScoreMid(m_Elevator, m_Arm, m_Wrist), new WaitCommand(1.5)));
+
         Constants.AutoConstants.eventMap.put("scoreCubeMid", new SequentialCommandGroup(
             new InstantCommand(m_Wrist::wristSolenoidON),
             new ParallelRaceGroup(new ScoreMid(m_Elevator, m_Arm, m_Wrist), new WaitCommand(1.5)),
             new InstantCommand(m_Wrist::wristSolenoidON),
             new WaitCommand(0.2),
-            new IntakeOutFullSpeed(m_Intake),
+            new IntakeOut(m_Intake, .1),
             new StartingConfig(m_Elevator, m_Arm, m_Wrist)
             )
         );
         Constants.AutoConstants.eventMap.put("driveBackInverse", new DriveBackInverse(s_Swerve));
         Constants.AutoConstants.eventMap.put("chargeStationInverse", new MountAndBalanceInverse(s_Swerve));
+        Constants.AutoConstants.eventMap.put("balanceChargeStationInverse", new BalanceChargeStationInverse(s_Swerve, true));
     }
 
     public void printHashMap() {

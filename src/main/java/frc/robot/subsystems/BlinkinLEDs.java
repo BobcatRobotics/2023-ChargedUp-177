@@ -26,41 +26,23 @@ public class BlinkinLEDs extends SubsystemBase {
 
   public void setYellow() {
     pdh.setSwitchableChannel(true);
-    if(leds.get() == 0.69){
-      //for(int i = 0; i < 4; i++){
-        leds.set(0.91);
-        //Timer.delay(0.25);
-        //leds.set(0.69);
-        //Timer.delay(0.25);
-      //}
-    }else{
       leds.set(0.69);
-    }
   }
 
   public boolean getYellow() {
-    return leds.get() == 0.69;
+    return leds.get() < 0.69+0.1 && leds.get() > 0.69 + 0.1;
   }
 
   public void setPurple() {
     
     pdh.setSwitchableChannel(true);
-    if(getPurple()){
-      for(int i = 0; i < 4; i++){
-        setBlack();
-        Timer.delay(0.25);
-        leds.set(0.91);
-        Timer.delay(0.25);
-      }
-    }else{
       leds.set(0.91);
-    }
   }
 
   
 
   public boolean getPurple() {
-    return (leds.get() < 0.91-0.1) && (leds.get() > 0.91 + 0.1);
+    return (leds.get() < 0.91+0.1) && (leds.get() > 0.91 - 0.1);
   }
 
   public void setGreen() {
