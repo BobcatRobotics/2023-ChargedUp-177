@@ -46,6 +46,8 @@ public class SetArm extends CommandBase {
       arm.setState(2);
     } else if (state == 3) {
       arm.setState(3);
+    } else if(state == 4){
+      arm.setState(4);
     }
   }
 

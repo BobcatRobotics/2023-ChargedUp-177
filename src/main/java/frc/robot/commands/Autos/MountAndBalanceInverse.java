@@ -20,7 +20,7 @@ public class MountAndBalanceInverse extends SequentialCommandGroup {
     addRequirements(s_Swerve);
     addCommands(
       new MountChargeStationInverse(s_Swerve),
-      new BalanceChargeStationInverse(s_Swerve, true)
+      new BalanceChargeStation(s_Swerve, true)
     );
   }
 }

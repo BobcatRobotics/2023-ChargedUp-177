@@ -13,7 +13,7 @@ public class IntakeOut extends CommandBase {
   private Intake i;
   private Timer timer = new Timer();
   private boolean firstExecute = true;
-  private double duration = 1.0;
+  private double duration = 0.25;
   public IntakeOut(Intake i) {
     this.i = i;
     addRequirements(i);

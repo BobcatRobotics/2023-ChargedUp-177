@@ -64,9 +64,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public void elevate(double speed) {
-    if(speed == 0){
+    if(speed == 0 && !getBottomLimits()) {
       elevatorMotor.set(ControlMode.PercentOutput, speed, DemandType.ArbitraryFeedForward, -0.03);
-    }else{
+    } else if(speed == 0 && getBottomLimits()) {
+      elevatorMotor.set(ControlMode.PercentOutput, 0);
+    } else{
       elevatorMotor.set(ControlMode.PercentOutput, speed);
     }
     

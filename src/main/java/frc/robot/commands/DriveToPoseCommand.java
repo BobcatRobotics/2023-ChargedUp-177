@@ -20,7 +20,7 @@ import frc.robot.subsystems.Swerve;
 
 public class DriveToPoseCommand extends CommandBase {
   /** Creates a new DriveToPoseCommand. */
-  private static final double TRANSLATION_TOLERANCE = 0.02;
+  private static final double TRANSLATION_TOLERANCE = 0.05;
   private static final double THETA_TOLERANCE = Units.degreesToRadians(2.0);
 
   private static final TrapezoidProfile.Constraints DEFAULT_XY_CONSTRAINTS = new TrapezoidProfile.Constraints(

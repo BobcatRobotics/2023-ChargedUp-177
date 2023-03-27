@@ -72,8 +72,8 @@ public final class Constants {
             scoringPositions.get(8)
         };
         
-        public static final double kPXController = 2.3;
-        public static final double kPYController = 2.3;
+        public static final double kPXController = 2.8;
+        public static final double kPYController = 2.8;
         public static final double kPThetaController = 3.7;
     
 
@@ -215,9 +215,9 @@ public final class Constants {
         // public static final double kPYController = 2.3;
         // public static final double kPThetaController = 3.6;
 
-        public static final double kPXController = 2.0;
-        public static final double kPYController = 2.0;
-        public static final double kPThetaController = 3.3;
+        public static final double kPXController = 2.5; // 2
+        public static final double kPYController = 2.5;
+        public static final double kPThetaController = 3.4; // 3.3
 
         public static HashMap<String, Command> eventMap = new HashMap<>();
     
@@ -279,7 +279,7 @@ public final class Constants {
         public static final int pos0 = 0; // done
         public static final int pos1 = 16710; // done
         public static final int pos2 = 25658; // done
-        public static final int minNonCollidingExtention = pos1-500;
+        public static final int minNonCollidingExtention = pos1-900;
         public static final int bottomPickup = 43664 - 300;
 
         public static final double bottomLimit = 0.0;

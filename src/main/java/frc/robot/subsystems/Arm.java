@@ -83,6 +83,8 @@ public class Arm extends SubsystemBase {
         } else if (state == 3) {
             armMotor.set(ControlMode.MotionMagic, ArmConstants.bottomPickup);
             SmartDashboard.putString("arm error", "State: " + state + ", Error: " + getArmPIDError());
+        }else if (state == 4){
+            armMotor.set(ControlMode.MotionMagic, ArmConstants.minNonCollidingExtention+400);
         }
     }
     public void setPos(int pos) {

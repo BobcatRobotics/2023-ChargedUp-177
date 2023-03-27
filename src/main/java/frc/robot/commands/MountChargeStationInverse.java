@@ -18,7 +18,7 @@ public class MountChargeStationInverse extends CommandBase {
   private int stage = 1;
   private boolean isRed;
   private boolean finished = false;
-  private double xSpeed = 1.75;
+  private double xSpeed = 2.75;
 
   /** Creates a new MountChargeStationInverse. */
   public MountChargeStationInverse(Swerve drivetrain) {

@@ -23,15 +23,13 @@ public class StartingConfig extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SequentialCommandGroup(
-        new ParallelCommandGroup( 
+      new SetArm(a, 4),  
+      new ParallelCommandGroup( 
           new SetElevator(e,0),
-          new SetWrist(w, true),
-          new InstantCommand(() -> a.setPos(Constants.ArmConstants.minNonCollidingExtention))
+          new SetWrist(w, true)
+          )
         ),
         new SetArm(a,0)
-        )
-  
-
-    );
+        );
   }
 }

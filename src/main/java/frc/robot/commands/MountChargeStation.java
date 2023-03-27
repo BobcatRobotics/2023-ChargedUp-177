@@ -21,7 +21,7 @@ public class MountChargeStation extends CommandBase {
   private int stage = 1;
   private boolean isRed;
   private boolean finished = false;
-  private double xSpeed = -1.75;
+  private double xSpeed = -2.75;
   
   public MountChargeStation(Swerve drivetrain, boolean isRed) {
     swerve = drivetrain;

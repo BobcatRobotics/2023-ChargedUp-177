@@ -32,10 +32,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
+import frc.robot.commands.AutoAlign.TopMid;
+import frc.robot.commands.AutoAlign.TopRight;
 import frc.robot.commands.Autos.AlignToTarget;
 import frc.robot.commands.Autos.AlignToTargetAutos;
 import frc.robot.commands.Autos.BalanceChargeStation;
-import frc.robot.commands.Autos.BalanceChargeStationInverse;
 import frc.robot.commands.Autos.MountAndBalance;
 import frc.robot.commands.Autos.MountAndBalanceInverse;
 import frc.robot.commands.Autos.AutoPresets.ScoreCubeHighAutos;
@@ -94,15 +95,15 @@ public class RobotContainer {
 
 
    // operator buttons
-//    private final JoystickButton OpTopLeft = new JoystickButton(buttonBoards, );
-//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
-//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
-//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
-//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
-//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
-//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
-//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
-//    private final JoystickButton Op = new JoystickButton(buttonBoards, );
+    private final JoystickButton OpTopLeft = new JoystickButton(buttonBoards, 3);
+    private final JoystickButton OpTopMid = new JoystickButton(buttonBoards, 4);
+    private final JoystickButton OpTopRight = new JoystickButton(buttonBoards, 5);
+    private final JoystickButton OpBottomLeft = new JoystickButton(buttonBoards, 6);
+    private final JoystickButton OpBottomMid = new JoystickButton(buttonBoards, 7);
+    private final JoystickButton OpBottomRight = new JoystickButton(buttonBoards, 8);
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, 9);
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, 10);
+//    private final JoystickButton Op = new JoystickButton(buttonBoards, 11);
 
    private final JoystickButton leftBumper = new JoystickButton(driver, 5); //left bumper
    private final JoystickButton rightBumper = new JoystickButton(driver, 6);//right bumper
@@ -176,7 +177,10 @@ public class RobotContainer {
         autoChooser.addOption("1.5DirtyBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupRightBalance", new PathConstraints(4.5, 3))));
         autoChooser.addOption("1.5CleanNoBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupLeftNoBalance", new PathConstraints(4.5, 3))));
         autoChooser.addOption("1.5DirtyNoBalance", buildAuto(PathPlanner.loadPathGroup("Score1HighCubePickupRightNoBalance", new PathConstraints(4.5, 3))));
-        autoChooser.addOption("2PieceBalance", buildAuto(PathPlanner.loadPathGroup("2PieceBalance", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("2PieceBalanceClean", buildAuto(PathPlanner.loadPathGroup("2PieceBalanceClean", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("2PieceBalanceDirty", buildAuto(PathPlanner.loadPathGroup("2PieceBalanceDirty", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("2PieceHighBalanceClean", buildAuto(PathPlanner.loadPathGroup("2PieceHighBalanceClean", new PathConstraints(4.5, 3))));
+        autoChooser.addOption("3PieceHybridClean", buildAuto(PathPlanner.loadPathGroup("3PieceHybridClean", new PathConstraints(4.5, 3))));
         autoChooser.addOption("PPTestBalance", buildAuto(PathPlanner.loadPathGroup("PPTestBalance", new PathConstraints(2, 2))));
         //autoChooser.addOption("PathPlanner Test w/ Events", new SequentialCommandGroup(Swerve.followTrajectoryCommand(PathPlanner.loadPath("New Path", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)), true)));
         //autoChooser.addOption("charge station", chargestation);
@@ -229,7 +233,7 @@ public class RobotContainer {
         );
         Constants.AutoConstants.eventMap.put("driveBackInverse", new DriveBackInverse(s_Swerve));
         Constants.AutoConstants.eventMap.put("chargeStationInverse", new MountAndBalanceInverse(s_Swerve));
-        Constants.AutoConstants.eventMap.put("balanceChargeStationInverse", new BalanceChargeStationInverse(s_Swerve, true));
+        Constants.AutoConstants.eventMap.put("balanceChargeStationInverse", new BalanceChargeStation(s_Swerve, true));
     }
 
     public void printHashMap() {
@@ -287,7 +291,8 @@ public class RobotContainer {
                 () -> -strafe.getRawAxis(Joystick.AxisType.kY.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kY.value)), 
                 () -> -strafe.getRawAxis(Joystick.AxisType.kX.value)*Math.abs(strafe.getRawAxis(Joystick.AxisType.kX.value)), 
                 () -> -rotate.getRawAxis(Joystick.AxisType.kX.value), 
-                () -> false //() -> robotCentric.getAsBoolean() //always field centric
+                () -> false, //() -> robotCentric.getAsBoolean() //always field centric,
+                () -> -strafe.getRawAxis(Joystick.AxisType.kZ.value)*0.2 // fine tune strafing supplier
             )
         );
 
@@ -325,7 +330,10 @@ public class RobotContainer {
         
         righttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
         rightBumper.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
-        
+
+        OpTopLeft.onTrue(new TopRight(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::baseDriverControlsMoved));
+        OpTopMid.onTrue(new TopMid(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::baseDriverControlsMoved));
+        OpTopRight.onTrue(new TopRight(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::baseDriverControlsMoved));
         
     //    lefttrigger.whileTrue(new InstantCommand(m_Intake::runIntakeOut));
     //     leftBumper.whileTrue(new InstantCommand(m_Intake::runIntakeIn));
@@ -355,6 +363,8 @@ public class RobotContainer {
         start.whileTrue(driveToPose(true).until(this::baseDriverControlsMoved));
     }
 
+
+
     public Command driveToPose(boolean useAlianceColor) {
         return new DriveToPoseCommand(s_Swerve, this::closestGrid, swervePoseEstimator::getCurrentPose, useAlianceColor);
     }
@@ -381,7 +391,7 @@ public class RobotContainer {
             default:
                 return Constants.PoseEstimation.grid2[1];
             }
-        }
+    }
 
 
     public boolean anythingPressed() {
@@ -401,7 +411,6 @@ public class RobotContainer {
   
     
     public static Command buildAuto(List<PathPlannerTrajectory> trajs) {
-        //s_Swerve.resetOdometry(trajs.get(0).getInitialHolonomicPose());
         swerveAutoBuilder = new SwerveAutoBuilder(
             swervePoseEstimator::getCurrentPose,
             swervePoseEstimator::setCurrentPose,
