@@ -12,10 +12,12 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,11 +41,13 @@ import frc.robot.commands.Autos.BalanceChargeStationInverse;
 import frc.robot.commands.Autos.MountAndBalance;
 import frc.robot.commands.Autos.MountAndBalanceInverse;
 import frc.robot.commands.Autos.AutoPresets.ScoreCubeHighAutos;
+import frc.robot.commands.Presets.HPChute;
 import frc.robot.commands.Presets.IntakeInConstantly;
 import frc.robot.commands.Presets.RetractArm;
 import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.SetArm;
 import frc.robot.commands.Presets.SetElevator;
+import frc.robot.commands.Presets.SetWrist;
 import frc.robot.commands.Presets.StartingConfig;
 import frc.robot.commands.Presets.ZeroElevator;
 import frc.robot.commands.Presets.intakeStop;
@@ -193,7 +197,7 @@ public class RobotContainer {
             new IntakeInConstantly(m_Intake)
         ));
         Constants.AutoConstants.eventMap.put("startingConfig", new StartingConfig(m_Elevator, m_Arm, m_Wrist));
-        Constants.AutoConstants.eventMap.put("flickWrist", new InstantCommand(m_Wrist::wristSolenoidON));
+        // Constants.AutoConstants.eventMap.put("flickWrist", new InstantCommand(m_Wrist::wristSolenoidON));
         Constants.AutoConstants.eventMap.put("intakeOut", new IntakeOut(m_Intake));//new ParallelRaceGroup(new IntakeOut(), new WaitCommand(5)));
         Constants.AutoConstants.eventMap.put("intakeOutFullSpeed", new IntakeOutFullSpeed(m_Intake));
         Constants.AutoConstants.eventMap.put("driveBack", new DriveBack(s_Swerve)); // TODO: Actually is driving forward, my bad
@@ -201,16 +205,16 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("waitHalfSec", new WaitCommand(0.5));
         Constants.AutoConstants.eventMap.put("smallDrive", new SmallDrive(s_Swerve));
         Constants.AutoConstants.eventMap.put("scoreCubeHigh", new SequentialCommandGroup(
-            new InstantCommand(m_Wrist::wristSolenoidON),
+            // new InstantCommand(m_Wrist::wristSolenoidON),
             new ParallelRaceGroup(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2)), 
-            new InstantCommand(m_Wrist::wristSolenoidON),
+            // new InstantCommand(m_Wrist::wristSolenoidON),
             new WaitCommand(0.2),
             new IntakeOutFullSpeed(m_Intake), 
             new StartingConfig(m_Elevator, m_Arm, m_Wrist)
             )
         );
         Constants.AutoConstants.eventMap.put("scoreConeHigh", new SequentialCommandGroup(
-            new InstantCommand(m_Wrist::wristSolenoidON),
+            // new InstantCommand(m_Wrist::wristSolenoidON),
             new ParallelRaceGroup(new ScoreHigh(m_Elevator, m_Arm, m_Intake, m_Wrist), new WaitCommand(2)), 
             new IntakeOutFullSpeed(m_Intake), 
             new StartingConfig(m_Elevator, m_Arm, m_Wrist)
@@ -219,9 +223,9 @@ public class RobotContainer {
         Constants.AutoConstants.eventMap.put("setElevatorMid", new ParallelRaceGroup(new ScoreMid(m_Elevator, m_Arm, m_Wrist), new WaitCommand(1.5)));
 
         Constants.AutoConstants.eventMap.put("scoreCubeMid", new SequentialCommandGroup(
-            new InstantCommand(m_Wrist::wristSolenoidON),
+            // new InstantCommand(m_Wrist::wristSolenoidON),
             new ParallelRaceGroup(new ScoreMid(m_Elevator, m_Arm, m_Wrist), new WaitCommand(1.5)),
-            new InstantCommand(m_Wrist::wristSolenoidON),
+            // new InstantCommand(m_Wrist::wristSolenoidON),
             new WaitCommand(0.2),
             new IntakeOut(m_Intake, .1),
             new StartingConfig(m_Elevator, m_Arm, m_Wrist)
@@ -323,8 +327,8 @@ public class RobotContainer {
         ruffy1.onTrue(new InstantCommand(() -> s_Swerve.configToX()));
 
         
-        righttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
-        rightBumper.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
+        // righttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
+        // rightBumper.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
         
         
     //    lefttrigger.whileTrue(new InstantCommand(m_Intake::runIntakeOut));
@@ -352,11 +356,11 @@ public class RobotContainer {
         //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
         //alignRobot.whileTrue(align);
-        start.whileTrue(driveToPose(true).until(this::baseDriverControlsMoved));
+        start.whileTrue(driveToPose(true, closestGrid().equals(Constants.PoseEstimation.hpStation)).until(this::baseDriverControlsMoved));
     }
 
-    public Command driveToPose(boolean useAlianceColor) {
-        return new DriveToPoseCommand(s_Swerve, this::closestGrid, swervePoseEstimator::getCurrentPose, useAlianceColor);
+    public Command driveToPose(boolean useAlianceColor, boolean isHpChute) {
+        return new DriveToPoseCommand(s_Swerve, this::closestGrid, swervePoseEstimator::getCurrentPose, useAlianceColor).andThen(isHpChute ? new HPChute(m_Wrist, m_Arm) : new WaitCommand(0)); //TODO: make noOp command
     }
 
     public Pose2d getSelectedNode() {
@@ -367,10 +371,10 @@ public class RobotContainer {
         List<Pose2d> poses = List.of(
             Constants.PoseEstimation.grid1[1],
             Constants.PoseEstimation.grid2[1],
-            Constants.PoseEstimation.grid3[1]
+            Constants.PoseEstimation.grid3[1],
+            Constants.PoseEstimation.hpStation
         );
-        
-        
+
         switch (poses.indexOf(swervePoseEstimator.getCurrentPose().nearest(poses))+1){
             case 1:
                 return Constants.PoseEstimation.grid1[1];
@@ -378,6 +382,8 @@ public class RobotContainer {
                 return Constants.PoseEstimation.grid2[1];
             case 3:
                 return Constants.PoseEstimation.grid3[1];
+            case 4:
+                return Constants.PoseEstimation.hpStation;
             default:
                 return Constants.PoseEstimation.grid2[1];
             }

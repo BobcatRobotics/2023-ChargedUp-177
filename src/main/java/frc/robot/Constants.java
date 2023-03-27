@@ -18,9 +18,11 @@ import frc.lib.util.SwerveModuleConstants;
 import java.util.Hashtable;
 
 public final class Constants {
-    public static final int intakeMotorID = 11; //TODO: assign correct values
-    public static final int wristSolenoidID = 0;
-    public static final int wristMotorID = 0;
+    public static final int intakeMotorID = 11; 
+    
+    public static final int wristCANCoderID = 999;//TODO: assign correct values
+    public static final int wristMotorID = 9999;
+
     public static final int pHubID = 1;
     public static final int compressorID = 1;
     public static final double stickDeadband = 0.05;
@@ -47,10 +49,12 @@ public final class Constants {
             add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 5), new Rotation2d(Math.PI)));//5
             add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 6), new Rotation2d(Math.PI)));//6
             add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 7), new Rotation2d(Math.PI)));//7, center of grid
-            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 8), new Rotation2d(Math.PI)));//8, 
+            add(new Pose2d(2.18, Units.inchesToMeters(20.19 + 22.0 * 8), new Rotation2d(Math.PI)));//8,
         }};
 
-        public static final Pose2d hpStation = new Pose2d(15.61, 7.34, new Rotation2d());
+        public static final Pose2d hpStation = new Pose2d(14.00, 7.20, new Rotation2d(Math.PI/2));
+
+        // public static final Pose2d blueHpChute = new Pose2d(14.00, 7.00, new Rotation2d(Math.PI/2));
         
         public static final Pose2d[] grid1 = 
         {
@@ -72,9 +76,16 @@ public final class Constants {
             scoringPositions.get(8)
         };
         
-        public static final double kPXController = 2.3;
-        public static final double kPYController = 2.3;
-        public static final double kPThetaController = 3.7;
+        public static final Pose2d[] hp = 
+        {
+            scoringPositions.get(6),
+            scoringPositions.get(7),
+            scoringPositions.get(8)
+        };
+
+        public static final double kPXController = 2.0;
+        public static final double kPYController = 2.0;
+        public static final double kPThetaController = 4.0;
     
 
     }
@@ -226,6 +237,7 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+    
     public class BalancingConstants{
         public static final double kP = 0.225;//TODO: tune
         public static final double kI = 0;
@@ -281,6 +293,7 @@ public final class Constants {
         public static final int pos2 = 25658; // done
         public static final int minNonCollidingExtention = pos1-500;
         public static final int bottomPickup = 43664 - 300;
+        public static final int HPChute = minNonCollidingExtention; //TODO: this is wrong!
 
         public static final double bottomLimit = 0.0;
         public static final double constrictedBottomLimit = 4096;
@@ -302,6 +315,18 @@ public final class Constants {
         // public static final double topLimit = -236710;
 
         public static int elevatorState = 0;
+    }
+
+    public static final class WristConstants {
+        public static final int forwardGround = 0; //TODO: Tune!
+        public static final int topGround = 0;
+        public static final int HPChute = 0;
+        public static final int HPSlide = 0;
+        public static final int score = 0;
+        public static final int holdPiece = 0;
+
+        public static final int topLimit = 0;
+        public static final int bottomLimit = 0;
     }
     
     public static final class LEDConstants {

@@ -18,6 +18,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.WristState;
 
 
 public class ForwardSuck extends SequentialCommandGroup {
@@ -28,13 +29,13 @@ public class ForwardSuck extends SequentialCommandGroup {
       addCommands(
         new ParallelCommandGroup(
           new InstantCommand(() -> a.setPos(Constants.ArmConstants.minNonCollidingExtention + 200)),
-          new SetWrist(w, true)
+          new SetWrist(w, WristState.holdPiece)
         ),
         new SetElevator(e, 0)
       );
     }else{
     addCommands(
-      Commands.parallel(new SetElevator(e,0),new SetArm(a,3), new SetWrist(w,true))
+      Commands.parallel(new SetElevator(e,0),new SetArm(a,3), new SetWrist(w,WristState.forwardGround))
     );
     }
   }

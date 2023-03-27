@@ -146,7 +146,7 @@ public class PoseEstimator extends SubsystemBase {
       System.out.println(e);
     }
     if (visionPose != null && limelight.tv() == 1.0) {
-      System.out.println("vision pose found!");
+      // System.out.println("vision pose found!");
       sawTag = true;
       
       Pose2d pose2d = new Pose2d(visionPose.getTranslation().toTranslation2d(), rotationSupplier.get());

@@ -121,17 +121,17 @@ public class Elevator extends SubsystemBase {
       elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos0);
       // holdPosValue = ElevatorConstants.pos0;
       // holdPosition();
-      SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
+     // SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     } else if (state == 1) {
       elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos1);
       // holdPosValue = ElevatorConstants.pos1;
       // holdPosition();
-      SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
+      //SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     } else if (state == 2) {
       elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos2);
       // holdPosValue = ElevatorConstants.pos2;
       // holdPosition();
-      SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
+     // SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     }
   }
 

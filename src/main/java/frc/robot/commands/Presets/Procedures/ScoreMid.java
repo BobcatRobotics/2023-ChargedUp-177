@@ -14,6 +14,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.WristState;
 
 public class ScoreMid extends SequentialCommandGroup {
     // elevator mid, arm out, wrist down, intake out
@@ -23,7 +24,7 @@ public class ScoreMid extends SequentialCommandGroup {
     addCommands(
       new SequentialCommandGroup(
       new SetArm(a,1),
-      Commands.parallel(new SetElevator(e,1), new SetWrist(w, false))
+      Commands.parallel(new SetElevator(e,1), new SetWrist(w, WristState.score))
      )
     );
   }

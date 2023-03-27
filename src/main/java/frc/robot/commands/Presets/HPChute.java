@@ -4,35 +4,22 @@
 
 package frc.robot.commands.Presets;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.WristState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class StartingConfig extends SequentialCommandGroup {
-  /** Creates a new StartingConfig. */
-
-  public StartingConfig(Elevator e, Arm a, Wrist w) {
+public class HPChute extends ParallelCommandGroup {
+  /** Creates a new HPChute. */
+  public HPChute(Wrist w, Arm a) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SequentialCommandGroup(
-        new ParallelCommandGroup( 
-          new SetElevator(e,0),
-          new SetWrist(w, WristState.holdPiece),
-          new InstantCommand(() -> a.setPos(Constants.ArmConstants.minNonCollidingExtention))
-        ),
-        new SetArm(a,0)
-        )
-  
-
+      new SetArm(a, 4),
+      new SetWrist(w, WristState.HPChute)
     );
   }
 }

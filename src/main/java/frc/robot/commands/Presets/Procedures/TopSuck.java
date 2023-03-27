@@ -12,6 +12,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.WristState;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -24,7 +25,7 @@ public class TopSuck extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     //always set the wrist to false for everything 
     addCommands(
-      Commands.parallel(new SetElevator(e,1),new SetArm(a,2), new SetWrist(W, false))
+      Commands.parallel(new SetElevator(e,1),new SetArm(a,2), new SetWrist(W, WristState.topGround))
     );
   }
 }
