@@ -78,6 +78,7 @@ public class BlinkinLEDs extends SubsystemBase {
 
   public void turnOff() {
     pdh.setSwitchableChannel(false);
+    init = false;
 
   }
 

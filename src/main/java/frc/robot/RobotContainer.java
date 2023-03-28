@@ -101,8 +101,12 @@ public class RobotContainer {
 
    // private final JoystickButton alignRobot = new JoystickButton(driver, 1);
 
-
-   // operator buttons
+   //driver buttons
+   //TODO: check if these are the right sides
+    private final JoystickButton driverLeft = new JoystickButton(buttonBoards, 2);
+    private final JoystickButton driverRight = new JoystickButton(buttonBoards, 1);
+   
+    // operator buttons
     private final JoystickButton OpTopLeft = new JoystickButton(buttonBoards, 3);
     private final JoystickButton OpTopMid = new JoystickButton(buttonBoards, 4);
     private final JoystickButton OpTopRight = new JoystickButton(buttonBoards, 5);
@@ -366,9 +370,13 @@ public class RobotContainer {
 
         x.onTrue(new BlinkPurple(m_LEDs));
         y.onTrue(new BlinkYellow(m_LEDs));
+        
+        driverLeft.onTrue(new BlinkPurple(m_LEDs));
+        driverRight.onTrue(new BlinkYellow(m_LEDs));
 
         //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
-
+        
+        
         //alignRobot.whileTrue(align);
         start.whileTrue(driveToPose(true).until(this::anythingPressed));
     }
