@@ -14,24 +14,30 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.*;
+import frc.robot.commands.ArmControls;
+import frc.robot.commands.DriveBack;
+import frc.robot.commands.DriveBackInverse;
+import frc.robot.commands.DriveToPoseCommand;
+import frc.robot.commands.ElevatorControls;
+import frc.robot.commands.IntakeOut;
+import frc.robot.commands.IntakeOutFullSpeed;
+import frc.robot.commands.SmallDrive;
+import frc.robot.commands.SpinInPlace;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.AutoAlign.MidLeft;
+import frc.robot.commands.AutoAlign.MidMid;
+import frc.robot.commands.AutoAlign.MidRight;
+import frc.robot.commands.AutoAlign.TopLeft;
 import frc.robot.commands.AutoAlign.TopMid;
 import frc.robot.commands.AutoAlign.TopRight;
 import frc.robot.commands.Autos.AlignToTarget;
@@ -39,24 +45,26 @@ import frc.robot.commands.Autos.AlignToTargetAutos;
 import frc.robot.commands.Autos.BalanceChargeStation;
 import frc.robot.commands.Autos.MountAndBalance;
 import frc.robot.commands.Autos.MountAndBalanceInverse;
-import frc.robot.commands.Autos.AutoPresets.ScoreCubeHighAutos;
+import frc.robot.commands.LEDs.BlinkPurple;
+import frc.robot.commands.LEDs.BlinkYellow;
 import frc.robot.commands.Presets.IntakeInConstantly;
-import frc.robot.commands.Presets.RetractArm;
 import frc.robot.commands.Presets.RunIntake;
 import frc.robot.commands.Presets.SetArm;
 import frc.robot.commands.Presets.SetElevator;
 import frc.robot.commands.Presets.StartingConfig;
-import frc.robot.commands.Presets.ZeroElevator;
-import frc.robot.commands.Presets.intakeStop;
 import frc.robot.commands.Presets.Procedures.ForwardSuck;
 import frc.robot.commands.Presets.Procedures.ScoreHigh;
 import frc.robot.commands.Presets.Procedures.ScoreMid;
 import frc.robot.commands.Presets.Procedures.TopSuck;
-import frc.robot.subsystems.*;
-import frc.robot.autos.PathPlannerTest;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.BlinkinLEDs;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 //import frc.robot.autos.RedHighCone6PickupBalance;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Wrist;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -331,10 +339,12 @@ public class RobotContainer {
         righttrigger.onTrue(new InstantCommand(m_Wrist::wristSolenoidOFF));
         rightBumper.onTrue(new InstantCommand(m_Wrist::wristSolenoidON));
 
-        OpTopLeft.onTrue(new TopRight(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::baseDriverControlsMoved));
-        OpTopMid.onTrue(new TopMid(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::baseDriverControlsMoved));
-        OpTopRight.onTrue(new TopRight(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::baseDriverControlsMoved));
-        
+        OpTopLeft.onTrue(new TopLeft(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::anythingPressed));
+        OpTopMid.onTrue(new TopMid(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::anythingPressed));
+        OpTopRight.onTrue(new TopRight(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::anythingPressed));
+        OpBottomRight.onTrue(new MidRight(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::anythingPressed));
+        OpBottomMid.onTrue(new MidMid(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::anythingPressed));
+        OpBottomLeft.onTrue(new MidLeft(s_Swerve, swervePoseEstimator, m_Elevator, m_Arm, m_Wrist, m_Intake).until(this::anythingPressed));
     //    lefttrigger.whileTrue(new InstantCommand(m_Intake::runIntakeOut));
     //     leftBumper.whileTrue(new InstantCommand(m_Intake::runIntakeIn));
 
@@ -354,13 +364,13 @@ public class RobotContainer {
         a.onTrue(new ForwardSuck(m_Elevator, m_Arm, m_Wrist).until(this::anythingPressed));
         b.onTrue(new TopSuck(m_Elevator, m_Arm, m_Intake, m_Wrist).until(this::anythingPressed));
 
-        x.onTrue(new InstantCommand(m_LEDs::setPurple));
-        y.onTrue(new InstantCommand(m_LEDs::setYellow));
+        x.onTrue(new BlinkPurple(m_LEDs));
+        y.onTrue(new BlinkYellow(m_LEDs));
 
         //back.whileTrue(new InstantCommand(m_Intake::runIntakeOutFull));
 
         //alignRobot.whileTrue(align);
-        start.whileTrue(driveToPose(true).until(this::baseDriverControlsMoved));
+        start.whileTrue(driveToPose(true).until(this::anythingPressed));
     }
 
 
@@ -395,7 +405,10 @@ public class RobotContainer {
 
 
     public boolean anythingPressed() {
-        return Math.abs(driver.getRawAxis(1)) >= 0.1 || Math.abs(driver.getRawAxis(3)) >= 0.1; 
+        return operatorControlsMoved() || baseDriverControlsMoved(); 
+    }
+    public boolean operatorControlsMoved(){
+        return Math.abs(driver.getRawAxis(1)) >= 0.1 || Math.abs(driver.getRawAxis(3)) >= 0.1 || driver.getPOV() != -1;
     }
 
     public boolean baseDriverControlsMoved() {

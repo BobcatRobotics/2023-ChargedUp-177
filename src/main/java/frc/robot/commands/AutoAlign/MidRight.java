@@ -19,6 +19,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.Presets.Procedures.ScoreHigh;
+import frc.robot.commands.Presets.Procedures.ScoreMid;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -43,7 +44,7 @@ public class MidRight extends SequentialCommandGroup {
     
     addCommands(
       new DriveToPoseCommand(s, this::getGrid, sPose::getCurrentPose, true),
-      new ScoreHigh(e, a, i, w)
+      new ScoreMid(e, a, w)
     );
   }
   
@@ -56,13 +57,13 @@ public class MidRight extends SequentialCommandGroup {
 
     switch (poses.indexOf(sPose.getCurrentPose().nearest(poses))+1){
       case 1:
-          return Constants.PoseEstimation.grid1[2];
+          return Constants.PoseEstimation.grid1[0];
       case 2:
-          return Constants.PoseEstimation.grid2[2];
+          return Constants.PoseEstimation.grid2[0];
       case 3:
-          return Constants.PoseEstimation.grid3[2];
+          return Constants.PoseEstimation.grid3[0];
       default:
-          return Constants.PoseEstimation.grid2[2];
+          return Constants.PoseEstimation.grid2[0];
       }
   }
 }

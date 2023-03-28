@@ -19,6 +19,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.Presets.Procedures.ScoreHigh;
+import frc.robot.commands.Presets.Procedures.ScoreMid;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

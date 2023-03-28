@@ -18,20 +18,19 @@ import frc.robot.subsystems.Wrist;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveToPoseCommand;
-import frc.robot.commands.Presets.StartingConfig;
 import frc.robot.commands.Presets.Procedures.ScoreHigh;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 
-public class TopRight extends SequentialCommandGroup {
+public class TopLeft extends SequentialCommandGroup {
   /** Creates a new TopMid. */
   Pose2d desiredpos;
   PoseEstimator sPose;
   Pose2d desiredPose;
 
-  public TopRight(Swerve s, PoseEstimator sPose, Elevator e, Arm a, Wrist w, Intake i) {
+  public TopLeft(Swerve s, PoseEstimator sPose, Elevator e, Arm a, Wrist w, Intake i) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     this.sPose = sPose;
@@ -43,7 +42,6 @@ public class TopRight extends SequentialCommandGroup {
   
     
     addCommands(
-      new StartingConfig(e, a, w),
       new DriveToPoseCommand(s, this::getGrid, sPose::getCurrentPose, true),
       new ScoreHigh(e, a, i, w)
     );
@@ -58,13 +56,13 @@ public class TopRight extends SequentialCommandGroup {
 
     switch (poses.indexOf(sPose.getCurrentPose().nearest(poses))+1){
       case 1:
-          return Constants.PoseEstimation.grid1[0];
+          return Constants.PoseEstimation.grid1[2];
       case 2:
-          return Constants.PoseEstimation.grid2[0];
+          return Constants.PoseEstimation.grid2[2];
       case 3:
-          return Constants.PoseEstimation.grid3[0];
+          return Constants.PoseEstimation.grid3[2];
       default:
-          return Constants.PoseEstimation.grid2[0];
+          return Constants.PoseEstimation.grid2[2];
       }
   }
 }
