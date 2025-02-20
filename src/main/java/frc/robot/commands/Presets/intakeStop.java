@@ -4,10 +4,10 @@
 
 package frc.robot.commands.Presets;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
-public class intakeStop extends CommandBase {
+public class intakeStop extends Command {
   /** Creates a new intakeStop. */
   Intake i;
   public intakeStop(Intake i) {

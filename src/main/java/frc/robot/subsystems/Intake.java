@@ -4,52 +4,48 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.Solenoid;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Util.MathUtils;
 
 public class Intake extends SubsystemBase {
-  private WPI_TalonFX motor; 
+  private TalonFX motor; 
 
   /** Creates a new Intake. */
   public Intake() {
-   motor = new WPI_TalonFX(Constants.intakeMotorID);
-   motor.setNeutralMode(NeutralMode.Brake);
+   motor = new TalonFX(Constants.intakeMotorID);
+   TalonFXConfiguration internalConfig = new TalonFXConfiguration();
+   internalConfig.MotorOutput.withNeutralMode(NeutralModeValue.Brake);
+   motor.getConfigurator().apply(internalConfig);
   }
   
   public void runIntakeIn(){
-    
-    motor.set(ControlMode.PercentOutput, -0.9);
+    motor.set(-0.9);
   }
   public void runIntakeOut(){
-    
-    motor.set(ControlMode.PercentOutput, 0.4);
+    motor.set(0.4);
   } 
   public void runIntakeOutFull(){
-    
-    motor.set(ControlMode.PercentOutput, 1);
+    motor.set(1);
   }
 
   public boolean isAtHardStop() {
-    return motor.getStatorCurrent() >= 20.0;
+    double statorCurrent = motor.getStatorCurrent().getValueAsDouble();
+    return statorCurrent >= 20.0;
   }
 
   public void runIntakePercent(double speed){
     speed = MathUtils.throttlePercent(speed);
-    motor.set(ControlMode.PercentOutput, speed);
+    motor.set(speed);
   }
   public void stop(){
-   motor.set(ControlMode.PercentOutput, 0); 
+    motor.stopMotor();
   }
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     
   }
 }

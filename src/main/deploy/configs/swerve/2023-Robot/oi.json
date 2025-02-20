@@ -1,0 +1,13 @@
+{
+  "single": {
+    "type": "ruffy",
+    "id": 0,
+    "deadband": 0.1
+  },
+  "split_one": {
+    "type": "ruffy",
+    "id": 1,
+    "deadband": 0.1
+  },
+  "isDual": true
+}

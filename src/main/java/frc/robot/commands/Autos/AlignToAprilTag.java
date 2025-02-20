@@ -9,16 +9,16 @@
 
 package frc.robot.commands.Autos;
 
+import BobcatLib.Subsystems.Swerve.SimpleSwerve.SwerveDrive;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.PhotonVision;
-import frc.robot.subsystems.Swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-public class AlignToAprilTag extends CommandBase {
-  private Swerve drivetrain;
+public class AlignToAprilTag extends Command {
+  private SwerveDrive drivetrain;
   private PhotonVision camera;
   
   // TODO: Tune!
@@ -27,7 +27,7 @@ public class AlignToAprilTag extends CommandBase {
   private PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
   /** Creates a new AlignToAprilTag. */
-  public AlignToAprilTag(Swerve dt, PhotonVision cam) {
+  public AlignToAprilTag(SwerveDrive dt, PhotonVision cam) {
     drivetrain = dt;
     camera = cam;
 
@@ -50,14 +50,14 @@ public class AlignToAprilTag extends CommandBase {
     } else {
       double yaw = camera.getTarget().getYaw();
       rotationSpeed = -turnController.calculate(yaw, 0);
-      drivetrain.drive(new Translation2d(0, 0), rotationSpeed, false, false);
+      drivetrain.drive(new Translation2d(0, 0), rotationSpeed,false,drivetrain.getGyroYaw(),drivetrain.getPose());
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.drive(new Translation2d(), 0, true, true);
+    drivetrain.drive(new Translation2d(0, 0), 0,false,drivetrain.getGyroYaw(),drivetrain.getPose());
   }
 
   // Returns true when the command should end.

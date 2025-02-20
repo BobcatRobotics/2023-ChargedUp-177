@@ -1,0 +1,33 @@
+{
+  "drive": {
+    "motor_type": "KrakenX60",
+    "id": 7,
+    "canbus": "rio"
+  },
+  "angle": {
+    "motor_type": "KrakenX60",
+    "id": 8,
+    "canbus": "rio"
+  },
+  "encoder": {
+    "type": "cancoder",
+    "id": 4,
+    "canbus": "rio",
+    "offset": 0.3957,
+    "inverted": false
+  },
+  "manufacturer":"sds",
+  "type": "mk4i",
+  "level": "L4",
+  "wheelCircumference": 4.00,
+  "angleCurrentLimit": 35,
+  "angleCurrentThreshold": 60,
+  "angleCurrentThresholdTime": 0.1,
+  "angleEnableCurrentLimit": true,
+  "driveCurrentLimit": 35,
+  "driveCurrentThreshold": 60,
+  "driveCurrentThresholdTime": 0.1,
+  "driveEnableCurrentLimit": true,
+  "openLoopRamp":0.25,
+  "closedLoopRamp":0.0
+}

@@ -1,0 +1,56 @@
+{
+    "Falcon500": {
+        "wheelDiameter": 4,
+        "angleGearRatio": 12.1,
+        "angleKP": 1.0,
+        "angleKI": 0.0,
+        "angleKD": 0.0,
+        "driveMotorInvert": false,
+        "angleMotorInvert": true,
+        "absoluteEncoderInvert": false
+    },
+    "KrakenX60": {
+        "wheelDiameter": 4,
+        "angleGearRatio": 12.1,
+        "angleKP": 1.0,
+        "angleKI": 0.0,
+        "angleKD": 0.0,
+        "driveMotorInvert": false,
+        "angleMotorInvert": true,
+        "absoluteEncoderInvert": false
+    },
+    "Neo": {
+        "wheelDiameter": 4,
+        "angleGearRatio": 12.1,
+        "angleKP": 0.1,
+        "angleKI": 0.0,
+        "angleKD": 0.0,
+        "driveMotorInvert": false,
+        "angleMotorInvert": true,
+        "absoluteEncoderInvert": false
+    },
+    "Vortex": {
+        "wheelDiameter": 4,
+        "angleGearRatio": 12.1,
+        "angleKP": 0.1,
+        "angleKI": 0.0,
+        "angleKD": 0.0,
+        "driveMotorInvert": false,
+        "angleMotorInvert": true,
+        "absoluteEncoderInvert": false
+    },
+    "driveGearRatios": {
+        "X1_10": 7.67,
+        "X1_11": 6.98,
+        "X1_12": 6.39,
+        "X2_10": 6.82,
+        "X2_11": 6.20,
+        "X2_12": 5.68,
+        "X3_10": 6.48,
+        "X3_11": 5.89,
+        "X3_12": 3.71,
+        "X4_10": 5.67,
+        "X4_11": 5.15,
+        "X4_12": 4.73
+    }
+}

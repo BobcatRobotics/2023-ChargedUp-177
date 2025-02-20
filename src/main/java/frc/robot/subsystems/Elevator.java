@@ -1,108 +1,91 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
-  private WPI_TalonFX elevatorMotor;
+  private TalonFX elevatorMotor;
 
   private DigitalInput topLimit;
   private DigitalInput bottomLimit;
   
-
+final MotionMagicVoltage m_motmag = new MotionMagicVoltage(0);
   private double holdPosValue;
 
   /** Creates a new Elevator. */
   public Elevator() {
-    elevatorMotor = new WPI_TalonFX(ElevatorConstants.elevatorMotorPort);
+    elevatorMotor = new TalonFX(ElevatorConstants.elevatorMotorPort);
     topLimit = new DigitalInput(ElevatorConstants.topLimitPort);
     bottomLimit = new DigitalInput(ElevatorConstants.bottomLimitPort);
 
-    elevatorMotor.configFactoryDefault();
-    elevatorMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
-    elevatorMotor.setSensorPhase(true);
-    elevatorMotor.configNominalOutputForward(0, 20);
-    elevatorMotor.configNominalOutputReverse(0, 20);
-    elevatorMotor.configPeakOutputForward(1, 20);
-    elevatorMotor.configPeakOutputReverse(-1, 20);//TODO: needs to be changes for comp
-    elevatorMotor.configAllowableClosedloopError(0, 0, 20);
-    elevatorMotor.config_kF(0, 0, 20);
-    elevatorMotor.config_kP(0, 0.25, 20);
-    elevatorMotor.config_kI(0, 0, 20);
-    elevatorMotor.config_kD(0, 0, 20);
-    elevatorMotor.setInverted(false); // used to be true but we flipped motor direction 2/25/23
-    elevatorMotor.setNeutralMode(NeutralMode.Brake);
-    elevatorMotor.configNeutralDeadband(0.001, 20);
-    elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
-    elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 20);
-    elevatorMotor.configAllowableClosedloopError(0, 400, 20);
-
-
-    // motion magic trapezoid configuration
-    //elevatorMotor.configAllowableClosedloopError()
-    elevatorMotor.configMotionCruiseVelocity(8000, 20); //needs to be tuned to robot
-    elevatorMotor.configMotionAcceleration(4000, 20);
-
-    holdPosValue = elevatorMotor.getSelectedSensorPosition();
+    TalonFXConfiguration internalConfig =  new TalonFXConfiguration();
+    internalConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+    Slot0Configs slot0Configs = new Slot0Configs();
+    slot0Configs.kP =  0.25;
+    slot0Configs.kI =  0;
+    slot0Configs.kD =  0;
+    internalConfig.withSlot0(slot0Configs);
+    internalConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    internalConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    internalConfig.MotionMagic.MotionMagicCruiseVelocity = 8000;
+    internalConfig.MotionMagic.MotionMagicAcceleration = 4000;
+    elevatorMotor.getConfigurator().apply(internalConfig);
+    holdPosValue = elevatorMotor.getPosition().getValueAsDouble();
   }
 
   public void elevate(double speed) {
-    elevatorMotor.set(ControlMode.PercentOutput, speed);
+    elevatorMotor.set(speed);
   }
   public double getSpeed(){
-    return elevatorMotor.getSelectedSensorVelocity();
+    return elevatorMotor.getVelocity().getValueAsDouble();
   } 
   public boolean getStopped(){
     return getSpeed() == 0;
   }
   public void holdPosition() {
-    elevatorMotor.set(ControlMode.Position, holdPosValue);
+    elevatorMotor.setControl(m_motmag.withPosition(holdPosValue));
   }
 
   public void holdPosition(double pos) {
-    elevatorMotor.set(ControlMode.Position, pos);
+    elevatorMotor.setControl(m_motmag.withPosition(pos));
   }
 
   public double getPIDError(){
-    return elevatorMotor.getClosedLoopError();
+    return elevatorMotor.getClosedLoopError().getValueAsDouble();
   }
 
   public void setHoldPos() {
-    holdPosValue = elevatorMotor.getSelectedSensorPosition();
+    holdPosValue = elevatorMotor.getPosition().getValueAsDouble();
   }
 
   public void resetEncoderPos() {
-    elevatorMotor.setSelectedSensorPosition(0);
+    elevatorMotor.getPosition().getValueAsDouble();
   }
 
   public boolean isAtSetpoint() {
-    return elevatorMotor.isMotionProfileFinished();
+    double error = elevatorMotor.getClosedLoopError().getValueAsDouble();
+    double threshold = 0.5;
+    if( error <= threshold){
+      return true;
+    }
+    return false;
   }
-
-  // public boolean getTopLimits() {
-  //   return !topLimit.get();
-  // }
 
   public boolean getBottomLimits() {
     return !bottomLimit.get();
   }
   public double getEncoderPos() {
-    return elevatorMotor.getSelectedSensorPosition();
+    return elevatorMotor.getPosition().getValueAsDouble();
   }
 
   public boolean topLimitSwitch() {
@@ -111,17 +94,17 @@ public class Elevator extends SubsystemBase {
 
   public void setState(int state) {
     if (state == 0) {
-      elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos0);
+      elevatorMotor.setControl(m_motmag.withPosition(ElevatorConstants.pos0));
       holdPosValue = ElevatorConstants.pos0;
       holdPosition();
       SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     } else if (state == 1) {
-      elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos1);
+      elevatorMotor.setControl(m_motmag.withPosition(ElevatorConstants.pos1));
       holdPosValue = ElevatorConstants.pos1;
       holdPosition();
       SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
     } else if (state == 2) {
-      elevatorMotor.set(ControlMode.MotionMagic, ElevatorConstants.pos2);
+      elevatorMotor.setControl(m_motmag.withPosition(ElevatorConstants.pos2));
       holdPosValue = ElevatorConstants.pos2;
       holdPosition();
       SmartDashboard.putString("elevator error", "State: " + state + ", Error: " + getPIDError());
@@ -129,21 +112,22 @@ public class Elevator extends SubsystemBase {
   }
 
   public int getState() {
-    double pos = elevatorMotor.getSelectedSensorPosition();
+    double pos = elevatorMotor.getPosition().getValueAsDouble();
     if (pos <= 256) pos = 0;
     return (int) Math.ceil(pos/4096);
   }
 
   public double getEncoder() {
-    return elevatorMotor.getSelectedSensorPosition();
+    return elevatorMotor.getPosition().getValueAsDouble();
   }
 
   public boolean isAtCurrentLimit() {
-    return elevatorMotor.getStatorCurrent() >= 50.0;
+    double statorCurrent = elevatorMotor.getStatorCurrent().getValueAsDouble();
+    return statorCurrent >= 50.0;
   }
 
   public void resetEncoderPosTop() {
-    elevatorMotor.setSelectedSensorPosition(-236710);
+    elevatorMotor.setPosition(-236710);
   }
 
   @Override
@@ -151,8 +135,7 @@ public class Elevator extends SubsystemBase {
     if (getBottomLimits()){
       resetEncoderPos();
       holdPosValue = 0;
-      elevatorMotor.set(ControlMode.PercentOutput, 0);
+      elevatorMotor.set( 0);
     }
-    // This method will be called once per scheduler run
   }
 }

@@ -1,23 +1,20 @@
 package frc.robot.commands;
 
+import BobcatLib.Subsystems.Swerve.SimpleSwerve.SwerveDrive;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Swerve;
 
-public class SetToX extends CommandBase {
-    private Swerve drivetrain;
+public class SetToX extends Command {
+    private SwerveDrive drivetrain;
     
-    public SetToX(Swerve dt) {
+    public SetToX(SwerveDrive dt) {
         drivetrain = dt;
         addRequirements(dt);
     }
 
     @Override
     public void initialize() {
-        drivetrain.configToX();
-        drivetrain.drive(new Translation2d(0, 0), 0, false, true);
+        drivetrain.drive(new Translation2d(0, 0), 0, false,drivetrain.getGyroYaw(),drivetrain.getPose());
     }
     
     @Override

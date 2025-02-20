@@ -4,11 +4,11 @@
 
 package frc.robot.commands.Presets;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Arm;
 
-public class RetractArm extends CommandBase {
+public class RetractArm extends Command {
   //TODO: Write this command
   
   // if the elevator is at the bottom, retract the arm

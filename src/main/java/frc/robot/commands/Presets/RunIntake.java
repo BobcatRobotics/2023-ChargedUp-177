@@ -6,13 +6,13 @@ package frc.robot.commands.Presets;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.Joystick;
 
 
-public class RunIntake extends CommandBase {
+public class RunIntake extends Command {
   /** Creates a new RunIntake. */
   Intake i;
   boolean runIn;

@@ -4,16 +4,18 @@
 
 package frc.robot.commands;
 
+import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
+
+import BobcatLib.Subsystems.Swerve.SimpleSwerve.SwerveDrive;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PhotonVision;
-import frc.robot.subsystems.Swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-public class FollowAprilTag extends CommandBase {
-  private Swerve drivetrain;
+public class FollowAprilTag extends Command {
+  private SwerveDrive drivetrain;
   private PhotonVision camera;
 
   // TODO: Tune!
@@ -22,7 +24,7 @@ public class FollowAprilTag extends CommandBase {
   private PIDController controller = new PIDController(P_GAIN, 0, D_GAIN);
 
   /** Creates a new FollowAprilTag. */
-  public FollowAprilTag(Swerve dt, PhotonVision cam) {
+  public FollowAprilTag(SwerveDrive dt, PhotonVision cam) {
     drivetrain = dt;
     camera = cam;
 
@@ -53,14 +55,14 @@ public class FollowAprilTag extends CommandBase {
       //double forwardSpeedY = -controller.calculate(rangeY, 0.5);
       Translation2d translation = new Translation2d(forwardSpeedX, 0);
 
-      drivetrain.drive(translation, 0, false, false);
+      drivetrain.drive(translation, 0, false, drivetrain.getGyroYaw(), drivetrain.getPose());
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.drive(new Translation2d(), 0, false, true);
+    drivetrain.drive(new Translation2d(), 0, false, drivetrain.getGyroYaw(), drivetrain.getPose());
   }
 
   // Returns true when the command should end.

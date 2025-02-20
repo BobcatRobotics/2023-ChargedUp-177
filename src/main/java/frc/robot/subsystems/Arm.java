@@ -3,57 +3,50 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ElevatorConstants;
 
 public class Arm extends SubsystemBase {
-    private WPI_TalonFX armMotor;
+    private TalonFX armMotor;
     //private TalonFXSensorCollection absoluteEncoder;
     private DigitalInput armLimit;
 
+final MotionMagicVoltage m_motmag = new MotionMagicVoltage(0);
     // private double holdPosValue;
     
     public Arm() {
-        armMotor = new WPI_TalonFX(Constants.ArmConstants.armMotorPort);
+        armMotor = new TalonFX(Constants.ArmConstants.armMotorPort);
         armLimit = new DigitalInput(Constants.ArmConstants.stowedLimitSwitch);
         //absoluteEncoder = new TalonFXSensorCollection(armMotor);
 
-        armMotor.configFactoryDefault();
-        armMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
-        armMotor.setSensorPhase(true);
-        armMotor.configNominalOutputForward(0, 20);
-        armMotor.configNominalOutputReverse(0, 20);
-        armMotor.configPeakOutputForward(0.5, 20);
-        armMotor.configPeakOutputReverse(-0.5, 20);
-        armMotor.configAllowableClosedloopError(0, 0, 20);
-        armMotor.config_kF(0, 0, 20);
-        armMotor.config_kP(0, 0.275, 20);
-        armMotor.config_kI(0, 0, 20);
-        armMotor.config_kD(0, 0, 20);
-        armMotor.setInverted(true);
-        armMotor.setNeutralMode(NeutralMode.Brake);
-        armMotor.configNeutralDeadband(0.001, 20);
-        armMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
-        armMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 20);
-        armMotor.configMotionCruiseVelocity(30000, 20); //needs to be tuned to robot
-        armMotor.configMotionAcceleration(24000, 20);
-        armMotor.configAllowableClosedloopError(0, 200, 20);
-
-        // holdPosValue = armMotor.getSelectedSensorPosition();
+        TalonFXConfiguration internalConfig =  new TalonFXConfiguration();
+        internalConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+        Slot0Configs slot0Configs = new Slot0Configs();
+        slot0Configs.kP =  0.275;
+        slot0Configs.kI =  0;
+        slot0Configs.kD =  0;
+        internalConfig.withSlot0(slot0Configs);
+        internalConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        internalConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        internalConfig.MotionMagic.MotionMagicCruiseVelocity = 30000;
+        internalConfig.MotionMagic.MotionMagicAcceleration = 24000;
+        armMotor.getConfigurator().apply(internalConfig);
     }
 
     public void setSpeed(double speed) {
-        armMotor.set(ControlMode.PercentOutput, speed);
+        armMotor.set(speed);
     }
 
     // public void holdPosition() {
@@ -61,71 +54,76 @@ public class Arm extends SubsystemBase {
     // }
 
     // public void setHoldPos() {
-    //     holdPosValue = armMotor.getSelectedSensorPosition();
+    //     holdPosValue = armMotor.getPosition().getValueAsDouble();
     // }
 
     public void setState(int state) {
         if (state == 0) {
-            armMotor.set(ControlMode.MotionMagic, ArmConstants.pos0);
+
+            armMotor.setControl(m_motmag.withPosition(ArmConstants.pos0));
             SmartDashboard.putString("arm error", "State: " + state + ", Error: " + getArmPIDError());
         } else if (state == 1) {
-            armMotor.set(ControlMode.MotionMagic, ArmConstants.pos1);
+
+            armMotor.setControl(m_motmag.withPosition(ArmConstants.pos1));
             SmartDashboard.putString("arm error", "State: " + state + ", Error: " + getArmPIDError());
         } else  if (state == 2) {
-            armMotor.set(ControlMode.MotionMagic, ArmConstants.pos2);
+
+            armMotor.setControl(m_motmag.withPosition(ArmConstants.pos2));
             SmartDashboard.putString("arm error", "State: " + state + ", Error: " + getArmPIDError());
         } else if (state == 3) {
-            armMotor.set(ControlMode.MotionMagic, ArmConstants.bottomPickup);
+            armMotor.setControl(m_motmag.withPosition(ArmConstants.bottomPickup));
             SmartDashboard.putString("arm error", "State: " + state + ", Error: " + getArmPIDError());
         }
     }
     public void setPos(int pos) {
-        armMotor.set(ControlMode.MotionMagic, pos);
+        armMotor.setControl(m_motmag.withPosition(pos));
         SmartDashboard.putString("arm error", "State: " + pos + ", Error: " + getArmPIDError());
     }
     public double getArmPIDError(){
-        return armMotor.getClosedLoopError();
+        return armMotor.getClosedLoopError().getValueAsDouble();
     }
     public boolean isAtStowedLimit() {
         return !armLimit.get();
     }
 
     public int getState() {
-        double pos = armMotor.getSelectedSensorPosition();
+        double pos = armMotor.getPosition().getValueAsDouble();
         if (pos <= 256) pos = 0;
         return (int) Math.ceil(pos/4096);
     }
 
     public double getPos() {
-        return armMotor.getSelectedSensorPosition();
+        return armMotor.getPosition().getValueAsDouble();
     }
 
     public boolean isAtTopLimit() {
-        return armMotor.getSelectedSensorPosition() >= Constants.ArmConstants.topLimit;
+        return armMotor.getPosition().getValueAsDouble() >= Constants.ArmConstants.topLimit;
     }
 
     public boolean isAtBottomLimit() {
-        return armMotor.getSelectedSensorPosition() <= Constants.ArmConstants.bottomLimit;
+        return armMotor.getPosition().getValueAsDouble() <= Constants.ArmConstants.bottomLimit;
     }
 
     public boolean isAtConstrictedBottomLimit() {
-        return armMotor.getSelectedSensorPosition() <= Constants.ArmConstants.constrictedBottomLimit;
+        return armMotor.getPosition().getValueAsDouble() <= Constants.ArmConstants.constrictedBottomLimit;
     }
 
     public boolean isAtSetpoint() {
-        return armMotor.isMotionProfileFinished();
-    }
-
-    // public double absoluteEncoderVal() {
-    //     return absoluteEncoder.getIntegratedSensorAbsolutePosition();
-    // }
+        double error = armMotor.getClosedLoopError().getValueAsDouble();
+        double threshold = 0.5;
+        if( error <= threshold){
+          return true;
+        }
+        return false;
+      }
     
     public boolean isAtCurrentLimit() {
-        return armMotor.getStatorCurrent() >= 50.0;
-    }
+        double statorCurrent = armMotor.getStatorCurrent().getValueAsDouble();
+        return statorCurrent >= 50.0;
+      }
 
     public void resetEncoder() {
-        armMotor.setSelectedSensorPosition(0);
+        armMotor.setPosition(0);
     }
 
     @Override

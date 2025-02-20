@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
@@ -14,7 +14,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 
-public class ElevatorControls extends CommandBase {
+public class ElevatorControls extends Command {
   private Elevator elevator;
   private Joystick gamepad;
   private Arm arm;

@@ -14,13 +14,11 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-import java.util.Optional;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -51,7 +49,7 @@ public class PhotonVision extends SubsystemBase {
 
     // TODO - once 2023 happens, replace this with just loading the 2023 field arrangement
     AprilTagFieldLayout atfl = new AprilTagFieldLayout(atList, Constants.FieldConstants.length, Constants.FieldConstants.width);
-    photonPoseEstimator = new PhotonPoseEstimator(atfl, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, ROBOT_TO_CAMERA);
+    photonPoseEstimator = new PhotonPoseEstimator(atfl,  PoseStrategy.CLOSEST_TO_REFERENCE_POSE, ROBOT_TO_CAMERA);
   }
 
   public void getNewResults() {
@@ -73,7 +71,7 @@ public class PhotonVision extends SubsystemBase {
 
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
     photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-    return photonPoseEstimator.update();  
+    return photonPoseEstimator.update(result);
   }
 
   @Override

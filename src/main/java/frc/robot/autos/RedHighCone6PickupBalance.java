@@ -3,9 +3,11 @@ package frc.robot.autos;
 import frc.robot.Constants;
 import frc.robot.commands.Autos.AlignToTargetAutos;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Swerve;
 
 import java.nio.file.Path;
+
+import BobcatLib.Subsystems.Swerve.SimpleSwerve.SwerveDrive;
+
 import java.io.IOException;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -26,25 +28,17 @@ public class RedHighCone6PickupBalance extends SequentialCommandGroup {
     Trajectory exampleTrajectory = new Trajectory();
     Trajectory exampleTrajectory2 = new Trajectory();
     AlignToTargetAutos alignToTargetAutos;
+    SwerveDrive swerve;
 
-    public RedHighCone6PickupBalance(Swerve s_Swerve, Limelight lime){
+    public RedHighCone6PickupBalance(SwerveDrive s_Swerve, Limelight lime){
+        this.swerve = s_Swerve;
         TrajectoryConfig config =
             new TrajectoryConfig(
                     Constants.AutoConstants.kMaxSpeedMetersPerSecond,
                     Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                .setKinematics(Constants.Swerve.swerveKinematics);
+                .setKinematics(s_Swerve.swerveKinematics);
         
         alignToTargetAutos = new AlignToTargetAutos(s_Swerve, lime);
-        // // An example trajectory to follow.  All units in meters.
-        // Trajectory exampleTrajectory =
-        //     TrajectoryGenerator.generateTrajectory(
-        //         // Start at the origin facing the +X direction
-        //         new Pose2d(0, 0, new Rotation2d(0)),
-        //         // Pass through these two interior waypoints, making an 's' curve path
-        //         List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        //         // End 3 meters straight ahead of where we started, facing forward
-        //         new Pose2d(3, 0, new Rotation2d(0)),
-        //         config);
 
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -64,7 +58,7 @@ public class RedHighCone6PickupBalance extends SequentialCommandGroup {
             new SwerveControllerCommand(
                 exampleTrajectory,
                 s_Swerve::getPose,
-                Constants.Swerve.swerveKinematics,
+                s_Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
                 new PIDController(Constants.AutoConstants.kPYController, 0, 0),
                 thetaController,
@@ -75,7 +69,7 @@ public class RedHighCone6PickupBalance extends SequentialCommandGroup {
             new SwerveControllerCommand(
                 exampleTrajectory2,
                 s_Swerve::getPose,
-                Constants.Swerve.swerveKinematics,
+                s_Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
                 new PIDController(Constants.AutoConstants.kPYController, 0, 0),
                 thetaController,
@@ -84,8 +78,8 @@ public class RedHighCone6PickupBalance extends SequentialCommandGroup {
 
         
         addCommands(
-            new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
-            swerveControllerCommand, alignToTargetAutos, new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory2.getInitialPose())),
+            new InstantCommand(() -> s_Swerve.setPose(exampleTrajectory.getInitialPose())),
+            swerveControllerCommand, alignToTargetAutos, new InstantCommand(() -> s_Swerve.setPose(exampleTrajectory2.getInitialPose())),
             swerveControllerCommand2
         );
     }

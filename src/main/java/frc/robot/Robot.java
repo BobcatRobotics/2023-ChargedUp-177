@@ -6,16 +6,26 @@ package frc.robot;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import BobcatLib.BobcatLibCoreRobot;
+import BobcatLib.Hardware.Controllers.OI;
+import BobcatLib.Subsystems.Swerve.SimpleSwerve.Swerve.Module.Utility.PIDConstants;
+import BobcatLib.Subsystems.Swerve.SimpleSwerve.Utility.Alliance;
+import BobcatLib.Subsystems.Swerve.Utility.LoadablePathPlannerAuto;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.Autos.BalanceChargeStation;
-import frc.robot.subsystems.Swerve;
+import edu.wpi.first.wpilibj2.command.Commands;
 //=talonfx(canid, "CANt_open_file")
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,19 +33,34 @@ import frc.robot.subsystems.Swerve;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
-  public static CTREConfigs ctreConfigs;
-
+public class Robot  extends BobcatLibCoreRobot {
   private Command m_autonomousCommand;
-  
-
-  private RobotContainer m_robotContainer;
-  
+  private OI driver_controller;
+  public static Alliance alliance;
+  private final RobotContainer m_robotContainer;  
   private boolean firstExecute = true;
-
   private Timer timer;
-
   private int i = 0;
+
+  public Robot(){
+     super(RobotBase.isReal());
+      
+    alliance = new Alliance();
+    
+    // Instantiate our RobotContainer. This will perform all our button bindings,
+    // and put our
+    // autonomous chooser on the dashboard.
+    List<LoadablePathPlannerAuto> loadableAutos = new ArrayList<LoadablePathPlannerAuto>();
+    loadableAutos.add(new LoadablePathPlannerAuto("Do Nothing", Commands.none(), true));
+
+    String robotName = "RobotName";
+    boolean isSim = false;
+    PIDConstants tranPidPathPlanner = new PIDConstants(10, 0, 0);
+    PIDConstants rotPidPathPlanner = new PIDConstants(5, 0, 0);
+    driver_controller = new OI(robotName);
+    m_robotContainer = new RobotContainer(driver_controller, loadableAutos, robotName,isSim, alliance, tranPidPathPlanner,rotPidPathPlanner);
+    m_robotContainer.updateLoadedPaths(loadableAutos);
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -43,10 +68,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    ctreConfigs = new CTREConfigs();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
     timer = new Timer();
 
     File deployDir = Filesystem.getDeployDirectory();
@@ -101,7 +124,6 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    RobotContainer.s_Swerve.resetOdometryAutos();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     try{
     m_robotContainer.cancelDefaultTeleop();
@@ -157,5 +179,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+
+  }
 }

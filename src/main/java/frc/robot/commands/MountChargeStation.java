@@ -4,17 +4,17 @@
 
 package frc.robot.commands;
 
+import BobcatLib.Subsystems.Swerve.SimpleSwerve.SwerveDrive;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Swerve;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class MountChargeStation extends CommandBase {
-  
+public class MountChargeStation extends Command {
+
   // stage 1 -> drive forward until pitch increases beyond a certain threshold
   // stage 2 -> drive forward until pitch decreases below a certain threshold
-  
-  private Swerve swerve;
+
+  private SwerveDrive swerve;
   private double pitch;
   private double stage1Threshold = 5;
   private double stage2Threshold = 10;
@@ -22,8 +22,7 @@ public class MountChargeStation extends CommandBase {
   private boolean isRed;
   private boolean finished = false;
 
-  
-  public MountChargeStation(Swerve drivetrain, boolean isRed) {
+  public MountChargeStation(SwerveDrive drivetrain, boolean isRed) {
     swerve = drivetrain;
     addRequirements(drivetrain);
     this.isRed = isRed;
@@ -39,27 +38,25 @@ public class MountChargeStation extends CommandBase {
   @Override
   public void execute() {
     swerve.resetModulesToAbsolute();
-    pitch = swerve.getPitch();
-    swerve.drive(new Translation2d(-2.5, 0), /*may need to be changed*/
-     0, true, true);
-    
-    
-      if((pitch > stage1Threshold)){
-        SmartDashboard.putString("ChargeStation", "stage 1: " + pitch);
-        stage = 2;
-      }
-      else if(stage == 2 && (pitch < stage2Threshold)){
-        SmartDashboard.putString("ChargeStation", "stage 2: " + pitch);
-        finished = true;
-      }
-      
+    pitch = swerve.getBaseGyro().getPitch().getDegrees();
+    swerve.drive(new Translation2d(-2.5, 0), /* may need to be changed */
+        0, true, swerve.getGyroYaw(), swerve.getPose());
+
+    if ((pitch > stage1Threshold)) {
+      SmartDashboard.putString("ChargeStation", "stage 1: " + pitch);
+      stage = 2;
+    } else if (stage == 2 && (pitch < stage2Threshold)) {
+      SmartDashboard.putString("ChargeStation", "stage 2: " + pitch);
+      finished = true;
+    }
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerve.drive(new Translation2d(0, 0), 0, true, true);
-    
+    swerve.drive(new Translation2d(0, 0), 0, true, swerve.getGyroYaw(), swerve.getPose());
+
     SmartDashboard.putString("ChargeStation", "Finished: " + pitch);
   }
 

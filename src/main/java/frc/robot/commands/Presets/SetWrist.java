@@ -1,10 +1,10 @@
 package frc.robot.commands.Presets;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Wrist;
 
-public class SetWrist extends CommandBase {
+public class SetWrist extends Command {
     Wrist wrist;
     boolean direction;
     public SetWrist(Wrist w, boolean d ) {

@@ -1,0 +1,41 @@
+{
+  "base": {
+    "trackWidth": 20.50,
+    "wheelBase": 20.50
+  },
+  "moduleSpeedLimits": {
+    "maxSpeed": 4.5,
+    "maxAccel": 3.0,
+    "maxAngularVelocity": 10.0,
+    "maxAngularAcceleration": 1.57
+  },
+  "chassisSpeedLimits": {
+    "maxSpeed": 5.5,
+    "maxAccel": 10.0,
+    "maxAngularVelocity": 900.00,
+    "maxAngularAccel": 720.00
+  },
+  "driveCharacteristics": {
+    "driveKS": 0.24128,
+    "driveKV": 1.98,
+    "driveKA": 1.0449
+  },
+  "translationPID": {
+    "driveKP": 2.0087,
+    "driveKI": 0.00,
+    "driveKD": 0.00,
+    "driveKF": 0.00
+  },
+  "rotationPID": {
+    "driveKP": 0.05,
+    "driveKI": 0.00,
+    "driveKD": 0.00,
+    "driveKF": 0.00
+  },
+  "indicator": {
+    "type": "CANdle",
+    "id": 0,
+    "ledCount": 8,
+    "canbus": "rio"
+  }
+}

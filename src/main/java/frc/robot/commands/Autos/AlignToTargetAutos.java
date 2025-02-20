@@ -5,15 +5,14 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj.Timer;
+import BobcatLib.Subsystems.Swerve.SimpleSwerve.SwerveDrive;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Swerve;
-
-public class AlignToTargetAutos extends CommandBase {
-  private Swerve drivetrain;
+public class AlignToTargetAutos extends Command {
+  private SwerveDrive drivetrain;
   private Limelight lime;
   private PIDController pidController;
   private Timer timer;
@@ -28,7 +27,7 @@ public class AlignToTargetAutos extends CommandBase {
   private double calc;
 
   /** Creates a new AlignToTarget. */
-  public AlignToTargetAutos(Swerve dt, Limelight lm) {
+  public AlignToTargetAutos(SwerveDrive dt, Limelight lm) {
     drivetrain = dt;
     lime = lm;
     timer = new Timer();
@@ -60,7 +59,7 @@ public class AlignToTargetAutos extends CommandBase {
       calc = pidController.calculate(xOffset);
       SmartDashboard.putNumber("xOffset", xOffset);
       SmartDashboard.putNumber("PID Value", calc);
-      drivetrain.drive(new Translation2d(), calc, true, true);
+      drivetrain.drive(new Translation2d(), calc,true,drivetrain.getGyroYaw(),drivetrain.getPose());
     } else {
       end(false);
     }
@@ -69,7 +68,7 @@ public class AlignToTargetAutos extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.drive(new Translation2d(), 0, true, true);
+    drivetrain.drive(new Translation2d(), 0,true,drivetrain.getGyroYaw(),drivetrain.getPose());
     SmartDashboard.putBoolean("Executing", false);
   }
 

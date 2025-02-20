@@ -4,10 +4,10 @@
 
 package frc.robot.commands.Presets;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 
-public class ZeroElevator extends CommandBase {
+public class ZeroElevator extends Command {
   /** Creates a new ZeroElevator. */
   Elevator e;
   public ZeroElevator(Elevator e) {
