@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'checkstyle'
+}
+
+group = "org.bobcatrobotics"
+version = "1.0.0"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+    maven { url = "https://frcmaven.wpi.edu/artifactory/release" }
+}
+
+dependencies {
+    // WPILib core for compilation (optional)
+    implementation "edu.wpi.first.wpilibj:wpilibj-java:2025.2.1"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+}
+
+checkstyle {
+    configFile = file("config/checkstyle/checkstyle.xml")
+    toolVersion = '10.26.1'
+}
+
+test {
+    useJUnitPlatform()
+}
