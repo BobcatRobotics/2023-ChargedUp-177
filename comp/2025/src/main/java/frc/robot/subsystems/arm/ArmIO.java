@@ -1,27 +1,21 @@
-package frc.robot.subsystems.elevator;
+package frc.robot.subsystems.arm;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ElevatorIO {
+public interface ArmIO {
     @AutoLog
-    public static class ElevatorIOInputs {
+    public static class ArmIOInputs {
         public double positionRotations = 0.0;
         public double velocityRps = 0.0;
         public double statorCurrent = 0.0;
-        public boolean bottomLimitPressed = false;
-        public boolean topLimitPressed = false;
+        public boolean stowedLimitPressed = false;
         public boolean isMotionDone = false;
     }
 
-    public default void updateInputs(ElevatorIOInputs inputs) {}
+    public default void updateInputs(ArmIOInputs inputs) {}
 
     public default void setPercent(double percent) {}
-
     public default void setMotionMagic(double position) {}
 
-    public default void holdPosition(double position) {}
-
     public default void resetEncoder() {}
-    
-    public default void resetEncoderTop() {}
 }
