@@ -5,6 +5,14 @@ plugins {
     id "com.peterabeles.gversion" version "1.10"
 }
 
+sourceSets{
+    main{
+        java{
+            srcDir "../../lib/src/main/java"
+        }
+    }
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17

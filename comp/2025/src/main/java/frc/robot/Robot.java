@@ -90,6 +90,8 @@ public class Robot extends LoggedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    m_robotContainer.getControllers().updateControllerAlerts();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -134,7 +136,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_robotContainer.getControllers().updateControllerAlerts();
+  }
 
   @Override
   public void testInit() {
@@ -144,5 +148,7 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    m_robotContainer.getControllers().updateControllerAlerts();
+  }
 }

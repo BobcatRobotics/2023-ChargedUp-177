@@ -34,6 +34,9 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOLimelight;
+
+import org.bobcatrobotics.Controllers.ControllerAutoDetect;
+import org.bobcatrobotics.Controllers.Gamepads.ControllerBase;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -48,7 +51,8 @@ public class RobotContainer {
   private Vision vision;
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  //private final CommandXboxController controller = new CommandXboxController(0);
+  private final ControllerBase controller = ControllerAutoDetect.createGamepad(0,"driver");
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;

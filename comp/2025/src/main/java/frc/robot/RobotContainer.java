@@ -50,7 +50,11 @@ import frc.robot.subsystems.wrist.Wrist;
 import frc.robot.subsystems.wrist.WristIO;
 import frc.robot.subsystems.wrist.WristIOReal;
 import frc.robot.subsystems.wrist.WristIOSim;
+
+import org.bobcatrobotics.Controllers.ControllerAutoDetect;
+import org.bobcatrobotics.Controllers.Gamepads.ControllerBase;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -68,13 +72,14 @@ public class RobotContainer {
     private Arm arm;
 
     // Controller
-    private final CommandXboxController controller = new CommandXboxController(0);
+    private final ControllerBase controller;
 
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+       controller = new ControllerAutoDetect().createGamepad(0,"driver");
         switch (Constants.currentMode) {
             case REAL:
                 // Real robot, instantiate hardware IO implementations
@@ -148,15 +153,15 @@ public class RobotContainer {
                 () -> -controller.getLeftX(), () -> -controller.getRightX()));
 
         // Lock to 0° when A button is held
-        controller.a()
+        controller.getButton("A")
                 .whileTrue(DriveCommands.joystickDriveAtAngle(drive, () -> -controller.getLeftY(),
                         () -> -controller.getLeftX(), () -> new Rotation2d()));
 
         // Switch to X pattern when X button is pressed
-        controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+        controller.getButton("X").onTrue(Commands.runOnce(drive::stopWithX, drive));
 
         // Reset gyro to 0° when B button is pressed
-        controller.b().onTrue(Commands.runOnce(
+        controller.getButton("B").onTrue(Commands.runOnce(
                 () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                 drive).ignoringDisable(true));
     }
@@ -172,5 +177,9 @@ public class RobotContainer {
 
     public Pose2d getPose2D() {
         return drive.getPose();
+    }
+
+    public ControllerBase getControllers(){
+        return controller;
     }
 }
