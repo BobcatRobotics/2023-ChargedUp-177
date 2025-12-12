@@ -33,10 +33,10 @@ public final class Constants {
 
   public static final int intakeMotorID = 11; // TODO: assign correct values
   public static final int wristSolenoidID = 0;
-  public static final int wristMotorID = 0;
   public static final int pHubID = 1;
   public static final int compressorID = 1;
-
+  public static final int wristCANCoderID = 999;//TODO: assign correct values
+  public static final int wristMotorID = 9999;
 
   public static final class ArmConstants {
     public static final int armMotorPort = 10;
@@ -71,4 +71,22 @@ public final class Constants {
 
     public static int elevatorState = 0;
   }
+
+
+
+  public static final class WristConstants {
+    public static final int forwardGround = 0; //TODO: Tune!
+    public static final int topGround = 0;
+    public static final int HPChute = 0;
+    public static final int HPSlide = 0;
+    public static final int score = 0;
+    public static final int holdPiece = 0;
+
+    public static final int topLimit = 0;
+    public static final int bottomLimit = 0;
+}
+
+public static final class LEDConstants {
+    public static final int ledPort = 0; // placeholder
+}
 }

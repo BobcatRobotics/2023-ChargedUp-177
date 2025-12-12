@@ -3,16 +3,22 @@ package frc.robot.subsystems.wrist;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface WristIO {
-    @AutoLog
-    public static class WristIOInputs {
-        public boolean solenoidExtended = false;
-        public double pressurePsi = 0.0;
-        public boolean compressorEnabled = false;
-    }
+  @AutoLog
+  public static class WristIOInputs {
+    public double absolutePositionDeg = 0.0;
+    public double motorVelocity = 0.0;
+    public double motorOutput = 0.0;
+  }
 
-    public default void updateInputs(WristIOInputs inputs) {}
+  public default void updateInputs(WristIOInputs inputs) {
+  }
 
-    public default void setSolenoid(boolean extended) {}
+  public default void setPercent(double percent) {
+  }
 
-    public default void enableCompressorAnalog(double minPsi, double maxPsi) {}
+  public default void setMotionMagic(WristState state) {
+  }
+
+  public default void stop() {
+  }
 }

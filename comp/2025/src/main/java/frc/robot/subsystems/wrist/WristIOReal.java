@@ -1,37 +1,60 @@
 package frc.robot.subsystems.wrist;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.Solenoid;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+
 import frc.robot.Constants;
 
 public class WristIOReal implements WristIO {
 
-    private final Solenoid solenoid;
-    private final PneumaticHub hub;
-    private final Compressor compressor;
+  private final TalonFX motor = new TalonFX(Constants.wristMotorID);
+  private final CANcoder encoder = new CANcoder(Constants.wristCANCoderID);
 
-    public WristIOReal() {
-        hub = new PneumaticHub(Constants.pHubID);
-        solenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.wristSolenoidID);
-        compressor = new Compressor(Constants.compressorID, PneumaticsModuleType.REVPH);
-    }
+  private final DutyCycleOut percentReq = new DutyCycleOut(0);
+  private final MotionMagicVoltage mmReq = new MotionMagicVoltage(0);
 
-    @Override
-    public void updateInputs(WristIOInputs inputs) {
-        inputs.solenoidExtended = solenoid.get();
-        inputs.pressurePsi = compressor.getPressure();
-        inputs.compressorEnabled = compressor.isEnabled();
-    }
+  public WristIOReal() {
 
-    @Override
-    public void setSolenoid(boolean extended) {
-        solenoid.set(extended);
-    }
+    TalonFXConfiguration config = new TalonFXConfiguration();
+    config.Slot0.kP = 0.275;
+    config.Slot0.kI = 0;
+    config.Slot0.kD = 0;
+    config.Slot0.kV = 0;
+    config.MotorOutput.Inverted = com.ctre.phoenix6.signals.InvertedValue.Clockwise_Positive;
+    config.MotorOutput.NeutralMode = com.ctre.phoenix6.signals.NeutralModeValue.Brake;
 
-    @Override
-    public void enableCompressorAnalog(double minPsi, double maxPsi) {
-        compressor.enableAnalog(minPsi, maxPsi);
-    }
+    config.MotionMagic.MotionMagicCruiseVelocity = 30000;
+    config.MotionMagic.MotionMagicAcceleration = 24000;
+
+    motor.getConfigurator().apply(config);
+
+    encoder.getConfigurator().apply(new CANcoderConfiguration());
+  }
+
+  @Override
+  public void updateInputs(WristIOInputs inputs) {
+    inputs.absolutePositionDeg = encoder.getAbsolutePosition().getValueAsDouble();
+    inputs.motorVelocity = motor.getVelocity().getValueAsDouble();
+    inputs.motorOutput = motor.getDutyCycle().getValueAsDouble();
+  }
+
+  @Override
+  public void setPercent(double percent) {
+    percentReq.Output = percent;
+    motor.setControl(percentReq);
+  }
+
+  @Override
+  public void setMotionMagic(WristState state) {
+    motor.setControl(mmReq.withPosition(state.position));
+  }
+
+  @Override
+  public void stop() {
+    motor.setControl(new DutyCycleOut(0));
+  }
 }

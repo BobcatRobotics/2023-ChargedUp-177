@@ -3,8 +3,7 @@ package frc.robot.subsystems.intake;
 public class IntakeIOSim implements IntakeIO {
     private double percent = 0;
 
-    public IntakeIOSim(){
-        
+    public IntakeIOSim(){        
     }
 
     @Override

@@ -2,40 +2,46 @@ package frc.robot.subsystems.wrist;
 
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Wrist extends SubsystemBase {
+  private final WristIO io;
+  private final WristIOInputsAutoLogged inputs = new WristIOInputsAutoLogged();
 
-    private final WristIO io;
-    private final WristIOInputsAutoLogged inputs = new WristIOInputsAutoLogged();
+  public Wrist(WristIO io) {
+    this.io = io;
+  }
 
-    public Wrist(WristIO io) {
-        this.io = io;
-    }
+  @Override
+  public void periodic() {
+    io.updateInputs(inputs);
 
-    @Override
-    public void periodic() {
-        io.updateInputs(inputs);
+    Logger.processInputs("Wrist", inputs);
+  }
 
-        // Log with AdvantageKit
-        Logger.processInputs("Wrist", inputs);
+  /** Get absolute wrist position (°) */
+  public double getWristPositionDeg() {
+    return inputs.absolutePositionDeg;
+  }
 
-        // Keep compressor in analog mode (same as your code)
-        io.enableCompressorAnalog(80, 115);
-    }
+  /** Manual control */
+  public void setSpeed(double speed) {
+    io.setPercent(speed);
+  }
 
-    public void wristSolenoidON() {
-        io.setSolenoid(true);
-    }
+  /** Stop */
+  public void stop() {
+    io.stop();
+  }
 
-    public void wristSolenoidOFF() {
-        io.setSolenoid(false);
-    }
+  /** Set wrist to preset position */
+  public void setState(WristState state) {
+    io.setMotionMagic(state);
+  }
 
-    public boolean getWristSolenoid() {
-        return inputs.solenoidExtended;
-    }
 
-    public double getPressure() {
-        return inputs.pressurePsi;
-    }
+  /** Soft limit check using absolute encoder */
+  public boolean topLimit() {
+    return getWristPositionDeg() > Constants.WristConstants.topLimit;
+  }
 }
