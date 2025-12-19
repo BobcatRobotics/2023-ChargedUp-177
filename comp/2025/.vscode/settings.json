@@ -61,5 +61,6 @@
     "edu.wpi.first.math.**.struct.*",
     null
   ],
-  "java.debug.settings.onBuildFailureProceed": true
+  "java.debug.settings.onBuildFailureProceed": true,
+  "C_Cpp.errorSquiggles": "disabled"
 }

@@ -77,6 +77,7 @@ public class RobotContainer {
 
         // Controller
         private final ControllerBase controller;
+        private final ControllerBase operator;
 
         // Dashboard inputs
         private final LoggedDashboardChooser<Command> autoChooser;
@@ -86,6 +87,7 @@ public class RobotContainer {
          */
         public RobotContainer() {
                 controller = ControllerAutoDetect.createGamepad(0, "driver");
+                operator = ControllerAutoDetect.createGamepad(1, "operator");
                 switch (Constants.currentMode) {
                         case REAL:
                                 // Real robot, instantiate hardware IO implementations
@@ -183,6 +185,11 @@ public class RobotContainer {
                 controller.getButton("Y").whileTrue(new RunCommand(()-> intake.runIntakeOut()))
                 .onFalse(new InstantCommand(()-> intake.stop()));
                 
+                operator.getButton("A").whileTrue(new RunCommand(()-> elevator.elevate(.5), elevator))
+                .onFalse(new RunCommand(()->elevator.holdPosition()));
+
+                operator.getButton("B").whileTrue(new RunCommand(()-> elevator.elevate(-.5), elevator))
+                .onFalse(new RunCommand(()->elevator.holdPosition()));
         
         }
 
