@@ -58,12 +58,9 @@ import org.bobcatrobotics.Controllers.Gamepads.ControllerBase;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -107,8 +104,8 @@ public class RobotContainer {
                                 break;
                         case SIM:
                                 // Sim robot, instantiate physics sim IO implementations
-                                drive = new Drive(new GyroIO() {
-                                }, new ModuleIOSim(TunerConstants.FrontLeft),
+                                drive = new Drive(new GyroIO() {},
+                                                new ModuleIOSim(TunerConstants.FrontLeft),
                                                 new ModuleIOSim(TunerConstants.FrontRight),
                                                 new ModuleIOSim(TunerConstants.BackLeft),
                                                 new ModuleIOSim(TunerConstants.BackRight));
@@ -120,23 +117,19 @@ public class RobotContainer {
 
                         default:
                                 // Replayed robot, disable IO implementations
-                                drive = new Drive(new GyroIO() {
-                                }, new ModuleIO() {
-                                }, new ModuleIO() {
-                                },
-                                                new ModuleIO() {
-                                                }, new ModuleIO() {
-                                                });
+                                drive = new Drive(new GyroIO() {}, new ModuleIO() {},
+                                                new ModuleIO() {}, new ModuleIO() {},
+                                                new ModuleIO() {});
                                 intake = new Intake(new IntakeIO() {});
                                 arm = new Arm(new ArmIO() {});
                                 elevator = new Elevator(new ElevatorIO() {});
-                                wrist = new Wrist(new WristIO() {
-                                });
+                                wrist = new Wrist(new WristIO() {});
                                 break;
                 }
 
                 // Set up auto routines
-                autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+                autoChooser = new LoggedDashboardChooser<>("Auto Choices",
+                                AutoBuilder.buildAutoChooser());
 
                 // Set up SysId routines
                 autoChooser.addOption("Drive Wheel Radius Characterization",
@@ -157,40 +150,44 @@ public class RobotContainer {
         }
 
         /**
-         * Use this method to define your button->command mappings. Buttons can be
-         * created by
+         * Use this method to define your button->command mappings. Buttons can be created by
          * instantiating a {@link GenericHID} or one of its subclasses
-         * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-         * passing it to a
-         * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+         * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it
+         * to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
          */
         private void configureButtonBindings() {
                 // Default command, normal field-relative drive
-                drive.setDefaultCommand(DriveCommands.joystickDrive(drive, () -> -controller.getLeftY(),
-                                () -> -controller.getLeftX(), () -> -controller.getRightX()));
+                drive.setDefaultCommand(DriveCommands.joystickDrive(drive,
+                                () -> -controller.getLeftY(), () -> -controller.getLeftX(),
+                                () -> -controller.getRightX()));
 
                 // Lock to 0° when A button is held
-                controller.getButton("A")
-                                .whileTrue(DriveCommands.joystickDriveAtAngle(drive, () -> -controller.getLeftY(),
-                                                () -> -controller.getLeftX(), () -> new Rotation2d()));
+                controller.getButton("A").whileTrue(DriveCommands.joystickDriveAtAngle(drive,
+                                () -> -controller.getLeftY(), () -> -controller.getLeftX(),
+                                () -> new Rotation2d()));
 
                 // Switch to X pattern when X button is pressed
                 controller.getButton("X").onTrue(Commands.runOnce(drive::stopWithX, drive));
 
                 // Reset gyro to 0° when B button is pressed
-                controller.getButton("B").onTrue(Commands.runOnce(
-                                () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                controller.getButton("B").onTrue(Commands.runOnce(() -> drive.setPose(
+                                new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                                 drive).ignoringDisable(true));
 
-                controller.getButton("Y").whileTrue(new RunCommand(()-> intake.runIntakeOut()))
-                .onFalse(new InstantCommand(()-> intake.stop()));
-                
-                operator.getButton("A").whileTrue(new RunCommand(()-> elevator.elevate(.5), elevator))
-                .onFalse(new RunCommand(()->elevator.holdPosition()));
+                operator.getButton("X").whileTrue(new RunCommand(() -> intake.runIntakeOut()))
+                                .onFalse(new InstantCommand(() -> intake.stop()));
 
-                operator.getButton("B").whileTrue(new RunCommand(()-> elevator.elevate(-.5), elevator))
-                .onFalse(new RunCommand(()->elevator.holdPosition()));
-        
+                operator.getButton("Y").whileTrue(new RunCommand(() -> intake.runIntakeOut()))
+                                .onFalse(new InstantCommand(() -> intake.stop()));
+
+                operator.getButton("A")
+                                .whileTrue(new RunCommand(() -> elevator.elevate(.5), elevator))
+                                .onFalse(new RunCommand(() -> elevator.holdPosition()));
+
+                operator.getButton("B")
+                                .whileTrue(new RunCommand(() -> elevator.elevate(-.5), elevator))
+                                .onFalse(new RunCommand(() -> elevator.holdPosition()));
+
         }
 
         /**

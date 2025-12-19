@@ -37,6 +37,12 @@ public class ElevatorIOReal implements ElevatorIO {
         config.MotionMagic.MotionMagicCruiseVelocity = 8000;
         config.MotionMagic.MotionMagicAcceleration = 4000;
 
+        // Limits
+        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0;
+        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+
         motor.getConfigurator().apply(config);
     }
 
