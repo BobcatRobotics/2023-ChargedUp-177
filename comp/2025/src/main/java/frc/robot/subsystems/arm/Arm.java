@@ -58,4 +58,7 @@ public class Arm extends SubsystemBase {
     public double getPosition() {
         return inputs.positionRotations;
     }
+    public void stop(){
+        io.stop();
+    }
 }

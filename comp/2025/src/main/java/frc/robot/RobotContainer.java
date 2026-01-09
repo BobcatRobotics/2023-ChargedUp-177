@@ -187,6 +187,18 @@ public class RobotContainer {
                 operator.getButton("B")
                                 .whileTrue(new RunCommand(() -> elevator.elevate(-.5), elevator))
                                 .onFalse(new RunCommand(() -> elevator.holdPosition()));
+                operator.getRightTrigger()
+                                .whileTrue(new RunCommand(() -> wrist.setSpeed(1), wrist))
+                                .onFalse(new InstantCommand(() -> wrist.stop()));
+                operator.getLeftTrigger()
+                                .whileTrue(new RunCommand(() -> wrist.setSpeed(-1), wrist))
+                                .onFalse(new InstantCommand(() -> wrist.stop()));
+                operator.getPovUp()
+                                .whileTrue(new RunCommand(() -> arm.setPercent(1), wrist))
+                                .onFalse(new InstantCommand(() -> arm.stop()));
+                operator.getPovDown()
+                                .whileTrue(new RunCommand(() -> arm.setPercent(-1), wrist))
+                                .onFalse(new InstantCommand(() -> arm.stop()));
 
         }
 

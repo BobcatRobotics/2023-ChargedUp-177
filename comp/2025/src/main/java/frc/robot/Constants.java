@@ -35,8 +35,8 @@ public final class Constants {
   public static final int wristSolenoidID = 0;
   public static final int pHubID = 1;
   public static final int compressorID = 1;
-  public static final int wristCANCoderID = 999;//TODO: assign correct values
-  public static final int wristMotorID = 9999;
+  public static final int wristCANCoderID = 14;//TODO: assign correct values
+  public static final int wristMotorID = 12;
 
   public static final class ArmConstants {
     public static final int armMotorPort = 10;
@@ -82,8 +82,8 @@ public final class Constants {
     public static final int score = 0;
     public static final int holdPiece = 0;
 
-    public static final int topLimit = 0;
-    public static final int bottomLimit = 0;
+    public static final double topLimit = 0.2412109375;
+    public static final double bottomLimit = 0.4541015625;
 }
 
 public static final class LEDConstants {

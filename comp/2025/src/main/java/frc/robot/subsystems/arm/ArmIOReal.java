@@ -34,9 +34,9 @@ public class ArmIOReal implements ArmIO {
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 12.156;
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 1.204;
 
 
         armMotor.getConfigurator().apply(config);
@@ -68,5 +68,9 @@ public class ArmIOReal implements ArmIO {
     @Override
     public void resetEncoder() {
         armMotor.setPosition(0);
+    }
+
+    public void stop(){
+        armMotor.setControl(new DutyCycleOut(0));
     }
 }

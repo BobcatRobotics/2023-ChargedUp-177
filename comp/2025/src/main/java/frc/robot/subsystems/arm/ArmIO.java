@@ -18,4 +18,5 @@ public interface ArmIO {
     public default void setMotionMagic(double position) {}
 
     public default void resetEncoder() {}
+    public default void stop() {}
 }
