@@ -27,6 +27,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.RollerWrist;
+import frc.robot.commands.WristRoller;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
@@ -42,6 +44,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorState;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
@@ -52,6 +55,8 @@ import frc.robot.subsystems.wrist.Wrist;
 import frc.robot.subsystems.wrist.WristIO;
 import frc.robot.subsystems.wrist.WristIOReal;
 import frc.robot.subsystems.wrist.WristIOSim;
+
+import static edu.wpi.first.units.Units.Rotations;
 
 import org.bobcatrobotics.Controllers.ControllerAutoDetect;
 import org.bobcatrobotics.Controllers.Gamepads.ControllerBase;
@@ -76,6 +81,7 @@ public class RobotContainer {
         private final ControllerBase controller;
         private final ControllerBase operator;
 
+        double middlePosition = ElevatorState.MIDDLE.position.in(Rotations);
         // Dashboard inputs
         private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -174,11 +180,11 @@ public class RobotContainer {
                                 new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                                 drive).ignoringDisable(true));
 
-                operator.getButton("X").whileTrue(new RunCommand(() -> intake.runIntakeOut()))
-                                .onFalse(new InstantCommand(() -> intake.stop()));
+                //operator.getButton("X").whileTrue(new RunCommand(() -> intake.runIntakeOut()))
+                                //.onFalse(new InstantCommand(() -> intake.stop()));
 
-                operator.getButton("Y").whileTrue(new RunCommand(() -> intake.runIntakeOut()))
-                                .onFalse(new InstantCommand(() -> intake.stop()));
+                //operator.getButton("Y").whileTrue(new RunCommand(() -> intake.runIntakeOut()))
+                                //.onFalse(new InstantCommand(() -> intake.stop()));
 
                 operator.getButton("A")
                                 .whileTrue(new RunCommand(() -> elevator.elevate(.5), elevator))
@@ -186,7 +192,7 @@ public class RobotContainer {
 
                 operator.getButton("B")
                                 .whileTrue(new RunCommand(() -> elevator.elevate(-.5), elevator))
-                                .onFalse(new RunCommand(() -> elevator.holdPosition()));
+                                .onFalse(new RunCommand(() -> elevator.holdPosition(), elevator));
                 operator.getRightTrigger()
                                 .whileTrue(new RunCommand(() -> wrist.setSpeed(1), wrist))
                                 .onFalse(new InstantCommand(() -> wrist.stop()));
@@ -199,8 +205,27 @@ public class RobotContainer {
                 operator.getPovDown()
                                 .whileTrue(new RunCommand(() -> arm.setPercent(-1), wrist))
                                 .onFalse(new InstantCommand(() -> arm.stop()));
+                //operator.getButton("X")
+                                //.whileTrue(new RunCommand(() -> elevator.setState(middlePosition), elevator));
+                operator.getButton("Y")
+                                .whileTrue(new RollerWrist(wrist, intake))
+                                .onFalse(new InstantCommand(() -> wrist.setSpeed(0)).alongWith(new InstantCommand(() -> intake.stop())));
+                operator.getButton("X")
+                                .whileTrue(new WristRoller(wrist, intake))
+                                .onFalse(new InstantCommand(() -> wrist.setSpeed(0)).alongWith(new InstantCommand(() -> intake.stop())));
+
+                
+
+                
+
+                
+
+                
+
 
         }
+
+
 
         /**
          * Use this to pass the autonomous command to the main {@link Robot} class.

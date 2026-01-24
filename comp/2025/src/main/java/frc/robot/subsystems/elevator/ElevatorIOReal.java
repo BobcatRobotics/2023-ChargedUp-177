@@ -1,6 +1,9 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import static edu.wpi.first.units.Units.Rotations;
+
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.signals.*;
@@ -38,10 +41,12 @@ public class ElevatorIOReal implements ElevatorIO {
         config.MotionMagic.MotionMagicAcceleration = 4000;
 
         // Limits
-        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        ElevatorState max_limit = ElevatorState.TOP;
+        ElevatorState min_limit = ElevatorState.BOTTOM;
+        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
         config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0;
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = max_limit.position.in(Rotations);
 
         motor.getConfigurator().apply(config);
     }

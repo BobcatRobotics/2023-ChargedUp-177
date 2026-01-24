@@ -42,6 +42,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorState;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOReal;
@@ -52,6 +53,8 @@ import frc.robot.subsystems.wrist.Wrist;
 import frc.robot.subsystems.wrist.WristIO;
 import frc.robot.subsystems.wrist.WristIOReal;
 import frc.robot.subsystems.wrist.WristIOSim;
+
+import static edu.wpi.first.units.Units.Rotations;
 
 import org.bobcatrobotics.Controllers.ControllerAutoDetect;
 import org.bobcatrobotics.Controllers.Gamepads.ControllerBase;
@@ -75,6 +78,7 @@ public class RobotContainer {
         // Controller
         private final ControllerBase controller;
         private final ControllerBase operator;
+
 
         // Dashboard inputs
         private final LoggedDashboardChooser<Command> autoChooser;
@@ -174,18 +178,18 @@ public class RobotContainer {
                                 new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                                 drive).ignoringDisable(true));
 
-                operator.getButton("X").whileTrue(new RunCommand(() -> intake.runIntakeOut()))
-                                .onFalse(new InstantCommand(() -> intake.stop()));
+                //operator.getButton("X").whileTrue(new RunCommand(() -> intake.runIntakeOut()))
+                //                .onFalse(new InstantCommand(() -> intake.stop()));
 
                 operator.getButton("Y").whileTrue(new RunCommand(() -> intake.runIntakeOut()))
                                 .onFalse(new InstantCommand(() -> intake.stop()));
 
                 operator.getButton("A")
-                                .whileTrue(new RunCommand(() -> elevator.elevate(.5), elevator))
+                                .whileTrue(new RunCommand(() -> elevator.elevate(-.5), elevator))
                                 .onFalse(new RunCommand(() -> elevator.holdPosition()));
 
                 operator.getButton("B")
-                                .whileTrue(new RunCommand(() -> elevator.elevate(-.5), elevator))
+                                .whileTrue(new RunCommand(() -> elevator.elevate(.5), elevator))
                                 .onFalse(new RunCommand(() -> elevator.holdPosition()));
                 operator.getRightTrigger()
                                 .whileTrue(new RunCommand(() -> wrist.setSpeed(1), wrist))
@@ -199,6 +203,7 @@ public class RobotContainer {
                 operator.getPovDown()
                                 .whileTrue(new RunCommand(() -> arm.setPercent(-1), wrist))
                                 .onFalse(new InstantCommand(() -> arm.stop()));
+                operator.getButton("X").whileTrue(new RunCommand(() -> elevator.setState(middlePosition), elevator));
 
         }
 

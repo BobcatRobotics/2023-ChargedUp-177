@@ -3,7 +3,6 @@ package frc.robot.subsystems.elevator;
 import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-import org.littletonrobotics.junction.AutoLog;
 
 public class Elevator extends SubsystemBase {
 
@@ -81,14 +80,9 @@ public class Elevator extends SubsystemBase {
         io.resetEncoderTop();
     }
 
-    public void setState(int state) {
-        double pos = switch (state) {
-            case 0 -> ElevatorConstants.pos0;
-            case 1 -> ElevatorConstants.pos1;
-            case 2 -> ElevatorConstants.pos2;
-            default -> holdPosValue;
-        };
+    public void setState(double pos) {
         holdPosValue = pos;
         io.setMotionMagic(pos);
+        Logger.recordOutput("Elevator/Setpoint", pos);
     }
 }
