@@ -1,3 +1,28 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+replay_pid*
+
 # This gitignore has been specially created by the WPILib team.
 # If you remove items from this file, intellisense might break.
 
@@ -158,9 +183,30 @@ gradle-app.setting
 .settings/
 bin/
 
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+out/
+
+# Fleet
+.fleet
+
 # Simulation GUI and other tools window save file
+networktables.json
+simgui.json
 *-window.json
 
-# Git tracking files
-src/main/deploy/branch.txt
-src/main/deploy/commit.txt
+# Simulation data log directory
+logs/
+
+# Folder that has CTRE Phoenix Sim device config storage
+ctre_sim/
+
+# clangd
+/.cache
+compile_commands.json
+
+# Eclipse generated file for annotation processors
+.factorypath

@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+  "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+  "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+  <!--
+    RegexpSingleline:
+    Checks each line for trailing whitespace,
+    but skips lines that are comments (starting with //, /*, or * inside block comments).
+    Severity set to "info" so it's a warning, not an error.
+  -->
+  <module name="RegexpSingleline">
+    <property name="format" value="^(?!\s*(//|/\*|\*)).*\s+$"/>
+    <property name="message" value="Line has trailing whitespace."/>
+    <property name="severity" value="info"/>
+  </module>
+  <!--
+    TreeWalker module analyzes Java AST (Abstract Syntax Tree).
+    Most style checks are inside TreeWalker.
+  -->
+  <module name="TreeWalker">
+
+    <!--
+      NeedBraces:
+      Enforces that all if, else, while, for, do statements use braces.
+      Helps prevent bugs from single-line statements without braces.
+    -->
+    <module name="NeedBraces"/>
+
+    <!--   
+      NestedIfDepth:
+      Limits how deeply nested 'if' statements can be.
+      Here max nesting is 3 levels deep to keep code readable.
+    -->
+    <module name="NestedIfDepth">
+      <property name="max" value="3"/>
+    </module>
+
+    <!--
+      JavadocType:
+      Enforces Javadoc comments on classes, interfaces, enums.
+      Allows missing @param tags inside class Javadocs since those don’t apply.
+    -->
+    <module name="JavadocType">
+      <property name="allowMissingParamTags" value="true"/>
+    </module>
+
+    <!--
+      JavadocMethod:
+      Enforces Javadoc comments on methods with public or protected access.
+      Allows missing param, return, and throws tags for flexibility.
+      Skips methods annotated with @Override (no need to document inherited methods).
+    -->
+    <module name="JavadocMethod">
+      <property name="accessModifiers" value="public, protected"/>
+      <property name="allowMissingParamTags" value="true"/>
+      <property name="allowMissingReturnTag" value="true"/>
+      <property name="allowedAnnotations" value="Override"/>
+    </module>
+
+
+    <!--
+      LeftCurly and RightCurly:
+      Enforce brace placement.
+      LeftCurly option "eol" means opening braces must be at end of the line, not next line.
+    
+    <module name="LeftCurly">
+      <property name="option" value="eol"/>
+    </module>
+    <module name="RightCurly"/>
+
+    
+      TypeName:
+      Enforces class and enum names follow PascalCase convention.
+    
+    <module name="TypeName"/>
+
+    
+      MethodName:
+      Enforces method names follow camelCase convention.
+    
+    <module name="MethodName"/>
+
+    
+      LocalVariableName:
+      Enforces local variables follow camelCase naming.
+    -->
+    <!-- <module name="LocalVariableName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+    </module> -->
+
+    <!--
+      MemberName:
+      Enforces field/member variable names follow camelCase.
+    -->
+    <!-- <module name="MemberName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+    </module> -->
+
+    <!--
+      ParameterName:
+      Enforces method parameter names follow camelCase.
+    -->
+    <!-- <module name="ParameterName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+    </module> -->
+
+  </module>
+</module>
