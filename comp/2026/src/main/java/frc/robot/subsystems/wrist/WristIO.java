@@ -19,6 +19,9 @@ public interface WristIO {
   public default void setMotionMagic(WristState state) {
   }
 
+  public default void getOutofTheWay() {
+  }
+
   public default void stop() {
   }
 }

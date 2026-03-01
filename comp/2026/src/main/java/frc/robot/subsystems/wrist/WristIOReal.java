@@ -61,6 +61,11 @@ public class WristIOReal implements WristIO {
     motor.setControl(mmReq.withPosition(state.position));
   }
 
+  public void getOutofTheWay(){
+    if(motor.getPosition().getValueAsDouble() >= Constants.WristConstants.topLimit && motor.getPosition().getValueAsDouble() <= Constants.WristConstants.bottomLimit){
+      motor.setPosition(Constants.WristConstants.safeLimit);
+    }
+  }
   @Override
   public void stop() {
     motor.setControl(new DutyCycleOut(0));

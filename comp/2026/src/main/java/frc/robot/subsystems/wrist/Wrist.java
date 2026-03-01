@@ -30,6 +30,10 @@ public class Wrist extends SubsystemBase {
     io.setPercent(speed);
   }
 
+  public void getOutofTheWay() {
+    io.getOutofTheWay();
+  }
+
   /** Stop */
   public void stop() {
     io.stop();

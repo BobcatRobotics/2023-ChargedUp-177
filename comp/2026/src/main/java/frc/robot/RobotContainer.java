@@ -187,11 +187,11 @@ public class RobotContainer {
                                 //.onFalse(new InstantCommand(() -> intake.stop()));
 
                 operator.getButton("A")
-                                .whileTrue(new RunCommand(() -> elevator.elevate(.5), elevator))
+                                .whileTrue(new RunCommand(() -> wrist.getOutofTheWay(), wrist).andThen(new RunCommand(() -> elevator.elevate(.5), elevator)))
                                 .onFalse(new RunCommand(() -> elevator.holdPosition()));
 
                 operator.getButton("B")
-                                .whileTrue(new RunCommand(() -> elevator.elevate(-.5), elevator))
+                                .whileTrue(new RunCommand(() -> wrist.getOutofTheWay(), wrist).andThen(new RunCommand(() -> elevator.elevate(-.5), elevator)))
                                 .onFalse(new RunCommand(() -> elevator.holdPosition(), elevator));
                 operator.getRightTrigger()
                                 .whileTrue(new RunCommand(() -> wrist.setSpeed(1), wrist))
