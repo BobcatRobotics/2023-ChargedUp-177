@@ -84,6 +84,7 @@ public final class Constants {
 
     public static final double topLimit = 0.2412109375;
     public static final double bottomLimit = 0.4541015625;
+    public static final double safeLimit = 0;
 }
 
 public static final class LEDConstants {

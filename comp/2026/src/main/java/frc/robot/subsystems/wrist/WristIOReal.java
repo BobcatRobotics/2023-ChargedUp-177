@@ -32,9 +32,9 @@ public class WristIOReal implements WristIO {
     config.MotionMagic.MotionMagicCruiseVelocity = 30000;
     config.MotionMagic.MotionMagicAcceleration = 24000;
 
-    config.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+    config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.WristConstants.topLimit;
-    config.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+    config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Constants.WristConstants.bottomLimit;
 
 

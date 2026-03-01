@@ -208,11 +208,11 @@ public class RobotContainer {
                 //operator.getButton("X")
                                 //.whileTrue(new RunCommand(() -> elevator.setState(middlePosition), elevator));
                 operator.getButton("Y")
-                                .whileTrue(new RollerWrist(wrist, intake))
-                                .onFalse(new InstantCommand(() -> wrist.setSpeed(0)).alongWith(new InstantCommand(() -> intake.stop())));
+                                .whileTrue(new RunCommand(() -> elevator.elevate(0.5)))
+                                .onFalse(new InstantCommand(() -> elevator.elevate(0)));
                 operator.getButton("X")
-                                .whileTrue(new WristRoller(wrist, intake))
-                                .onFalse(new InstantCommand(() -> wrist.setSpeed(0)).alongWith(new InstantCommand(() -> intake.stop())));
+                                .whileTrue(new RunCommand(() -> elevator.elevate(-0.5)))
+                                .onFalse(new InstantCommand(() -> elevator.elevate(0)));
 
                 
 
