@@ -16,6 +16,9 @@ public interface WristIO {
   public default void setPercent(double percent) {
   }
 
+    public default void holdWristPosition(double position) {
+  }
+
   public default void setMotionMagic(WristState state) {
   }
 

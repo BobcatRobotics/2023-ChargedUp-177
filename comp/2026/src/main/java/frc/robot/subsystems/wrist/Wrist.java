@@ -9,6 +9,9 @@ public class Wrist extends SubsystemBase {
   private final WristIO io;
   private final WristIOInputsAutoLogged inputs = new WristIOInputsAutoLogged();
 
+  private double holdWristValue = 0;
+
+
   public Wrist(WristIO io) {
     this.io = io;
   }
@@ -33,6 +36,15 @@ public class Wrist extends SubsystemBase {
   /** Stop */
   public void stop() {
     io.stop();
+  }
+
+  public void holdWristPosition() {
+      holdWristValue = getWristPositionDeg();
+      io.holdWristPosition(holdWristValue);
+  }
+
+  public void holdWristPosition(double pos) {
+      io.holdWristPosition(pos);
   }
 
   /** Set wrist to preset position */

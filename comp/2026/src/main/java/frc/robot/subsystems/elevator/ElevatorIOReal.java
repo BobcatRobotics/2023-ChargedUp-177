@@ -31,6 +31,8 @@ public class ElevatorIOReal implements ElevatorIO {
         config.Slot0.kI = 0.0;
         config.Slot0.kD = 0.0;
         config.Slot0.kV = 0.0;
+        config.Slot0.kG = 0.5;
+        config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
 
         // Output
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -73,7 +75,7 @@ public class ElevatorIOReal implements ElevatorIO {
 
     @Override
     public void holdPosition(double position) {
-        motor.setControl(mmRequest.withPosition(position));
+        motor.setControl(mmRequest.withPosition(position).withFeedForward(-1));
     }
 
     @Override

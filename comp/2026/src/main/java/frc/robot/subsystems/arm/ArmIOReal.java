@@ -14,6 +14,8 @@ public class ArmIOReal implements ArmIO {
     private final MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
     private final DutyCycleOut dutyRequest = new DutyCycleOut(0);
 
+    
+
     public ArmIOReal() {
         armMotor = new TalonFX(frc.robot.Constants.ArmConstants.armMotorPort);
         stowedLimit = new DigitalInput(frc.robot.Constants.ArmConstants.stowedLimitSwitch);
